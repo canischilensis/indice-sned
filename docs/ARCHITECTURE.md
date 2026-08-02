@@ -84,6 +84,11 @@ de actualizacion. El esquema responde a seis decisiones, cada una anclada a un h
 | 5 | Ventanas temporales declaradas | La regla anti-fuga debe ser estructural, no un comentario en un script | `catalogo.ventana_temporal` |
 | 6 | Tabla generica de indicadores anuales | Anadir una fuente debe insertar registros, no alterar el esquema | `hechos.indicador_anual` + `catalogo.tipo_indicador` |
 
+El esquema tiene **38 tablas**: `core` 16, `hechos` 6, `ml` 8 y `app` 8. Las 21 de `core` y
+`hechos` derivan del modelo entidad-relación; `core.conjunto_entrenamiento` —la lista maestra
+del conjunto depurado— más `ml` y `app` no provienen del diagrama y se declaran como
+infraestructura.
+
 ### Vistas de consumo
 
 - `v_reconstruccion_indice` — la formula oficial como consulta auditable
@@ -186,3 +191,16 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
 7. **Staging de git desde el bridge.** `git add` no puede finalizar objetos sobre la carpeta
    montada (`Operation not permitted` al liberar temporales). El repositorio esta inicializado
    y `.gitignore` verificado; el primer commit debe hacerse con git nativo en Windows.
+
+## Modelo de clases y diagramas de secuencia
+
+En `docs/diagramas/`, derivados del código real: arquitectura hexagonal con los cuatro puertos,
+los doce patrones, y las secuencias de predicción, simulación y explicación SHAP. Fuente
+Mermaid más exportación PNG.
+
+## Limitaciones de rendimiento conocidas
+
+| Síntoma | Causa | Estado |
+|---------|-------|--------|
+| Simulación en 4,6 s | 54 inferencias por llamada (9 puntos × 6 modelos); el caché no aplica porque cada punto es una observación distinta | Sin resolver |
+| Ranking 2,5× más lento en PostgreSQL | `v_ranking_intra_cluster` recalcula funciones de ventana sobre 54.298 filas en cada consulta | Sin resolver |

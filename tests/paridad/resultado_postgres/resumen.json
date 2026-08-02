@@ -1,0 +1,50 @@
+{
+  "adaptador": "postgres",
+  "n_rbd": 20,
+  "endpoints": [
+    "alertas",
+    "detalle",
+    "listado",
+    "prediccion",
+    "ranking",
+    "shapley",
+    "simulacion"
+  ],
+  "tiempos_ms": {
+    "listado": {
+      "n": 1,
+      "media": 240.1,
+      "max": 240.1
+    },
+    "detalle": {
+      "n": 20,
+      "media": 21.4,
+      "max": 104.5
+    },
+    "ranking": {
+      "n": 20,
+      "media": 117.9,
+      "max": 151.6
+    },
+    "prediccion": {
+      "n": 20,
+      "media": 594.0,
+      "max": 3160.2
+    },
+    "alertas": {
+      "n": 20,
+      "media": 9.0,
+      "max": 12.0
+    },
+    "shapley": {
+      "n": 20,
+      "media": 47.3,
+      "max": 787.1
+    },
+    "simulacion": {
+      "n": 20,
+      "media": 4652.3,
+      "max": 4828.6
+    }
+  }
+}

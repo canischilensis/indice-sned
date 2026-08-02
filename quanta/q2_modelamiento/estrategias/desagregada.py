@@ -70,15 +70,27 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
     # -- preparacion de entrada -------------------------------------------
 
     def _matriz(self, observacion: dict, codigo: str) -> pd.DataFrame:
-        """Imputacion por mediana. La ausencia es informacion, no defecto."""
+        """Imputacion por mediana mas banderas de ausencia.
+
+        La ausencia es informacion, no defecto: junto a cada variable imputada
+        viaja `<variable>_ausente`, que le dice al modelo que ese valor fue
+        rellenado. Los artefactos fueron entrenados con ese par y por eso el
+        orden de columnas se toma de `feature_names_in_` del propio modelo, no
+        de la lista de metadatos, que solo enumera las variables base.
+        """
         variables = self._variables(codigo)
-        fila = {}
+        fila: dict[str, float] = {}
+        ausente: dict[str, float] = {}
         for v in variables:
             valor = observacion.get(v)
-            if valor is None or (isinstance(valor, float) and np.isnan(valor)):
-                valor = self._medianas.get(v, 0.0)
-            fila[v] = float(valor)
-        return pd.DataFrame([fila], columns=variables)
+            falta = valor is None or (isinstance(valor, float) and np.isnan(valor))
+            ausente[f"{v}_ausente"] = 1.0 if falta else 0.0
+            fila[v] = float(self._medianas.get(v, 0.0) if falta else valor)
+
+        completa = {**fila, **ausente}
+        nombres = getattr(self._modelo(codigo), "feature_names_in_", None)
+        esperadas = list(nombres) if nombres is not None else variables
+        return pd.DataFrame([{c: completa.get(c, 0.0) for c in esperadas}], columns=esperadas)
 
     # -- inferencia --------------------------------------------------------
 

@@ -1,0 +1,4075 @@
+{
+  "alertas": {
+    "10": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 80% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "10"
+      },
+      "status": 200
+    },
+    "11": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "4 procesos con sancion y 3 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "alta",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 80% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "11"
+      },
+      "status": 200
+    },
+    "1418": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 67% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "1418"
+      },
+      "status": 200
+    },
+    "16816": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 78% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "16816"
+      },
+      "status": 200
+    },
+    "16942": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 76% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "16942"
+      },
+      "status": 200
+    },
+    "20008": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "2 procesos con sancion y 2 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 78% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "20008"
+      },
+      "status": 200
+    },
+    "26110": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "2 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "Promedio IDPS de 69.7 puntos, bajo el umbral de 70. Alimenta Iniciativa (6 %) e Integracion (5 %).",
+            "severidad": "media",
+            "tipo": "caida_idps",
+            "titulo": "Deterioro de indicadores de desarrollo personal y social"
+          },
+          {
+            "detalle": "El 74% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "26110"
+      },
+      "status": 200
+    },
+    "2829": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "Promedio IDPS de 69.2 puntos, bajo el umbral de 70. Alimenta Iniciativa (6 %) e Integracion (5 %).",
+            "severidad": "media",
+            "tipo": "caida_idps",
+            "titulo": "Deterioro de indicadores de desarrollo personal y social"
+          },
+          {
+            "detalle": "El 79% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "2829"
+      },
+      "status": 200
+    },
+    "2997": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "2 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "Promedio IDPS de 66.4 puntos, bajo el umbral de 70. Alimenta Iniciativa (6 %) e Integracion (5 %).",
+            "severidad": "media",
+            "tipo": "caida_idps",
+            "titulo": "Deterioro de indicadores de desarrollo personal y social"
+          },
+          {
+            "detalle": "El 77% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "2997"
+      },
+      "status": 200
+    },
+    "31": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "2 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 76% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "31"
+      },
+      "status": 200
+    },
+    "3215": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 76% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "3215"
+      },
+      "status": 200
+    },
+    "3640": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 78% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "3640"
+      },
+      "status": 200
+    },
+    "381": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "4 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 78% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "381"
+      },
+      "status": 200
+    },
+    "4288": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "4 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 78% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "4288"
+      },
+      "status": 200
+    },
+    "4432": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "4 procesos con sancion y 2 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "alta",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 75% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "4432"
+      },
+      "status": 200
+    },
+    "4505": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "3 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 80% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "4505"
+      },
+      "status": 200
+    },
+    "7388": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "4 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 70% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "7388"
+      },
+      "status": 200
+    },
+    "8376": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "3 procesos con sancion y 1 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "media",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 79% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "8376"
+      },
+      "status": 200
+    },
+    "9": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "6 procesos con sancion y 3 con multa registrados. Impactan los factores Igualdad (22 %) y Mejoramiento (2 %).",
+            "severidad": "alta",
+            "tipo": "riesgo_normativo",
+            "titulo": "Riesgo normativo por procesos sancionatorios"
+          },
+          {
+            "detalle": "El 71% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "9"
+      },
+      "status": 200
+    },
+    "9911": {
+      "cuerpo": {
+        "alertas": [
+          {
+            "detalle": "El 73% del indice estimado proviene de factores acotados por informacion que solo el organismo emisor posee. Interprete la cifra como orden de magnitud, no como valor puntual.",
+            "severidad": "informativa",
+            "tipo": "incertidumbre_alta",
+            "titulo": "Estimacion dominada por factores acotados"
+          }
+        ],
+        "rbd": "9911"
+      },
+      "status": 200
+    }
+  },
+  "detalle": {
+    "10": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1511,
+        "ES_RURAL": false,
+        "INDICER": 63.828,
+        "SEL": 3,
+        "cod_depe2": 5,
+        "cursos_total": 7.5,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 785.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 78.45743,
+        "idps_am_6b": 66.095894,
+        "idps_am_8b": 80.19069,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 84.71419,
+        "idps_cc_6b": 66.85444,
+        "idps_cc_8b": 85.30849,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 80.174774,
+        "idps_hv_6b": 61.344524,
+        "idps_hv_8b": 74.49912,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 88.9683,
+        "idps_pf_6b": 75.76741,
+        "idps_pf_8b": 86.24713,
+        "ive_basica": 0.9090288,
+        "ive_consolidado": 0.9090288,
+        "ive_media": null,
+        "matricula_total": 85.75,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 30.5,
+        "n_beneficiarios_sep": 145.5,
+        "n_directivos": 1.5,
+        "n_docentes": 22.5,
+        "n_vulnerables": 145.5,
+        "nom_rbd": "ESCUELA REPUBLICA DE FRANCIA",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "10",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 250.0,
+        "simce_lect_6b": 194.0,
+        "simce_lect_8b": 243.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 228.0,
+        "simce_mate_6b": 204.0,
+        "simce_mate_8b": 245.0,
+        "tasa_aprobacion": 0.94946023,
+        "tasa_reprobacion": 0.03257569,
+        "tasa_retiro": 0.01796407,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 154.5
+      },
+      "status": 200
+    },
+    "11": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1512,
+        "ES_RURAL": false,
+        "INDICER": 57.837,
+        "SEL": 3,
+        "cod_depe2": 5,
+        "cursos_total": 7.0,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 1,
+        "denuncias_juridica": 3,
+        "denuncias_total": 13,
+        "horas_docentes": 1401.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 75.64451,
+        "idps_am_6b": 70.86187,
+        "idps_am_8b": 74.47937,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 73.342636,
+        "idps_cc_6b": 68.3916,
+        "idps_cc_8b": 69.863594,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 69.65056,
+        "idps_hv_6b": 58.935795,
+        "idps_hv_8b": 65.459366,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 78.98285,
+        "idps_pf_6b": 69.596016,
+        "idps_pf_8b": 74.96111,
+        "ive_basica": 0.95185407,
+        "ive_consolidado": 0.95185407,
+        "ive_media": null,
+        "matricula_total": 183.5,
+        "mediaciones_de_denuncia": 2,
+        "mediaciones_efectivas": 2,
+        "mediaciones_total": 3,
+        "n_asistentes": 49.5,
+        "n_beneficiarios_sep": 340.0,
+        "n_directivos": 1.0,
+        "n_docentes": 38.5,
+        "n_vulnerables": 340.0,
+        "nom_rbd": "ESC. GRAL. PEDRO LAGOS MARCHANT",
+        "procesos_con_sancion": 4,
+        "procesos_multa": 3,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 4,
+        "rbd": "11",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 235.0,
+        "simce_lect_6b": 235.0,
+        "simce_lect_8b": 201.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 200.0,
+        "simce_mate_6b": 225.0,
+        "simce_mate_8b": 218.0,
+        "tasa_aprobacion": 0.96639184,
+        "tasa_reprobacion": 0.0176028,
+        "tasa_retiro": 0.01600536,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 311.5
+      },
+      "status": 200
+    },
+    "1418": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 521,
+        "ES_RURAL": true,
+        "INDICER": 74.494,
+        "SEL": 1,
+        "cod_depe2": 1,
+        "cursos_total": 2.0,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 150.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 77.19073,
+        "idps_am_6b": 80.25317,
+        "idps_am_8b": null,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 84.434616,
+        "idps_cc_6b": 79.30557,
+        "idps_cc_8b": null,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 90.416664,
+        "idps_hv_6b": 81.75679,
+        "idps_hv_8b": null,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 89.67088,
+        "idps_pf_6b": 72.286156,
+        "idps_pf_8b": null,
+        "ive_basica": 0.91106719,
+        "ive_consolidado": 0.91106719,
+        "ive_media": null,
+        "matricula_total": 13.75,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 5.5,
+        "n_beneficiarios_sep": 25.0,
+        "n_directivos": 0.0,
+        "n_docentes": 4.0,
+        "n_vulnerables": 25.0,
+        "nom_rbd": "ESCUELA BASICA",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "1418",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 319.0,
+        "simce_lect_6b": 313.0,
+        "simce_lect_8b": null,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 293.0,
+        "simce_mate_6b": 304.0,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.97826087,
+        "tasa_reprobacion": 0.0,
+        "tasa_retiro": 0.02173913,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 27.5
+      },
+      "status": 200
+    },
+    "16816": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1313,
+        "ES_RURAL": false,
+        "INDICER": 64.473,
+        "SEL": 2,
+        "cod_depe2": 2,
+        "cursos_total": 4.0,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 1,
+        "horas_docentes": 533.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 72.58016,
+        "idps_am_6b": 65.49418,
+        "idps_am_8b": null,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 71.24248,
+        "idps_cc_6b": 71.99741,
+        "idps_cc_8b": null,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 64.39627,
+        "idps_hv_6b": 63.271988,
+        "idps_hv_8b": null,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 74.91127,
+        "idps_pf_6b": 73.21923,
+        "idps_pf_8b": null,
+        "ive_basica": 0.95122924,
+        "ive_consolidado": 0.95122924,
+        "ive_media": null,
+        "matricula_total": 112.25,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 1,
+        "mediaciones_total": 1,
+        "n_asistentes": 11.0,
+        "n_beneficiarios_sep": 207.0,
+        "n_directivos": 1.0,
+        "n_docentes": 15.5,
+        "n_vulnerables": 207.0,
+        "nom_rbd": "ESCUELA  BASICA N°201, REDWOOD COLLEGE",
+        "procesos_con_sancion": 1,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 1,
+        "rbd": "16816",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 252.0,
+        "simce_lect_6b": 240.0,
+        "simce_lect_8b": null,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 225.0,
+        "simce_mate_6b": 219.0,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.93681255,
+        "tasa_reprobacion": 0.05744013,
+        "tasa_retiro": 0.00574732,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 174.0
+      },
+      "status": 200
+    },
+    "16942": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 932,
+        "ES_RURAL": false,
+        "INDICER": 64.558,
+        "SEL": 3,
+        "cod_depe2": 2,
+        "cursos_total": 2.0,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 448.5,
+        "idps_am_2m": 71.69186,
+        "idps_am_4b": null,
+        "idps_am_6b": null,
+        "idps_am_8b": 73.70658,
+        "idps_cc_2m": 76.11402,
+        "idps_cc_4b": null,
+        "idps_cc_6b": null,
+        "idps_cc_8b": 75.01185,
+        "idps_hv_2m": 70.610016,
+        "idps_hv_4b": null,
+        "idps_hv_6b": null,
+        "idps_hv_8b": 68.779945,
+        "idps_pf_2m": 79.71363,
+        "idps_pf_4b": null,
+        "idps_pf_6b": null,
+        "idps_pf_8b": 77.66371,
+        "ive_basica": 0.90833333,
+        "ive_consolidado": 0.92928571,
+        "ive_media": 0.9502381,
+        "matricula_total": 31.5,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 6.5,
+        "n_beneficiarios_sep": 91.0,
+        "n_directivos": 2.0,
+        "n_docentes": 14.0,
+        "n_vulnerables": 91.0,
+        "nom_rbd": "COMPLEJO EDUCACIONAL CRISTO REY",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "16942",
+        "simce_lect_2m": 253.0,
+        "simce_lect_4b": null,
+        "simce_lect_6b": null,
+        "simce_lect_8b": 237.0,
+        "simce_mate_2m": 236.0,
+        "simce_mate_4b": null,
+        "simce_mate_6b": null,
+        "simce_mate_8b": 228.0,
+        "tasa_aprobacion": 0.91707858,
+        "tasa_reprobacion": 0.04668043,
+        "tasa_retiro": 0.03624099,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 33.33333333
+      },
+      "status": 200
+    },
+    "20008": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 932,
+        "ES_RURAL": false,
+        "INDICER": 64.786,
+        "SEL": 3,
+        "cod_depe2": 2,
+        "cursos_total": 6.66666667,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 2,
+        "horas_docentes": 1281.0,
+        "idps_am_2m": 75.98085,
+        "idps_am_4b": 75.28329,
+        "idps_am_6b": 78.855286,
+        "idps_am_8b": 75.616776,
+        "idps_cc_2m": 75.789764,
+        "idps_cc_4b": 79.63963,
+        "idps_cc_6b": 78.10545,
+        "idps_cc_8b": 71.00905,
+        "idps_hv_2m": 68.9013,
+        "idps_hv_4b": 61.424793,
+        "idps_hv_6b": 70.350136,
+        "idps_hv_8b": 74.822395,
+        "idps_pf_2m": 77.34164,
+        "idps_pf_4b": 77.51477,
+        "idps_pf_6b": 83.52614,
+        "idps_pf_8b": 78.979355,
+        "ive_basica": 0.94544816,
+        "ive_consolidado": 0.91626074,
+        "ive_media": 0.88707332,
+        "matricula_total": 190.5,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 12.5,
+        "n_beneficiarios_sep": 547.0,
+        "n_directivos": 1.0,
+        "n_docentes": 38.5,
+        "n_vulnerables": 547.0,
+        "nom_rbd": "COLEGIO EL LABRADOR",
+        "procesos_con_sancion": 2,
+        "procesos_multa": 2,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 2,
+        "rbd": "20008",
+        "simce_lect_2m": 247.0,
+        "simce_lect_4b": 242.0,
+        "simce_lect_6b": 236.0,
+        "simce_lect_8b": 220.0,
+        "simce_mate_2m": 232.0,
+        "simce_mate_4b": 220.0,
+        "simce_mate_6b": 224.0,
+        "simce_mate_8b": 238.0,
+        "tasa_aprobacion": 0.91307632,
+        "tasa_reprobacion": 0.08137693,
+        "tasa_retiro": 0.00554675,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 232.5
+      },
+      "status": 200
+    },
+    "26110": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1331,
+        "ES_RURAL": false,
+        "INDICER": 66.871,
+        "SEL": 3,
+        "cod_depe2": 2,
+        "cursos_total": 9.33333333,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 1,
+        "denuncias_juridica": 0,
+        "denuncias_total": 7,
+        "horas_docentes": 1751.5,
+        "idps_am_2m": 73.97103,
+        "idps_am_4b": 69.36714,
+        "idps_am_6b": 70.75022,
+        "idps_am_8b": 72.93436,
+        "idps_cc_2m": 71.85329,
+        "idps_cc_4b": 69.135826,
+        "idps_cc_6b": 70.26469,
+        "idps_cc_8b": 70.693726,
+        "idps_hv_2m": 68.2013,
+        "idps_hv_4b": 67.31415,
+        "idps_hv_6b": 62.715843,
+        "idps_hv_8b": 68.729034,
+        "idps_pf_2m": 76.12768,
+        "idps_pf_4b": 73.053185,
+        "idps_pf_6b": 70.456085,
+        "idps_pf_8b": 71.91593,
+        "ive_basica": 0.56625653,
+        "ive_consolidado": 0.57531591,
+        "ive_media": 0.58437529,
+        "matricula_total": 402.66666667,
+        "mediaciones_de_denuncia": 1,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 1,
+        "n_asistentes": 27.0,
+        "n_beneficiarios_sep": 0.0,
+        "n_directivos": 1.0,
+        "n_docentes": 48.0,
+        "n_vulnerables": 585.0,
+        "nom_rbd": "COLEGIO SANTIAGO - QUILICURA",
+        "procesos_con_sancion": 2,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 2,
+        "rbd": "26110",
+        "simce_lect_2m": 261.0,
+        "simce_lect_4b": 267.0,
+        "simce_lect_6b": 260.0,
+        "simce_lect_8b": 231.0,
+        "simce_mate_2m": 262.0,
+        "simce_mate_4b": 253.0,
+        "simce_mate_6b": 262.0,
+        "simce_mate_8b": 258.0,
+        "tasa_aprobacion": 0.98775444,
+        "tasa_reprobacion": 0.00594844,
+        "tasa_retiro": 0.00629712,
+        "tiene_convenio_sep": 0.0,
+        "total_matricula": 537.25
+      },
+      "status": 200
+    },
+    "2829": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 721,
+        "ES_RURAL": true,
+        "INDICER": 61.833,
+        "SEL": 3,
+        "cod_depe2": 1,
+        "cursos_total": null,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 311.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 71.765076,
+        "idps_am_6b": 58.02708,
+        "idps_am_8b": 90.78828,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 76.155045,
+        "idps_cc_6b": 72.144325,
+        "idps_cc_8b": 88.36797,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 55.233383,
+        "idps_hv_6b": 67.872475,
+        "idps_hv_8b": 84.0319,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 73.77632,
+        "idps_pf_6b": 66.21472,
+        "idps_pf_8b": 88.36198,
+        "ive_basica": 0.95580808,
+        "ive_consolidado": 0.95580808,
+        "ive_media": null,
+        "matricula_total": 36.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 8.0,
+        "n_beneficiarios_sep": 34.0,
+        "n_directivos": 0.0,
+        "n_docentes": 8.0,
+        "n_vulnerables": 34.0,
+        "nom_rbd": "ESCUELA BASICA LUIS ESCOBAR LARA",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "2829",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 218.0,
+        "simce_lect_6b": 258.0,
+        "simce_lect_8b": 219.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 227.0,
+        "simce_mate_6b": 232.0,
+        "simce_mate_8b": 244.0,
+        "tasa_aprobacion": 0.98611111,
+        "tasa_reprobacion": 0.0,
+        "tasa_retiro": 0.01388889,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 36.0
+      },
+      "status": 200
+    },
+    "2997": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 732,
+        "ES_RURAL": false,
+        "INDICER": 60.514,
+        "SEL": 3,
+        "cod_depe2": 2,
+        "cursos_total": 8.75,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 3,
+        "horas_docentes": 1589.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 65.76947,
+        "idps_am_6b": 78.75782,
+        "idps_am_8b": 66.72443,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 67.049225,
+        "idps_cc_6b": 81.12236,
+        "idps_cc_8b": 65.84724,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 63.28757,
+        "idps_hv_6b": 71.45618,
+        "idps_hv_8b": 62.949654,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 69.52646,
+        "idps_pf_6b": 83.57929,
+        "idps_pf_8b": 66.15202,
+        "ive_basica": 0.89161404,
+        "ive_consolidado": 0.89161404,
+        "ive_media": null,
+        "matricula_total": 274.25,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 1,
+        "mediaciones_total": 3,
+        "n_asistentes": 40.5,
+        "n_beneficiarios_sep": 742.5,
+        "n_directivos": 1.0,
+        "n_docentes": 52.5,
+        "n_vulnerables": 779.5,
+        "nom_rbd": "COLEGIO DARIO SALAS",
+        "procesos_con_sancion": 2,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 2,
+        "rbd": "2997",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 241.0,
+        "simce_lect_6b": 232.0,
+        "simce_lect_8b": 180.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 240.0,
+        "simce_mate_6b": 243.0,
+        "simce_mate_8b": 242.0,
+        "tasa_aprobacion": 0.79306842,
+        "tasa_reprobacion": 0.18253607,
+        "tasa_retiro": 0.02439551,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 369.16666667
+      },
+      "status": 200
+    },
+    "31": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1522,
+        "ES_RURAL": true,
+        "INDICER": 60.044,
+        "SEL": 3,
+        "cod_depe2": 5,
+        "cursos_total": 6.0,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 1,
+        "denuncias_total": 1,
+        "horas_docentes": 1239.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 71.32843,
+        "idps_am_6b": 68.82226,
+        "idps_am_8b": 71.67671,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 74.77159,
+        "idps_cc_6b": 72.88558,
+        "idps_cc_8b": 76.21176,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 67.01866,
+        "idps_hv_6b": 67.361336,
+        "idps_hv_8b": 68.81242,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 74.76512,
+        "idps_pf_6b": 75.57018,
+        "idps_pf_8b": 78.89654,
+        "ive_basica": 0.92890719,
+        "ive_consolidado": 0.92890719,
+        "ive_media": null,
+        "matricula_total": 208.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 24.5,
+        "n_beneficiarios_sep": 346.0,
+        "n_directivos": 1.0,
+        "n_docentes": 33.0,
+        "n_vulnerables": 346.0,
+        "nom_rbd": "ESCUELA DARIO SALAS DIAZ",
+        "procesos_con_sancion": 2,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 2,
+        "rbd": "31",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 252.0,
+        "simce_lect_6b": 256.0,
+        "simce_lect_8b": 233.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 248.0,
+        "simce_mate_6b": 244.0,
+        "simce_mate_8b": 235.0,
+        "tasa_aprobacion": 0.98690589,
+        "tasa_reprobacion": 0.0,
+        "tasa_retiro": 0.01309411,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 343.5
+      },
+      "status": 200
+    },
+    "3215": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 724,
+        "ES_RURAL": true,
+        "INDICER": 63.537,
+        "SEL": 3,
+        "cod_depe2": 1,
+        "cursos_total": null,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 47.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 92.302475,
+        "idps_am_6b": 77.20543,
+        "idps_am_8b": null,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 86.67028,
+        "idps_cc_6b": 83.82359,
+        "idps_cc_8b": null,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 95.96487,
+        "idps_hv_6b": 83.935074,
+        "idps_hv_8b": null,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 92.899925,
+        "idps_pf_6b": 94.44233,
+        "idps_pf_8b": null,
+        "ive_basica": 1.0,
+        "ive_consolidado": 1.0,
+        "ive_media": null,
+        "matricula_total": 4.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 1.5,
+        "n_beneficiarios_sep": 4.0,
+        "n_directivos": 0.0,
+        "n_docentes": 2.0,
+        "n_vulnerables": 4.0,
+        "nom_rbd": "ESCUELA EL SANTO DE TABUNCO",
+        "procesos_con_sancion": 1,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 1,
+        "rbd": "3215",
+        "simce_lect_2m": null,
+        "simce_lect_4b": null,
+        "simce_lect_6b": null,
+        "simce_lect_8b": null,
+        "simce_mate_2m": null,
+        "simce_mate_4b": null,
+        "simce_mate_6b": null,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 1.0,
+        "tasa_reprobacion": 0.0,
+        "tasa_retiro": 0.0,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 4.5
+      },
+      "status": 200
+    },
+    "3640": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1632,
+        "ES_RURAL": false,
+        "INDICER": 61.771,
+        "SEL": 3,
+        "cod_depe2": 4,
+        "cursos_total": 9.5,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 5,
+        "horas_docentes": 1548.5,
+        "idps_am_2m": 73.75984,
+        "idps_am_4b": null,
+        "idps_am_6b": null,
+        "idps_am_8b": null,
+        "idps_cc_2m": 76.31747,
+        "idps_cc_4b": null,
+        "idps_cc_6b": null,
+        "idps_cc_8b": null,
+        "idps_hv_2m": 66.543434,
+        "idps_hv_4b": null,
+        "idps_hv_6b": null,
+        "idps_hv_8b": null,
+        "idps_pf_2m": 78.65467,
+        "idps_pf_4b": null,
+        "idps_pf_6b": null,
+        "idps_pf_8b": null,
+        "ive_basica": null,
+        "ive_consolidado": 0.93148106,
+        "ive_media": 0.93148106,
+        "matricula_total": 340.66666667,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 1,
+        "mediaciones_total": 1,
+        "n_asistentes": 24.5,
+        "n_beneficiarios_sep": 0.0,
+        "n_directivos": 1.5,
+        "n_docentes": 45.0,
+        "n_vulnerables": 986.0,
+        "nom_rbd": "INSTITUTO SUPERIOR DE COMERCIO PROFESOR FERNANDO PÉREZ BECERRA",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "3640",
+        "simce_lect_2m": 237.0,
+        "simce_lect_4b": null,
+        "simce_lect_6b": null,
+        "simce_lect_8b": null,
+        "simce_mate_2m": 235.0,
+        "simce_mate_4b": null,
+        "simce_mate_6b": null,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.92370015,
+        "tasa_reprobacion": 0.05008993,
+        "tasa_retiro": 0.02620993,
+        "tiene_convenio_sep": 0.0,
+        "total_matricula": 340.0
+      },
+      "status": 200
+    },
+    "381": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 312,
+        "ES_RURAL": false,
+        "INDICER": 61.975,
+        "SEL": 3,
+        "cod_depe2": 5,
+        "cursos_total": 4.5,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 1,
+        "denuncias_juridica": 2,
+        "denuncias_total": 4,
+        "horas_docentes": 630.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 71.83688,
+        "idps_am_6b": 76.6525,
+        "idps_am_8b": 78.31001,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 72.28114,
+        "idps_cc_6b": 75.98415,
+        "idps_cc_8b": 75.6055,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 74.59849,
+        "idps_hv_6b": 73.901924,
+        "idps_hv_8b": 73.5924,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 78.40903,
+        "idps_pf_6b": 77.23076,
+        "idps_pf_8b": 77.28419,
+        "ive_basica": 0.86818876,
+        "ive_consolidado": 0.86818876,
+        "ive_media": null,
+        "matricula_total": 75.75,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 13.0,
+        "n_beneficiarios_sep": 139.0,
+        "n_directivos": 1.0,
+        "n_docentes": 16.5,
+        "n_vulnerables": 139.0,
+        "nom_rbd": "ESCUELA BÁSICA PEDRO LUJAN",
+        "procesos_con_sancion": 4,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 4,
+        "rbd": "381",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 235.0,
+        "simce_lect_6b": 241.0,
+        "simce_lect_8b": 220.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 215.0,
+        "simce_mate_6b": 254.0,
+        "simce_mate_8b": 219.0,
+        "tasa_aprobacion": 0.98158841,
+        "tasa_reprobacion": 0.01094891,
+        "tasa_retiro": 0.00746269,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 135.5
+      },
+      "status": 200
+    },
+    "4288": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 833,
+        "ES_RURAL": false,
+        "INDICER": 64.086,
+        "SEL": 2,
+        "cod_depe2": 1,
+        "cursos_total": 7.375,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 1,
+        "denuncias_total": 4,
+        "horas_docentes": 2594.5,
+        "idps_am_2m": 76.4136,
+        "idps_am_4b": null,
+        "idps_am_6b": null,
+        "idps_am_8b": null,
+        "idps_cc_2m": 77.98949,
+        "idps_cc_4b": null,
+        "idps_cc_6b": null,
+        "idps_cc_8b": null,
+        "idps_hv_2m": 73.33536,
+        "idps_hv_4b": null,
+        "idps_hv_6b": null,
+        "idps_hv_8b": null,
+        "idps_pf_2m": 81.14305,
+        "idps_pf_4b": null,
+        "idps_pf_6b": null,
+        "idps_pf_8b": null,
+        "ive_basica": null,
+        "ive_consolidado": 0.92754245,
+        "ive_media": 0.92754245,
+        "matricula_total": 175.75,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 38.5,
+        "n_beneficiarios_sep": 645.5,
+        "n_directivos": 2.0,
+        "n_docentes": 66.0,
+        "n_vulnerables": 666.5,
+        "nom_rbd": "LICEO BICENTENARIO POLITÉCNICO MONTE ÁGUILA",
+        "procesos_con_sancion": 4,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 4,
+        "rbd": "4288",
+        "simce_lect_2m": 246.0,
+        "simce_lect_4b": null,
+        "simce_lect_6b": null,
+        "simce_lect_8b": null,
+        "simce_mate_2m": 233.0,
+        "simce_mate_4b": null,
+        "simce_mate_6b": null,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.77912534,
+        "tasa_reprobacion": 0.05218482,
+        "tasa_retiro": 0.16868984,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 179.25
+      },
+      "status": 200
+    },
+    "4432": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 822,
+        "ES_RURAL": true,
+        "INDICER": 63.217,
+        "SEL": 3,
+        "cod_depe2": 1,
+        "cursos_total": null,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 92.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 82.15173,
+        "idps_am_6b": 85.31753,
+        "idps_am_8b": null,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 90.09833,
+        "idps_cc_6b": 79.4892,
+        "idps_cc_8b": null,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 89.431946,
+        "idps_hv_6b": 91.69094,
+        "idps_hv_8b": null,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 91.06831,
+        "idps_pf_6b": 91.16185,
+        "idps_pf_8b": null,
+        "ive_basica": 1.0,
+        "ive_consolidado": 1.0,
+        "ive_media": null,
+        "matricula_total": 13.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 3.5,
+        "n_beneficiarios_sep": 13.0,
+        "n_directivos": 0.0,
+        "n_docentes": 3.0,
+        "n_vulnerables": 13.0,
+        "nom_rbd": "ESCUELA BASICA EL EDEN",
+        "procesos_con_sancion": 4,
+        "procesos_multa": 2,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 4,
+        "rbd": "4432",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 254.0,
+        "simce_lect_6b": 258.0,
+        "simce_lect_8b": null,
+        "simce_mate_2m": null,
+        "simce_mate_4b": null,
+        "simce_mate_6b": 242.0,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.90972222,
+        "tasa_reprobacion": 0.0625,
+        "tasa_retiro": 0.02777778,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 17.0
+      },
+      "status": 200
+    },
+    "4505": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 833,
+        "ES_RURAL": false,
+        "INDICER": 61.608,
+        "SEL": 3,
+        "cod_depe2": 1,
+        "cursos_total": 10.5,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 0,
+        "denuncias_total": 0,
+        "horas_docentes": 1113.5,
+        "idps_am_2m": 68.945015,
+        "idps_am_4b": null,
+        "idps_am_6b": null,
+        "idps_am_8b": null,
+        "idps_cc_2m": 73.526596,
+        "idps_cc_4b": null,
+        "idps_cc_6b": null,
+        "idps_cc_8b": null,
+        "idps_hv_2m": 65.620476,
+        "idps_hv_4b": null,
+        "idps_hv_6b": null,
+        "idps_hv_8b": null,
+        "idps_pf_2m": 73.10581,
+        "idps_pf_4b": null,
+        "idps_pf_6b": null,
+        "idps_pf_8b": null,
+        "ive_basica": null,
+        "ive_consolidado": 0.91887092,
+        "ive_media": 0.91887092,
+        "matricula_total": 317.5,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 18.0,
+        "n_beneficiarios_sep": 296.0,
+        "n_directivos": 1.0,
+        "n_docentes": 36.0,
+        "n_vulnerables": 296.0,
+        "nom_rbd": "LICEO PADRE LUIS ALBERTO SALDES IRARRAZABAL",
+        "procesos_con_sancion": 3,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 1,
+        "procesos_total": 3,
+        "rbd": "4505",
+        "simce_lect_2m": 228.0,
+        "simce_lect_4b": null,
+        "simce_lect_6b": null,
+        "simce_lect_8b": null,
+        "simce_mate_2m": 216.0,
+        "simce_mate_4b": null,
+        "simce_mate_6b": null,
+        "simce_mate_8b": null,
+        "tasa_aprobacion": 0.95254335,
+        "tasa_reprobacion": 0.04145472,
+        "tasa_retiro": 0.00600193,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 323.0
+      },
+      "status": 200
+    },
+    "7388": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1032,
+        "ES_RURAL": false,
+        "INDICER": 72.076,
+        "SEL": 1,
+        "cod_depe2": 2,
+        "cursos_total": 9.16666667,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 2,
+        "denuncias_total": 4,
+        "horas_docentes": 1984.5,
+        "idps_am_2m": 70.35653,
+        "idps_am_4b": 70.27881,
+        "idps_am_6b": 72.15032,
+        "idps_am_8b": 71.60729,
+        "idps_cc_2m": 77.308365,
+        "idps_cc_4b": 71.7695,
+        "idps_cc_6b": 74.747536,
+        "idps_cc_8b": 73.61048,
+        "idps_hv_2m": 75.646126,
+        "idps_hv_4b": 69.555145,
+        "idps_hv_6b": 70.237656,
+        "idps_hv_8b": 71.8356,
+        "idps_pf_2m": 79.01606,
+        "idps_pf_4b": 74.95031,
+        "idps_pf_6b": 77.12272,
+        "idps_pf_8b": 76.36833,
+        "ive_basica": 0.79805656,
+        "ive_consolidado": 0.77785858,
+        "ive_media": 0.7576606,
+        "matricula_total": 368.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 41.5,
+        "n_beneficiarios_sep": 499.0,
+        "n_directivos": 2.0,
+        "n_docentes": 54.0,
+        "n_vulnerables": 902.5,
+        "nom_rbd": "COLEGIO SAN JOSE",
+        "procesos_con_sancion": 4,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 1,
+        "procesos_total": 4,
+        "rbd": "7388",
+        "simce_lect_2m": 260.0,
+        "simce_lect_4b": 274.0,
+        "simce_lect_6b": 272.0,
+        "simce_lect_8b": 273.0,
+        "simce_mate_2m": 302.0,
+        "simce_mate_4b": 269.0,
+        "simce_mate_6b": 300.0,
+        "simce_mate_8b": 307.0,
+        "tasa_aprobacion": 0.94844193,
+        "tasa_reprobacion": 0.0478727,
+        "tasa_retiro": 0.00368537,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 477.25
+      },
+      "status": 200
+    },
+    "8376": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1112,
+        "ES_RURAL": false,
+        "INDICER": 62.47,
+        "SEL": 3,
+        "cod_depe2": 5,
+        "cursos_total": 7.25,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 3,
+        "denuncias_total": 6,
+        "horas_docentes": 1247.0,
+        "idps_am_2m": null,
+        "idps_am_4b": 71.31245,
+        "idps_am_6b": 71.648476,
+        "idps_am_8b": 69.89185,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 67.98811,
+        "idps_cc_6b": 68.435905,
+        "idps_cc_8b": 70.08648,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 67.84794,
+        "idps_hv_6b": 59.66946,
+        "idps_hv_8b": 62.431488,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 77.03497,
+        "idps_pf_6b": 74.246796,
+        "idps_pf_8b": 65.233574,
+        "ive_basica": 0.93930863,
+        "ive_consolidado": 0.93930863,
+        "ive_media": null,
+        "matricula_total": 176.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 0,
+        "mediaciones_total": 0,
+        "n_asistentes": 44.5,
+        "n_beneficiarios_sep": 330.5,
+        "n_directivos": 1.5,
+        "n_docentes": 36.0,
+        "n_vulnerables": 330.5,
+        "nom_rbd": "ESCUELA BASICA MUNICIPAL POETISA GABRIELA MISTRAL",
+        "procesos_con_sancion": 3,
+        "procesos_multa": 1,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 3,
+        "rbd": "8376",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 245.0,
+        "simce_lect_6b": 210.0,
+        "simce_lect_8b": 216.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 240.0,
+        "simce_mate_6b": 215.0,
+        "simce_mate_8b": 252.0,
+        "tasa_aprobacion": 0.95873894,
+        "tasa_reprobacion": 0.03627768,
+        "tasa_retiro": 0.00498339,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 293.5
+      },
+      "status": 200
+    },
+    "9": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1511,
+        "ES_RURAL": false,
+        "INDICER": 71.087,
+        "SEL": 2,
+        "cod_depe2": 5,
+        "cursos_total": 21.25,
+        "denuncias_ciberbullying": 1,
+        "denuncias_fiscalizacion": 2,
+        "denuncias_juridica": 3,
+        "denuncias_total": 8,
+        "horas_docentes": 3565.5,
+        "idps_am_2m": null,
+        "idps_am_4b": 81.201004,
+        "idps_am_6b": 78.75273,
+        "idps_am_8b": 82.731575,
+        "idps_cc_2m": null,
+        "idps_cc_4b": 79.1068,
+        "idps_cc_6b": 80.52855,
+        "idps_cc_8b": 82.93539,
+        "idps_hv_2m": null,
+        "idps_hv_4b": 75.62112,
+        "idps_hv_6b": 75.07653,
+        "idps_hv_8b": 79.25884,
+        "idps_pf_2m": null,
+        "idps_pf_4b": 82.98924,
+        "idps_pf_6b": 85.07373,
+        "idps_pf_8b": 84.237755,
+        "ive_basica": 0.80184481,
+        "ive_consolidado": 0.80184481,
+        "ive_media": null,
+        "matricula_total": 756.0,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 2,
+        "mediaciones_total": 2,
+        "n_asistentes": 104.5,
+        "n_beneficiarios_sep": 1162.0,
+        "n_directivos": 1.0,
+        "n_docentes": 94.0,
+        "n_vulnerables": 1162.0,
+        "nom_rbd": "ESCUELA REPUBLICA DE ISRAEL",
+        "procesos_con_sancion": 6,
+        "procesos_multa": 3,
+        "procesos_privacion_subvencion": 1,
+        "procesos_total": 7,
+        "rbd": "9",
+        "simce_lect_2m": null,
+        "simce_lect_4b": 299.0,
+        "simce_lect_6b": 265.0,
+        "simce_lect_8b": 249.0,
+        "simce_mate_2m": null,
+        "simce_mate_4b": 288.0,
+        "simce_mate_6b": 258.0,
+        "simce_mate_8b": 275.0,
+        "tasa_aprobacion": 0.9954539,
+        "tasa_reprobacion": 0.00153149,
+        "tasa_retiro": 0.00301462,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 1306.5
+      },
+      "status": 200
+    },
+    "9911": {
+      "cuerpo": {
+        "BIENIO_PREMIO": "2024-25",
+        "CLUSTER": 1332,
+        "ES_RURAL": false,
+        "INDICER": 67.029,
+        "SEL": 3,
+        "cod_depe2": 2,
+        "cursos_total": 9.33333333,
+        "denuncias_ciberbullying": 0,
+        "denuncias_fiscalizacion": 0,
+        "denuncias_juridica": 1,
+        "denuncias_total": 9,
+        "horas_docentes": 2556.5,
+        "idps_am_2m": 70.825775,
+        "idps_am_4b": 76.50068,
+        "idps_am_6b": 70.57096,
+        "idps_am_8b": 72.703865,
+        "idps_cc_2m": 72.82018,
+        "idps_cc_4b": 72.60164,
+        "idps_cc_6b": 72.281845,
+        "idps_cc_8b": 72.10772,
+        "idps_hv_2m": 65.26918,
+        "idps_hv_4b": 69.43793,
+        "idps_hv_6b": 64.30165,
+        "idps_hv_8b": 66.517746,
+        "idps_pf_2m": 70.97812,
+        "idps_pf_4b": 77.35753,
+        "idps_pf_6b": 70.01008,
+        "idps_pf_8b": 70.58534,
+        "ive_basica": 0.66448821,
+        "ive_consolidado": 0.66897689,
+        "ive_media": 0.67346557,
+        "matricula_total": 391.33333333,
+        "mediaciones_de_denuncia": 0,
+        "mediaciones_efectivas": 2,
+        "mediaciones_total": 4,
+        "n_asistentes": 43.5,
+        "n_beneficiarios_sep": 327.5,
+        "n_directivos": 2.0,
+        "n_docentes": 66.0,
+        "n_vulnerables": 750.0,
+        "nom_rbd": "COLEGIO DE LA PROVIDENCIA C.LARRAIN DE I",
+        "procesos_con_sancion": 0,
+        "procesos_multa": 0,
+        "procesos_privacion_subvencion": 0,
+        "procesos_total": 0,
+        "rbd": "9911",
+        "simce_lect_2m": 246.0,
+        "simce_lect_4b": 284.0,
+        "simce_lect_6b": 262.0,
+        "simce_lect_8b": 245.0,
+        "simce_mate_2m": 256.0,
+        "simce_mate_4b": 267.0,
+        "simce_mate_6b": 268.0,
+        "simce_mate_8b": 261.0,
+        "tasa_aprobacion": 0.9821852,
+        "tasa_reprobacion": 0.01197437,
+        "tasa_retiro": 0.00584042,
+        "tiene_convenio_sep": 1.0,
+        "total_matricula": 519.25
+      },
+      "status": 200
+    }
+  },
+  "listado": {
+    "_": {
+      "cuerpo": {
+        "detalle": [],
+        "origen": "postgres",
+        "rbds": [],
+        "rol": "auditor"
+      },
+      "status": 200
+    }
+  },
+  "prediccion": {
+    "10": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.93,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.59
+          },
+          {
+            "aporte_al_indice": 16.63,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.41
+          },
+          {
+            "aporte_al_indice": 12.29,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 33.21
+          },
+          {
+            "aporte_al_indice": 5.54,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 92.32
+          },
+          {
+            "aporte_al_indice": 4.16,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 83.28
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 99.2
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 60.54,
+        "rbd": "10",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "11": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.9,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.47
+          },
+          {
+            "aporte_al_indice": 16.59,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.26
+          },
+          {
+            "aporte_al_indice": 11.54,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 31.19
+          },
+          {
+            "aporte_al_indice": 5.18,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 86.29
+          },
+          {
+            "aporte_al_indice": 3.66,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 73.13
+          },
+          {
+            "aporte_al_indice": 1.95,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.53
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 58.82,
+        "rbd": "11",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "1418": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 23.2,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 62.7
+          },
+          {
+            "aporte_al_indice": 20.74,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 94.28
+          },
+          {
+            "aporte_al_indice": 16.4,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.56
+          },
+          {
+            "aporte_al_indice": 4.96,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 82.65
+          },
+          {
+            "aporte_al_indice": 3.9,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 77.9
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 99.2
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 71.18,
+        "rbd": "1418",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "16816": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.88,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.38
+          },
+          {
+            "aporte_al_indice": 16.62,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.37
+          },
+          {
+            "aporte_al_indice": 12.91,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 34.9
+          },
+          {
+            "aporte_al_indice": 4.85,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 80.77
+          },
+          {
+            "aporte_al_indice": 3.47,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 69.48
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.88
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.72,
+        "rbd": "16816",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "16942": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.94,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.63
+          },
+          {
+            "aporte_al_indice": 16.52,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.01
+          },
+          {
+            "aporte_al_indice": 14.2,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 38.39
+          },
+          {
+            "aporte_al_indice": 4.29,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 71.44
+          },
+          {
+            "aporte_al_indice": 3.09,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 61.74
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 99.2
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 60.02,
+        "rbd": "16942",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "20008": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.78,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 89.89
+          },
+          {
+            "aporte_al_indice": 16.63,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.4
+          },
+          {
+            "aporte_al_indice": 13.29,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 35.93
+          },
+          {
+            "aporte_al_indice": 5.09,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 84.9
+          },
+          {
+            "aporte_al_indice": 3.77,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 75.32
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.17
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 60.53,
+        "rbd": "20008",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "26110": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.15,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 91.61
+          },
+          {
+            "aporte_al_indice": 16.79,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 45.39
+          },
+          {
+            "aporte_al_indice": 16.55,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.11
+          },
+          {
+            "aporte_al_indice": 4.91,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 81.77
+          },
+          {
+            "aporte_al_indice": 3.37,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 67.31
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.17
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 63.73,
+        "rbd": "26110",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "2829": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.76,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 94.38
+          },
+          {
+            "aporte_al_indice": 16.5,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.92
+          },
+          {
+            "aporte_al_indice": 12.88,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 34.8
+          },
+          {
+            "aporte_al_indice": 4.79,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 79.89
+          },
+          {
+            "aporte_al_indice": 3.69,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 73.7
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 99.2
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 60.6,
+        "rbd": "2829",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "2997": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.41,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 88.25
+          },
+          {
+            "aporte_al_indice": 16.48,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.85
+          },
+          {
+            "aporte_al_indice": 13.76,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 37.2
+          },
+          {
+            "aporte_al_indice": 4.73,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 78.91
+          },
+          {
+            "aporte_al_indice": 3.13,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 62.64
+          },
+          {
+            "aporte_al_indice": 1.97,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.32
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.49,
+        "rbd": "2997",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "31": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.35,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 92.51
+          },
+          {
+            "aporte_al_indice": 16.55,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.1
+          },
+          {
+            "aporte_al_indice": 15.31,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 41.37
+          },
+          {
+            "aporte_al_indice": 4.98,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 83.08
+          },
+          {
+            "aporte_al_indice": 3.69,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 73.72
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.22
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 62.84,
+        "rbd": "31",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "3215": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.51,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 93.21
+          },
+          {
+            "aporte_al_indice": 16.47,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.82
+          },
+          {
+            "aporte_al_indice": 14.16,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 38.26
+          },
+          {
+            "aporte_al_indice": 4.0,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 66.67
+          },
+          {
+            "aporte_al_indice": 2.7,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 53.9
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 99.0
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.81,
+        "rbd": "3215",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "3640": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.84,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.16
+          },
+          {
+            "aporte_al_indice": 16.46,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.78
+          },
+          {
+            "aporte_al_indice": 12.98,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 35.08
+          },
+          {
+            "aporte_al_indice": 4.75,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 79.23
+          },
+          {
+            "aporte_al_indice": 3.51,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 70.28
+          },
+          {
+            "aporte_al_indice": 1.98,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.96
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.52,
+        "rbd": "3640",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "381": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.76,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 89.84
+          },
+          {
+            "aporte_al_indice": 16.57,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.18
+          },
+          {
+            "aporte_al_indice": 13.09,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 35.37
+          },
+          {
+            "aporte_al_indice": 5.01,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 83.45
+          },
+          {
+            "aporte_al_indice": 3.46,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 69.14
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.99
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.84,
+        "rbd": "381",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "4288": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.79,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 89.97
+          },
+          {
+            "aporte_al_indice": 16.47,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.82
+          },
+          {
+            "aporte_al_indice": 13.37,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 36.14
+          },
+          {
+            "aporte_al_indice": 5.04,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 84.02
+          },
+          {
+            "aporte_al_indice": 3.8,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 75.93
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.99
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 60.43,
+        "rbd": "4288",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "4432": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.03,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 91.04
+          },
+          {
+            "aporte_al_indice": 16.47,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.81
+          },
+          {
+            "aporte_al_indice": 15.85,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 42.84
+          },
+          {
+            "aporte_al_indice": 4.7,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 78.38
+          },
+          {
+            "aporte_al_indice": 3.29,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 65.72
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.79
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 62.29,
+        "rbd": "4432",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "4505": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.19,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 91.76
+          },
+          {
+            "aporte_al_indice": 16.48,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 58.84
+          },
+          {
+            "aporte_al_indice": 11.34,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 30.66
+          },
+          {
+            "aporte_al_indice": 4.83,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 80.58
+          },
+          {
+            "aporte_al_indice": 3.24,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 64.75
+          },
+          {
+            "aporte_al_indice": 1.97,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.4
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 58.05,
+        "rbd": "4505",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "7388": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.59,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 55.66
+          },
+          {
+            "aporte_al_indice": 19.77,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 89.88
+          },
+          {
+            "aporte_al_indice": 16.59,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.26
+          },
+          {
+            "aporte_al_indice": 4.98,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 82.97
+          },
+          {
+            "aporte_al_indice": 3.75,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 74.9
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.96
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 67.64,
+        "rbd": "7388",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "8376": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 19.93,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 90.6
+          },
+          {
+            "aporte_al_indice": 16.7,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.64
+          },
+          {
+            "aporte_al_indice": 12.31,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 33.27
+          },
+          {
+            "aporte_al_indice": 4.96,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 82.67
+          },
+          {
+            "aporte_al_indice": 3.52,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 70.35
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 97.9
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 59.38,
+        "rbd": "8376",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "9": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.27,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 92.13
+          },
+          {
+            "aporte_al_indice": 19.4,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 52.43
+          },
+          {
+            "aporte_al_indice": 16.56,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.15
+          },
+          {
+            "aporte_al_indice": 5.37,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 89.47
+          },
+          {
+            "aporte_al_indice": 4.07,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 81.33
+          },
+          {
+            "aporte_al_indice": 1.93,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 96.51
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 67.6,
+        "rbd": "9",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    },
+    "9911": {
+      "cuerpo": {
+        "advertencia": "Estimacion con incertidumbre cuantificada. La IA asiste; la decision estrategica y financiera la toma exclusivamente el equipo directivo.",
+        "estrategia": "desagregado",
+        "factores": [
+          {
+            "aporte_al_indice": 20.16,
+            "codigo": "IGUALDR",
+            "es_acotado": true,
+            "nombre": "Igualdad de Oportunidades",
+            "peso": 0.22,
+            "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+            "valor": 91.64
+          },
+          {
+            "aporte_al_indice": 17.72,
+            "codigo": "EFECTIVR",
+            "es_acotado": false,
+            "nombre": "Efectividad",
+            "peso": 0.37,
+            "restriccion": null,
+            "valor": 47.89
+          },
+          {
+            "aporte_al_indice": 16.57,
+            "codigo": "SUPERAR",
+            "es_acotado": true,
+            "nombre": "Superacion",
+            "peso": 0.28,
+            "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+            "valor": 59.17
+          },
+          {
+            "aporte_al_indice": 5.13,
+            "codigo": "INICIAR",
+            "es_acotado": true,
+            "nombre": "Iniciativa",
+            "peso": 0.06,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 85.48
+          },
+          {
+            "aporte_al_indice": 3.61,
+            "codigo": "INTEGRAR",
+            "es_acotado": true,
+            "nombre": "Integracion y Participacion",
+            "peso": 0.05,
+            "restriccion": "Ficha SNED de autorreporte no publica.",
+            "valor": 72.16
+          },
+          {
+            "aporte_al_indice": 1.96,
+            "codigo": "MEJORAR",
+            "es_acotado": true,
+            "nombre": "Mejoramiento de Condiciones",
+            "peso": 0.02,
+            "restriccion": "Varianza del objetivo proxima a cero.",
+            "valor": 98.01
+          }
+        ],
+        "incertidumbre_mae": 2.51,
+        "indice": 65.14,
+        "rbd": "9911",
+        "version_modelo": "1.0.0"
+      },
+      "status": 200
+    }
+  },
+  "ranking": {
+    "10": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1511,
+        "indicer": 63.828,
+        "n_grupo": 14,
+        "percentil": 0.5385,
+        "posicion_en_grupo": 7,
+        "rbd": "10",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "11": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1512,
+        "indicer": 57.837,
+        "n_grupo": 27,
+        "percentil": 0.2308,
+        "posicion_en_grupo": 21,
+        "rbd": "11",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "1418": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 521,
+        "indicer": 74.494,
+        "n_grupo": 60,
+        "percentil": 1.0,
+        "posicion_en_grupo": 1,
+        "rbd": "1418",
+        "sel": 1
+      },
+      "status": 200
+    },
+    "16816": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1313,
+        "indicer": 64.473,
+        "n_grupo": 374,
+        "percentil": 0.7828,
+        "posicion_en_grupo": 82,
+        "rbd": "16816",
+        "sel": 2
+      },
+      "status": 200
+    },
+    "16942": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 932,
+        "indicer": 64.558,
+        "n_grupo": 129,
+        "percentil": 0.75,
+        "posicion_en_grupo": 33,
+        "rbd": "16942",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "20008": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 932,
+        "indicer": 64.786,
+        "n_grupo": 129,
+        "percentil": 0.7734,
+        "posicion_en_grupo": 30,
+        "rbd": "20008",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "26110": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1331,
+        "indicer": 66.871,
+        "n_grupo": 163,
+        "percentil": 0.3765,
+        "posicion_en_grupo": 102,
+        "rbd": "26110",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "2829": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 721,
+        "indicer": 61.833,
+        "n_grupo": 41,
+        "percentil": 0.525,
+        "posicion_en_grupo": 20,
+        "rbd": "2829",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "2997": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 732,
+        "indicer": 60.514,
+        "n_grupo": 118,
+        "percentil": 0.3846,
+        "posicion_en_grupo": 73,
+        "rbd": "2997",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "31": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1522,
+        "indicer": 60.044,
+        "n_grupo": 19,
+        "percentil": 0.3889,
+        "posicion_en_grupo": 12,
+        "rbd": "31",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "3215": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 724,
+        "indicer": 63.537,
+        "n_grupo": 54,
+        "percentil": 0.5283,
+        "posicion_en_grupo": 26,
+        "rbd": "3215",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "3640": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1632,
+        "indicer": 61.771,
+        "n_grupo": 63,
+        "percentil": 0.4355,
+        "posicion_en_grupo": 36,
+        "rbd": "3640",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "381": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 312,
+        "indicer": 61.975,
+        "n_grupo": 44,
+        "percentil": 0.5349,
+        "posicion_en_grupo": 21,
+        "rbd": "381",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "4288": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 833,
+        "indicer": 64.086,
+        "n_grupo": 141,
+        "percentil": 0.7643,
+        "posicion_en_grupo": 34,
+        "rbd": "4288",
+        "sel": 2
+      },
+      "status": 200
+    },
+    "4432": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 822,
+        "indicer": 63.217,
+        "n_grupo": 156,
+        "percentil": 0.5032,
+        "posicion_en_grupo": 78,
+        "rbd": "4432",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "4505": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 833,
+        "indicer": 61.608,
+        "n_grupo": 141,
+        "percentil": 0.4571,
+        "posicion_en_grupo": 77,
+        "rbd": "4505",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "7388": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1032,
+        "indicer": 72.076,
+        "n_grupo": 46,
+        "percentil": 0.9556,
+        "posicion_en_grupo": 3,
+        "rbd": "7388",
+        "sel": 1
+      },
+      "status": 200
+    },
+    "8376": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1112,
+        "indicer": 62.47,
+        "n_grupo": 13,
+        "percentil": 0.3333,
+        "posicion_en_grupo": 9,
+        "rbd": "8376",
+        "sel": 3
+      },
+      "status": 200
+    },
+    "9": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1511,
+        "indicer": 71.087,
+        "n_grupo": 14,
+        "percentil": 0.7692,
+        "posicion_en_grupo": 4,
+        "rbd": "9",
+        "sel": 2
+      },
+      "status": 200
+    },
+    "9911": {
+      "cuerpo": {
+        "ciclo": "2024-25",
+        "cluster_codigo": 1332,
+        "indicer": 67.029,
+        "n_grupo": 357,
+        "percentil": 0.618,
+        "posicion_en_grupo": 137,
+        "rbd": "9911",
+        "sel": 3
+      },
+      "status": 200
+    }
+  },
+  "shapley": {
+    "10": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "11": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "1418": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "16816": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "16942": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "20008": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "26110": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "2829": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "2997": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "31": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "3215": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "3640": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "381": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "4288": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "4432": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "4505": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "7388": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "8376": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "9": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    },
+    "9911": {
+      "cuerpo": {
+        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+      },
+      "status": 422
+    }
+  },
+  "simulacion": {
+    "10": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 60.54,
+        "predicciones": [
+          59.65,
+          59.65,
+          59.7,
+          59.79,
+          60.54,
+          61.4,
+          61.96,
+          62.04,
+          62.05
+        ],
+        "rbd": "10",
+        "valor_actual": 228.0,
+        "valores": [
+          123.0,
+          149.25,
+          175.5,
+          201.75,
+          228.0,
+          254.25,
+          280.5,
+          306.75,
+          333.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "11": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 58.82,
+        "predicciones": [
+          58.19,
+          58.19,
+          58.19,
+          58.28,
+          58.82,
+          59.55,
+          60.22,
+          60.7,
+          60.87
+        ],
+        "rbd": "11",
+        "valor_actual": 200.0,
+        "valores": [
+          100.0,
+          125.62,
+          151.25,
+          176.88,
+          202.5,
+          228.12,
+          253.75,
+          279.38,
+          305.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "1418": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 71.18,
+        "predicciones": [
+          67.97,
+          68.17,
+          68.86,
+          69.74,
+          71.18,
+          71.63,
+          71.67,
+          71.67,
+          71.67
+        ],
+        "rbd": "1418",
+        "valor_actual": 293.0,
+        "valores": [
+          188.0,
+          214.25,
+          240.5,
+          266.75,
+          293.0,
+          319.25,
+          345.5,
+          371.75,
+          398.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "16816": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 59.72,
+        "predicciones": [
+          57.67,
+          57.67,
+          57.77,
+          58.88,
+          59.72,
+          60.83,
+          61.68,
+          61.97,
+          62.05
+        ],
+        "rbd": "16816",
+        "valor_actual": 225.0,
+        "valores": [
+          120.0,
+          146.25,
+          172.5,
+          198.75,
+          225.0,
+          251.25,
+          277.5,
+          303.75,
+          330.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "16942": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 60.02,
+        "predicciones": [
+          58.24,
+          58.26,
+          58.68,
+          59.6,
+          60.07,
+          61.27,
+          62.07,
+          62.2,
+          62.2
+        ],
+        "rbd": "16942",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "20008": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 60.53,
+        "predicciones": [
+          59.14,
+          59.14,
+          59.16,
+          59.6,
+          60.53,
+          60.8,
+          61.33,
+          61.62,
+          61.66
+        ],
+        "rbd": "20008",
+        "valor_actual": 220.0,
+        "valores": [
+          115.0,
+          141.25,
+          167.5,
+          193.75,
+          220.0,
+          246.25,
+          272.5,
+          298.75,
+          325.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "26110": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 63.73,
+        "predicciones": [
+          63.06,
+          63.08,
+          63.2,
+          63.45,
+          63.73,
+          64.29,
+          64.45,
+          64.52,
+          64.52
+        ],
+        "rbd": "26110",
+        "valor_actual": 253.0,
+        "valores": [
+          148.0,
+          174.25,
+          200.5,
+          226.75,
+          253.0,
+          279.25,
+          305.5,
+          331.75,
+          358.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "2829": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 60.6,
+        "predicciones": [
+          59.48,
+          59.48,
+          59.68,
+          60.17,
+          60.6,
+          61.6,
+          62.14,
+          62.34,
+          62.38
+        ],
+        "rbd": "2829",
+        "valor_actual": 227.0,
+        "valores": [
+          122.0,
+          148.25,
+          174.5,
+          200.75,
+          227.0,
+          253.25,
+          279.5,
+          305.75,
+          332.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "2997": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 59.49,
+        "predicciones": [
+          57.83,
+          57.84,
+          58.01,
+          58.4,
+          59.49,
+          60.01,
+          60.45,
+          60.54,
+          60.54
+        ],
+        "rbd": "2997",
+        "valor_actual": 240.0,
+        "valores": [
+          135.0,
+          161.25,
+          187.5,
+          213.75,
+          240.0,
+          266.25,
+          292.5,
+          318.75,
+          345.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "31": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 62.84,
+        "predicciones": [
+          61.26,
+          61.27,
+          61.55,
+          61.89,
+          62.84,
+          63.64,
+          63.87,
+          63.98,
+          63.98
+        ],
+        "rbd": "31",
+        "valor_actual": 248.0,
+        "valores": [
+          143.0,
+          169.25,
+          195.5,
+          221.75,
+          248.0,
+          274.25,
+          300.5,
+          326.75,
+          353.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "3215": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 59.81,
+        "predicciones": [
+          56.01,
+          56.05,
+          56.87,
+          58.6,
+          59.77,
+          62.52,
+          64.2,
+          64.33,
+          64.33
+        ],
+        "rbd": "3215",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "3640": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": false,
+        "prediccion_actual": 59.52,
+        "predicciones": [
+          57.37,
+          57.42,
+          58.13,
+          59.47,
+          59.66,
+          62.23,
+          63.74,
+          63.88,
+          63.87
+        ],
+        "rbd": "3640",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "381": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 59.84,
+        "predicciones": [
+          59.24,
+          59.24,
+          59.25,
+          59.49,
+          59.84,
+          60.65,
+          61.3,
+          61.7,
+          61.85
+        ],
+        "rbd": "381",
+        "valor_actual": 215.0,
+        "valores": [
+          110.0,
+          136.25,
+          162.5,
+          188.75,
+          215.0,
+          241.25,
+          267.5,
+          293.75,
+          320.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "4288": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 60.43,
+        "predicciones": [
+          57.93,
+          57.97,
+          58.69,
+          60.15,
+          60.54,
+          62.97,
+          64.52,
+          64.64,
+          64.64
+        ],
+        "rbd": "4288",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "4432": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 62.29,
+        "predicciones": [
+          60.38,
+          60.41,
+          60.88,
+          61.5,
+          62.25,
+          63.01,
+          63.45,
+          63.59,
+          63.59
+        ],
+        "rbd": "4432",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "4505": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": false,
+        "prediccion_actual": 58.05,
+        "predicciones": [
+          57.44,
+          57.47,
+          58.02,
+          58.51,
+          58.43,
+          60.87,
+          62.1,
+          62.2,
+          62.2
+        ],
+        "rbd": "4505",
+        "valor_actual": 247.0,
+        "valores": [
+          142.0,
+          168.25,
+          194.5,
+          220.75,
+          247.0,
+          273.25,
+          299.5,
+          325.75,
+          352.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "7388": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 67.64,
+        "predicciones": [
+          66.4,
+          66.4,
+          66.51,
+          66.94,
+          67.64,
+          68.36,
+          68.63,
+          68.65,
+          68.65
+        ],
+        "rbd": "7388",
+        "valor_actual": 269.0,
+        "valores": [
+          164.0,
+          190.25,
+          216.5,
+          242.75,
+          269.0,
+          295.25,
+          321.5,
+          347.75,
+          374.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "8376": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 59.38,
+        "predicciones": [
+          58.15,
+          58.19,
+          58.34,
+          58.9,
+          59.38,
+          60.16,
+          60.5,
+          60.55,
+          60.55
+        ],
+        "rbd": "8376",
+        "valor_actual": 240.0,
+        "valores": [
+          135.0,
+          161.25,
+          187.5,
+          213.75,
+          240.0,
+          266.25,
+          292.5,
+          318.75,
+          345.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "9": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 67.6,
+        "predicciones": [
+          65.24,
+          65.33,
+          65.54,
+          66.69,
+          67.6,
+          67.87,
+          67.9,
+          67.9,
+          67.9
+        ],
+        "rbd": "9",
+        "valor_actual": 288.0,
+        "valores": [
+          183.0,
+          209.25,
+          235.5,
+          261.75,
+          288.0,
+          314.25,
+          340.5,
+          366.75,
+          393.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    },
+    "9911": {
+      "cuerpo": {
+        "advertencia_magnitud": "El indice normaliza cada factor contra los extremos nacionales: el resultado depende del desempeno del conjunto del sistema. Una mejora realista de 15 a 20 puntos SIMCE aporta del orden de 0,5 puntos al indice. La curva comunica direccion y sensibilidad, no una promesa de retorno.",
+        "etiqueta": "SIMCE Matematica 4to basico",
+        "monotona": true,
+        "prediccion_actual": 65.14,
+        "predicciones": [
+          64.36,
+          64.38,
+          64.49,
+          64.93,
+          65.14,
+          65.99,
+          66.25,
+          66.25,
+          66.25
+        ],
+        "rbd": "9911",
+        "valor_actual": 267.0,
+        "valores": [
+          162.0,
+          188.25,
+          214.5,
+          240.75,
+          267.0,
+          293.25,
+          319.5,
+          345.75,
+          372.0
+        ],
+        "variable": "simce_mate_4b"
+      },
+      "status": 200
+    }
+  }
+}

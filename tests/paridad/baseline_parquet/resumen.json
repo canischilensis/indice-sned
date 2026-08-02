@@ -1,0 +1,50 @@
+{
+  "adaptador": "parquet",
+  "n_rbd": 20,
+  "endpoints": [
+    "alertas",
+    "detalle",
+    "listado",
+    "prediccion",
+    "ranking",
+    "shapley",
+    "simulacion"
+  ],
+  "tiempos_ms": {
+    "listado": {
+      "n": 1,
+      "media": 255.9,
+      "max": 255.9
+    },
+    "detalle": {
+      "n": 20,
+      "media": 41.9,
+      "max": 82.5
+    },
+    "ranking": {
+      "n": 20,
+      "media": 47.2,
+      "max": 92.4
+    },
+    "prediccion": {
+      "n": 20,
+      "media": 955.9,
+      "max": 10448.8
+    },
+    "alertas": {
+      "n": 20,
+      "media": 6.8,
+      "max": 8.6
+    },
+    "shapley": {
+      "n": 20,
+      "media": 406.7,
+      "max": 8018.7
+    },
+    "simulacion": {
+      "n": 20,
+      "media": 4435.2,
+      "max": 4874.2
+    }
+  }
+}

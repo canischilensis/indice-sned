@@ -42,6 +42,14 @@ class RepositorioEstablecimientos(ABC):
         """Resumen de los establecimientos indicados."""
 
     @abstractmethod
+    def ranking(self, rbd: str, periodo: str | None = None) -> dict:
+        """Posicion del establecimiento dentro de su grupo homogeneo.
+
+        Es la mecanica real de la seleccion SNED: no decide el indice absoluto
+        sino la posicion relativa dentro del cluster del periodo.
+        """
+
+    @abstractmethod
     def existe(self, rbd: str) -> bool: ...
 
     def describir(self) -> dict:

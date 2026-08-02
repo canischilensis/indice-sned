@@ -1,0 +1,62 @@
+---
+title: "Secuencia - Explicacion SHAP (atribucion local por variable)"
+---
+sequenceDiagram
+    autonumber
+    actor D as Directivo
+    participant R as router explicabilidad
+    participant S as seguridad
+    participant F as ServicioDePrediccion
+    participant Repo as RepositorioPostgres
+    participant BD as PostgreSQL
+    participant E as EstrategiaDesagregada
+    participant M as metadatos_modelos.json
+    participant P as ArtefactoDiferido
+    participant X as shap.TreeExplainer
+    participant Et as etiquetas
+
+    D->>R: GET /api/v1/xai/{rbd}/shapley?factor=EFECTIVR
+    R->>S: exigir_jurisdiccion(rbd, usuario)
+    S-->>R: autorizado
+
+    R->>F: variables_de(rbd, periodo)
+    F->>Repo: obtener(rbd, periodo)
+    Repo->>BD: CTE simce + idps + ind + sie
+    BD-->>Repo: observacion en formato ancho
+    Repo-->>F: dict
+    F-->>R: observacion
+
+    R->>F: explicar(rbd, variables, "EFECTIVR")
+    F->>E: explicar(observacion, factor)
+    E->>E: valida que el factor exista
+
+    rect rgb(240, 240, 245)
+        Note over E,M: DE DONDE SALE EL VECTOR DE FEATURES
+        E->>M: features del factor
+        M-->>E: 16 nombres: 8 variables base + 8 banderas _ausente
+        E->>P: feature_names_in_
+        P-->>E: orden real del artefacto
+        Note right of E: el ORDEN lo manda el modelo,<br/>no los metadatos
+        E->>E: _matriz: imputa medianas y<br/>calcula <variable>_ausente
+    end
+
+    E->>X: shap_values(X)
+    X->>P: recorre los arboles del RandomForest
+    P-->>X: contribuciones por arbol
+    X-->>E: vector de valores Shapley
+    E->>X: expected_value
+    X-->>E: valor base
+    E->>P: predict(X) para la prediccion puntual
+    P-->>E: valor del factor
+
+    loop por cada variable del factor
+        E->>Et: etiqueta_de(variable)
+        Et-->>E: nombre legible
+    end
+    E->>E: ordena por |contribucion| descendente
+    E-->>F: ExplicacionLocal
+
+    F->>F: verificar_aditividad(tolerancia 0,5)
+    Note over F: base + suma de contribuciones = prediccion
+    F-->>R: RespuestaExplicacion con lectura en lenguaje natural
+    R-->>D: 200 OK

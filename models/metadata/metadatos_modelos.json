@@ -9,7 +9,15 @@
       "simce_lect_8b",
       "simce_mate_8b",
       "simce_lect_2m",
-      "simce_mate_2m"
+      "simce_mate_2m",
+      "simce_lect_4b_ausente",
+      "simce_mate_4b_ausente",
+      "simce_lect_6b_ausente",
+      "simce_mate_6b_ausente",
+      "simce_lect_8b_ausente",
+      "simce_mate_8b_ausente",
+      "simce_lect_2m_ausente",
+      "simce_mate_2m_ausente"
     ],
     "r2": 0.8322,
     "mae": 2.495,
@@ -19,7 +27,17 @@
       "min_samples_leaf": 10,
       "max_features": "log2",
       "max_depth": null
-    }
+    },
+    "features_base": [
+      "simce_lect_4b",
+      "simce_mate_4b",
+      "simce_lect_6b",
+      "simce_mate_6b",
+      "simce_lect_8b",
+      "simce_mate_8b",
+      "simce_lect_2m",
+      "simce_mate_2m"
+    ]
   },
   "SUPERAR": {
     "peso": 0.28,
@@ -39,7 +57,21 @@
       "simce_lect_8b",
       "simce_mate_8b",
       "simce_lect_2m",
-      "simce_mate_2m"
+      "simce_mate_2m",
+      "dif_simce_mate_4b_ausente",
+      "dif_simce_lect_6b_ausente",
+      "dif_simce_mate_6b_ausente",
+      "dif_simce_lect_8b_ausente",
+      "dif_simce_mate_8b_ausente",
+      "dif_simce_lect_2m_ausente",
+      "dif_simce_mate_2m_ausente",
+      "simce_mate_4b_ausente",
+      "simce_lect_6b_ausente",
+      "simce_mate_6b_ausente",
+      "simce_lect_8b_ausente",
+      "simce_mate_8b_ausente",
+      "simce_lect_2m_ausente",
+      "simce_mate_2m_ausente"
     ],
     "r2": 0.1999,
     "mae": 4.191,
@@ -49,7 +81,25 @@
       "min_samples_leaf": 10,
       "max_features": "log2",
       "max_depth": null
-    }
+    },
+    "features_base": [
+      "dif_simce_lect_4b",
+      "dif_simce_mate_4b",
+      "dif_simce_lect_6b",
+      "dif_simce_mate_6b",
+      "dif_simce_lect_8b",
+      "dif_simce_mate_8b",
+      "dif_simce_lect_2m",
+      "dif_simce_mate_2m",
+      "simce_lect_4b",
+      "simce_mate_4b",
+      "simce_lect_6b",
+      "simce_mate_6b",
+      "simce_lect_8b",
+      "simce_mate_8b",
+      "simce_lect_2m",
+      "simce_mate_2m"
+    ]
   },
   "IGUALDR": {
     "peso": 0.22,
@@ -68,7 +118,9 @@
       "n_beneficiarios_sep",
       "ive_consolidado",
       "ive_basica",
-      "tiene_convenio_sep"
+      "tiene_convenio_sep",
+      "ive_consolidado_ausente",
+      "ive_basica_ausente"
     ],
     "r2": 0.1284,
     "mae": 3.979,
@@ -78,7 +130,24 @@
       "min_samples_leaf": 10,
       "max_features": 0.5,
       "max_depth": 8
-    }
+    },
+    "features_base": [
+      "tasa_aprobacion",
+      "tasa_reprobacion",
+      "tasa_retiro",
+      "procesos_con_sancion",
+      "procesos_privacion_subvencion",
+      "procesos_multa",
+      "denuncias_juridica",
+      "denuncias_fiscalizacion",
+      "denuncias_total",
+      "matricula_total",
+      "n_vulnerables",
+      "n_beneficiarios_sep",
+      "ive_consolidado",
+      "ive_basica",
+      "tiene_convenio_sep"
+    ]
   },
   "INICIAR": {
     "peso": 0.06,
@@ -90,7 +159,11 @@
       "idps_am_4b",
       "idps_cc_4b",
       "idps_pf_4b",
-      "idps_hv_4b"
+      "idps_hv_4b",
+      "idps_am_4b_ausente",
+      "idps_cc_4b_ausente",
+      "idps_pf_4b_ausente",
+      "idps_hv_4b_ausente"
     ],
     "r2": 0.0843,
     "mae": 14.947,
@@ -100,7 +173,17 @@
       "min_samples_leaf": 20,
       "max_features": "sqrt",
       "max_depth": 10
-    }
+    },
+    "features_base": [
+      "n_docentes",
+      "horas_docentes",
+      "n_directivos",
+      "n_asistentes",
+      "idps_am_4b",
+      "idps_cc_4b",
+      "idps_pf_4b",
+      "idps_hv_4b"
+    ]
   },
   "INTEGRAR": {
     "peso": 0.05,
@@ -111,7 +194,11 @@
       "idps_pf_2m",
       "n_asistentes",
       "denuncias_total",
-      "mediaciones_total"
+      "mediaciones_total",
+      "idps_cc_4b_ausente",
+      "idps_pf_4b_ausente",
+      "idps_cc_2m_ausente",
+      "idps_pf_2m_ausente"
     ],
     "r2": 0.1321,
     "mae": 18.013,
@@ -121,7 +208,16 @@
       "min_samples_leaf": 40,
       "max_features": 0.5,
       "max_depth": 8
-    }
+    },
+    "features_base": [
+      "idps_cc_4b",
+      "idps_pf_4b",
+      "idps_cc_2m",
+      "idps_pf_2m",
+      "n_asistentes",
+      "denuncias_total",
+      "mediaciones_total"
+    ]
   },
   "MEJORAR": {
     "peso": 0.02,
@@ -141,11 +237,20 @@
       "min_samples_leaf": 20,
       "max_features": "sqrt",
       "max_depth": 5
-    }
+    },
+    "features_base": [
+      "procesos_total",
+      "procesos_con_sancion",
+      "procesos_multa",
+      "denuncias_total",
+      "denuncias_fiscalizacion",
+      "denuncias_juridica"
+    ]
   },
   "_INDICER": {
     "formula": "suma ponderada de los 6 factores",
     "r2_reconstruido": 0.583,
     "mae": 2.51
-  }
+  },
+  "_nota_features": "El campo `features` declara el vector COMPLETO que espera el artefacto: las variables base mas sus banderas `<variable>_ausente`. Antes solo enumeraba las base, y esa omision impedia construir la matriz de entrada. `features_base` conserva la lista original."
 }

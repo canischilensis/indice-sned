@@ -1,0 +1,104 @@
+---
+title: "Indice SNED - Arquitectura Hexagonal: los cuatro puertos y sus adaptadores"
+---
+classDiagram
+    direction LR
+
+    class Especificacion~T~ {
+        <<puerto - ABC>>
+        +codigo: str
+        +descripcion: str
+        +es_satisfecha_por(candidato: T) bool*
+        +y(otra) Especificacion
+        +o(otra) Especificacion
+        +no() Especificacion
+    }
+    class TieneRbdValido
+    class TieneAnioValido
+    class LlaveEsUnica
+    class DentroDeVentanaTemporal
+    class FichaInstitucionalRespondida
+    class ReglaDeAlerta {
+        <<abstracto>>
+        +construir(c) Alerta*
+        +evaluar(c) Alerta
+    }
+    Especificacion <|-- TieneRbdValido
+    Especificacion <|-- TieneAnioValido
+    Especificacion <|-- LlaveEsUnica
+    Especificacion <|-- DentroDeVentanaTemporal
+    Especificacion <|-- FichaInstitucionalRespondida
+    Especificacion <|-- ReglaDeAlerta
+
+    class IngestorDeFuente {
+        <<puerto - ABC>>
+        +ejecutar(persistir) tuple
+        #_leer_archivo(ruta) DataFrame*
+        #_normalizar(df) DataFrame
+        #_agregar(df) DataFrame
+    }
+    class IngestorExcel {
+        +hoja: int
+        +filas_a_saltar: int
+    }
+    class IngestorCsv {
+        +separador: str
+        +codificacion: str
+    }
+    class IngestorCsvUtf8
+    IngestorDeFuente <|-- IngestorExcel
+    IngestorDeFuente <|-- IngestorCsv
+    IngestorCsv <|-- IngestorCsvUtf8
+
+    class EstrategiaPredictiva {
+        <<puerto - ABC>>
+        +nombre: str
+        +version: str
+        +soporta_explicabilidad: bool
+        +variables_requeridas: list*
+        +predecir(observacion) Prediccion*
+        +explicar(obs, factor) ExplicacionLocal
+        +simular(obs, variable) CurvaSensibilidad
+    }
+    class EstrategiaDesagregada {
+        +nombre = "desagregado"
+        6 modelos, uno por factor
+    }
+    class EstrategiaGlobal {
+        +nombre = "global"
+        1 modelo HistGradientBoosting
+    }
+    EstrategiaPredictiva <|-- EstrategiaDesagregada
+    EstrategiaPredictiva <|-- EstrategiaGlobal
+
+    class RepositorioEstablecimientos {
+        <<puerto - ABC>>
+        +origen: str
+        +obtener(rbd, periodo) dict*
+        +listar(rbds, limite) list*
+        +ranking(rbd, periodo) dict*
+        +existe(rbd) bool*
+    }
+    class RepositorioParquet {
+        +origen = "parquet"
+        lee data/processed
+    }
+    class RepositorioPostgres {
+        +origen = "postgres"
+        reconstruye desde formato largo
+    }
+    RepositorioEstablecimientos <|-- RepositorioParquet
+    RepositorioEstablecimientos <|-- RepositorioPostgres
+
+    class ServicioDePrediccion {
+        <<caso de uso>>
+        +predecir(rbd, variables)
+        +explicar(rbd, variables, factor)
+        +simular(rbd, variables, ...)
+        +evaluar_alertas(prediccion, variables)
+    }
+    ServicioDePrediccion o-- EstrategiaPredictiva : inyeccion por constructor
+    ServicioDePrediccion o-- RepositorioEstablecimientos : inyeccion por constructor
+    ServicioDePrediccion o-- ReglaDeAlerta : coleccion
+
+    note for RepositorioEstablecimientos "Dos implementaciones vivas y conmutables. Interruptor REPOSITORIO_DATOS = postgres o parquet. Paridad verificada: 101 llamadas, 0 divergencias."

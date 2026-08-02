@@ -1,0 +1,47 @@
+---
+title: "Secuencia - Simulacion what-if (curva ICE)"
+---
+sequenceDiagram
+    autonumber
+    actor D as Directivo
+    participant R as router explicabilidad
+    participant F as ServicioDePrediccion
+    participant Repo as RepositorioPostgres
+    participant E as EstrategiaDesagregada
+    participant B as ConstructorDeEscenario<br/>(Builder)
+    participant P as ArtefactoDiferido x6
+
+    D->>R: POST /api/v1/xai/simular<br/>{rbd, variable, n_puntos}
+    R->>F: variables_de(rbd, None, sobreescrituras)
+    F->>Repo: obtener(rbd)
+    Repo-->>F: observacion base
+    opt hay sobreescrituras
+        F->>B: desde(base).con(variable, valor).construir()
+        B-->>F: Escenario validado
+    end
+    F-->>R: observacion
+
+    R->>F: simular(rbd, variables, variable, rango, n_puntos)
+    F->>E: simular(observacion, variable, rango, n_puntos)
+    E->>B: rango_valido(variable)
+    B-->>E: limites, p.ej. simce en [100, 400]
+    E->>E: malla = linspace(rango, n_puntos)
+    Note over E: la malla se acota al rango valido:<br/>nunca propone un valor que el<br/>constructor rechazaria
+
+    loop n_puntos = 9
+        E->>B: desde(base).con(variable, punto).construir()
+        B-->>E: Escenario
+        E->>E: predecir(escenario.variables)
+        loop 6 factores
+            E->>P: predict(X)
+            P-->>E: valor del factor
+        end
+        E->>E: reconstruir_indice -> indice del punto
+    end
+
+    Note over E,P: 9 puntos x 6 modelos = 54 inferencias<br/>LIMITACION CONOCIDA: 4,6 s por llamada.<br/>El cache no ayuda: cada punto es<br/>una observacion distinta.
+
+    E-->>F: CurvaSensibilidad
+    F-->>R: RespuestaSimulacion
+    R-->>D: 200 OK con advertencia de magnitud
+    Note right of D: "una mejora de 15 a 20 puntos SIMCE<br/>aporta del orden de 0,5 al indice"

@@ -24,7 +24,7 @@ from q3_servicio.esquemas.predictivo import (
     RespuestaPrediccion,
     RespuestaSimulacion,
 )
-from q3_servicio.repositorios import RepositorioEstablecimientos, RepositorioParquet
+from q3_servicio.repositorios import RepositorioEstablecimientos, obtener_repositorio
 from q3_servicio.servicios import reglas_alerta
 from q3_servicio.servicios.reglas_alerta import ContextoDeAlerta, ReglaDeAlerta
 
@@ -51,7 +51,7 @@ class ServicioDePrediccion:
         reglas: tuple[ReglaDeAlerta, ...] | None = None,
     ) -> None:
         self._estrategia = estrategia or obtener_estrategia()
-        self._repositorio = repositorio or RepositorioParquet()
+        self._repositorio = repositorio or obtener_repositorio()
         self._reglas = reglas if reglas is not None else reglas_alerta.REGLAS_POR_DEFECTO
 
     # -- acceso a datos ----------------------------------------------------

@@ -1,17 +1,21 @@
--- ===========================================================================
--- 00 · Espacios logicos
--- ---------------------------------------------------------------------------
--- Cuatro esquemas. Los dos primeros derivan del modelo conceptual (diagrama
--- entidad-relacion); los dos ultimos son infraestructura y NO provienen del ER,
--- distincion que conviene declarar explicitamente en el informe.
--- ===========================================================================
+-- =============================================================================
+-- BASE DE DATOS NORMALIZADA — SIMULADOR PREDICTIVO ÍNDICE SNED
+-- PostgreSQL 14+
+--
+-- Arquitectura en cuatro esquemas, siguiendo la separación OLTP/OLAP
+-- declarada en el diseño de solución de la tesis:
+--
+--   core    : dimensiones y catálogos normalizados (3FN)
+--   hechos  : datos observados del Estado (repositorio analítico)
+--   ml      : registro de modelos, métricas e inferencias (MLOps estático)
+--   app     : transaccional web — usuarios, permisos, simulaciones, auditoría
+--
+-- Llave de integridad referencial: RBD + periodo, conforme a la regla de
+-- negocio ministerial. No se almacena ningún identificador personal (MRUN),
+-- en cumplimiento de la Ley N° 21.719 sobre Protección de Datos Personales.
+-- =============================================================================
 
-CREATE SCHEMA IF NOT EXISTS core;    -- entidades fuertes y catalogos del dominio
-CREATE SCHEMA IF NOT EXISTS hechos;  -- entidades debiles: lo observado
-CREATE SCHEMA IF NOT EXISTS ml;      -- registro de modelos e inferencias
-CREATE SCHEMA IF NOT EXISTS app;     -- transaccional de aplicacion
-
-COMMENT ON SCHEMA core   IS 'Derivado del ER: entidades fuertes, entidad asociativa y catalogos de normalizacion a 3FN.';
-COMMENT ON SCHEMA hechos IS 'Derivado del ER: entidades debiles con clave compuesta. Formato largo.';
-COMMENT ON SCHEMA ml     IS 'No proviene del ER. Infraestructura de trazabilidad del algoritmo (CTRL-05).';
-COMMENT ON SCHEMA app    IS 'No proviene del ER. RBAC, simulaciones y auditoria de acceso (CTRL-04).';
+CREATE SCHEMA IF NOT EXISTS core;
+CREATE SCHEMA IF NOT EXISTS hechos;
+CREATE SCHEMA IF NOT EXISTS ml;
+CREATE SCHEMA IF NOT EXISTS app;

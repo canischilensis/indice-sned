@@ -1,0 +1,62 @@
+---
+title: "Secuencia - Prediccion del indice y sus seis factores"
+---
+sequenceDiagram
+    autonumber
+    actor D as Directivo
+    participant R as router prediccion
+    participant S as seguridad
+    participant F as ServicioDePrediccion<br/>(Facade)
+    participant Repo as RepositorioPostgres<br/>(Adapter)
+    participant BD as PostgreSQL
+    participant C as EstrategiaConCache
+    participant A as EstrategiaAuditada
+    participant E as EstrategiaDesagregada
+    participant P as ArtefactoDiferido<br/>(Virtual Proxy)
+    participant Cat as catalogo factores
+
+    D->>R: GET /api/v1/prediccion/{rbd}
+    R->>S: exigir_jurisdiccion(rbd, usuario)
+    S-->>R: autorizado (CTRL-04)
+
+    R->>F: variables_de(rbd, periodo)
+    F->>Repo: obtener(rbd, periodo)
+    Repo->>BD: SELECT con CTE: ciclo, simce, idps, ind, sie
+    Note over Repo,BD: reconstruye la representacion ancha<br/>desde el formato largo normalizado
+    BD-->>Repo: 1 fila, 59 variables
+    Repo-->>F: dict observacion
+    F-->>R: observacion
+
+    R->>F: predecir(rbd, variables)
+    F->>C: predecir(observacion)
+    alt firma ya vista
+        C-->>F: resultado memoizado (0,09 ms)
+    else primera vez
+        C->>A: predecir(observacion)
+        A->>E: predecir(observacion)
+
+        loop 6 factores: EFECTIVR, SUPERAR, IGUALDR, INICIAR, INTEGRAR, MEJORAR
+            E->>E: _matriz(observacion, codigo)
+            Note right of E: imputa por mediana y agrega<br/>las banderas <variable>_ausente
+            E->>P: predict(X)
+            alt artefacto no materializado
+                P->>P: joblib.load (2,5 s, una sola vez)
+            end
+            P-->>E: valor crudo
+            E->>E: clip a [0, 100]
+        end
+
+        E->>Cat: reconstruir_indice(factores)
+        Note over Cat: suma ponderada con los pesos<br/>del catalogo, no incrustados en codigo
+        Cat-->>E: indice
+        E-->>A: Prediccion
+        A->>A: registra la inferencia (CTRL-05)
+        A-->>C: Prediccion
+        C->>C: memoiza
+        C-->>F: Prediccion
+    end
+
+    F->>Cat: factores() para nombre, peso, es_acotado
+    Cat-->>F: catalogo
+    F-->>R: RespuestaPrediccion ordenada por aporte
+    R-->>D: 200 OK, JSON con advertencia de decision humana

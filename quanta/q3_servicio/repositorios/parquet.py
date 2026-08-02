@@ -21,6 +21,18 @@ from q3_servicio.repositorios.contrato import (
 # entrenamiento (23.111 observaciones, la misma cifra que declara
 # metadatos_modelo_global.json). Las restantes son respaldos historicos con
 # menos variables y sirven solo para que el prototipo no quede inoperante.
+# Las once columnas de eventos SIE. El merge original fue LEFT y dejo nulos
+# donde no hubo evento; un establecimiento sin denuncias registradas tiene CERO
+# denuncias, no un dato desconocido. La base ya carga 0 desde los parquet
+# originales, de modo que aqui se normaliza para que ambos adaptadores
+# devuelvan lo mismo.
+EVENTOS_SIE = (
+    "denuncias_total", "denuncias_fiscalizacion", "denuncias_juridica",
+    "denuncias_ciberbullying", "procesos_total", "procesos_con_sancion",
+    "procesos_multa", "procesos_privacion_subvencion",
+    "mediaciones_total", "mediaciones_efectivas", "mediaciones_de_denuncia",
+)
+
 CANDIDATOS = (
     "tabla_modelo_largo.parquet",
     "tabla_modelo_final.parquet",
@@ -46,6 +58,14 @@ class RepositorioParquet(RepositorioEstablecimientos):
                     if col.lower() == "rbd":
                         df["rbd"] = df[col].astype("string").str.strip()
                         break
+                for c in EVENTOS_SIE:
+                    if c in df.columns:
+                        df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0)
+                if "cod_depe2" in df.columns:
+                    # Sin traduccion de codigos: la diferencia con PostgreSQL es
+                    # temporal, no de vocabulario. Ver la nota en la prueba de
+                    # paridad.
+                    df["cod_depe2"] = pd.to_numeric(df["cod_depe2"], errors="coerce")
                 return df
         raise ConjuntoNoDisponible(
             f"No se encontro ningun conjunto en {self._carpeta}. "
@@ -82,3 +102,28 @@ class RepositorioParquet(RepositorioEstablecimientos):
             return not self._conjunto()[self._conjunto()["rbd"] == str(rbd).strip()].empty
         except ConjuntoNoDisponible:
             return False
+
+    def ranking(self, rbd: str, periodo: str | None = None) -> dict:
+        """Ranking calculado en memoria sobre el conjunto cargado."""
+        df = self._conjunto()
+        fila = self.obtener(rbd, periodo)
+        ciclo = fila.get("BIENIO_PREMIO")
+        cluster = fila.get("CLUSTER")
+        if ciclo is None or cluster is None or "INDICER" not in df.columns:
+            raise EstablecimientoNoEncontrado(f"RBD {rbd} sin ranking calculable.")
+
+        grupo = df[(df["BIENIO_PREMIO"] == ciclo) & (df["CLUSTER"] == cluster)]
+        grupo = grupo[grupo["INDICER"].notna()].sort_values("INDICER", ascending=False)
+        orden = grupo["rbd"].tolist()
+        n = len(orden)
+        pos = orden.index(str(rbd).strip()) + 1
+        return {
+            "rbd": str(rbd).strip(),
+            "ciclo": str(ciclo),
+            "cluster_codigo": int(cluster),
+            "indicer": float(fila["INDICER"]),
+            "posicion_en_grupo": pos,
+            "n_grupo": n,
+            "percentil": round((n - pos) / (n - 1), 4) if n > 1 else 0.0,
+            "sel": int(fila["SEL"]) if fila.get("SEL") is not None else None,
+        }
