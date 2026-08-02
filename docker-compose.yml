@@ -1,0 +1,22 @@
+# Cuanto de persistencia — PostgreSQL local para desarrollo.
+# Los cuatro esquemas logicos se crean con: python scripts/inicializar_bd.py
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sned-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-indice_sned}
+      POSTGRES_USER: ${POSTGRES_USER:-sned}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambiar-en-local}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sned} -d ${POSTGRES_DB:-indice_sned}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

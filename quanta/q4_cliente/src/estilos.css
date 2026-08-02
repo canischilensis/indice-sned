@@ -1,0 +1,51 @@
+:root {
+  --fondo: #0f1720;
+  --panel: #17222e;
+  --borde: #24323f;
+  --texto: #e8eef4;
+  --tenue: #9aacbd;
+  --acento: #4a9eda;
+  --positivo: #3fa87a;
+  --negativo: #d97a7a;
+  --alerta-alta: #d9534f;
+  --alerta-media: #d9a34f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+}
+.contenedor { max-width: 1180px; margin: 0 auto; padding: 24px; }
+header.barra {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--borde); padding: 16px 24px;
+}
+header.barra h1 { font-size: 18px; margin: 0; font-weight: 600; }
+nav.pestanas { display: flex; gap: 4px; margin: 20px 0; }
+nav.pestanas button {
+  background: transparent; border: 1px solid var(--borde); color: var(--tenue);
+  padding: 9px 18px; border-radius: 6px; cursor: pointer; font-size: 14px;
+}
+nav.pestanas button.activa { background: var(--acento); border-color: var(--acento); color: #06121c; font-weight: 600; }
+.panel { background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 20px; margin-bottom: 18px; }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.metrica { background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 18px; }
+.metrica .valor { font-size: 30px; font-weight: 700; }
+.metrica .rotulo { color: var(--tenue); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+.acotado { font-size: 11px; color: var(--alerta-media); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--borde); }
+th { color: var(--tenue); font-weight: 500; font-size: 12px; text-transform: uppercase; }
+.aviso { border-left: 3px solid var(--acento); padding: 10px 14px; background: rgba(74,158,218,.08); font-size: 13px; color: var(--tenue); border-radius: 0 6px 6px 0; }
+.alerta { border-left: 3px solid var(--alerta-media); padding: 12px 14px; margin-bottom: 10px; background: rgba(217,163,79,.08); border-radius: 0 6px 6px 0; }
+.alerta.alta { border-left-color: var(--alerta-alta); background: rgba(217,83,79,.08); }
+select, input, button { font-family: inherit; font-size: 14px; }
+select, input {
+  background: var(--fondo); color: var(--texto); border: 1px solid var(--borde);
+  border-radius: 6px; padding: 8px 10px;
+}
+button.primario { background: var(--acento); color: #06121c; border: none; border-radius: 6px; padding: 9px 18px; font-weight: 600; cursor: pointer; }
+.error { color: #ff9d9d; font-size: 14px; }
+.cargando { color: var(--tenue); font-size: 14px; }

@@ -1,0 +1,95 @@
+{
+  "version": "SNED-2026-2027",
+  "fuente_normativa": "Documento Tecnico SNED, MINEDUC",
+  "verificacion_empirica": {
+    "r2_reconstruccion_formula": 1.0,
+    "mae": 0.0,
+    "nota": "La formula documentada reproduce el indice ministerial sin ajustes no declarados."
+  },
+  "escala_indice": {
+    "minimo": 0,
+    "maximo": 100
+  },
+  "factores": [
+    {
+      "codigo": "EFECTIVR",
+      "nombre": "Efectividad",
+      "peso": 0.37,
+      "r2": 0.8322,
+      "mae": 2.495,
+      "restriccion": null,
+      "descripcion": "Resultados de las mediciones estandarizadas por nivel y asignatura.",
+      "es_accionable": true,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    },
+    {
+      "codigo": "SUPERAR",
+      "nombre": "Superacion",
+      "peso": 0.28,
+      "r2": 0.1999,
+      "mae": 4.191,
+      "restriccion": "Correccion por significancia estadistica no publicada por el organismo emisor.",
+      "descripcion": "Avance respecto de la medicion del bienio anterior.",
+      "es_accionable": true,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    },
+    {
+      "codigo": "IGUALDR",
+      "nombre": "Igualdad de Oportunidades",
+      "peso": 0.22,
+      "r2": 0.1284,
+      "mae": 3.979,
+      "restriccion": "Subfactor Discriminacion (40%) requiere desagregacion de sanciones por materia, no publica.",
+      "descripcion": "Retencion, aprobacion, no discriminacion e integracion de estudiantes vulnerables.",
+      "es_accionable": true,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    },
+    {
+      "codigo": "INICIAR",
+      "nombre": "Iniciativa",
+      "peso": 0.06,
+      "r2": 0.0843,
+      "mae": 14.947,
+      "restriccion": "Ficha SNED de autorreporte no publica.",
+      "descripcion": "Capacidad de incorporar innovaciones y comprometer apoyo externo.",
+      "es_accionable": true,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    },
+    {
+      "codigo": "INTEGRAR",
+      "nombre": "Integracion y Participacion",
+      "peso": 0.05,
+      "r2": 0.1321,
+      "mae": 18.013,
+      "restriccion": "Ficha SNED de autorreporte no publica.",
+      "descripcion": "Participacion de la comunidad escolar y convivencia.",
+      "es_accionable": true,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    },
+    {
+      "codigo": "MEJORAR",
+      "nombre": "Mejoramiento de Condiciones",
+      "peso": 0.02,
+      "r2": 0.0238,
+      "mae": 1.97,
+      "restriccion": "Varianza del objetivo proxima a cero.",
+      "descripcion": "Cumplimiento normativo y condiciones de trabajo.",
+      "es_accionable": false,
+      "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
+    }
+  ],
+  "frontera_informacion": {
+    "ponderacion_acotada": 0.63,
+    "factores_acotados": [
+      "SUPERAR",
+      "IGUALDR",
+      "INICIAR",
+      "INTEGRAR",
+      "MEJORAR"
+    ],
+    "nota": "Cinco de los seis factores estan limitados por informacion que solo el organismo emisor posee."
+  },
+  "notas": {
+    "es_accionable": "Un factor es accionable si el establecimiento puede influir en sus insumos dentro del ciclo y el sistema puede simular al menos una variable que lo alimente. Distinto de `restriccion`, que marca los factores acotados por informacion que solo posee el organismo emisor."
+  }
+}

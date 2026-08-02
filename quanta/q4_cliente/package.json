@@ -1,0 +1,27 @@
+{
+  "name": "sned-cliente-b2b",
+  "private": true,
+  "version": "0.5.0",
+  "type": "module",
+  "description": "Cuanto 4 - Interfaz B2B con IA Explicable. Tres ventanas: Dashboard, Simulador, Reporte XAI.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit",
+    "tipos": "openapi-typescript http://127.0.0.1:8000/openapi.json -o src/tipos-api.d.ts"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.13.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "openapi-typescript": "^7.4.4"
+  }
+}

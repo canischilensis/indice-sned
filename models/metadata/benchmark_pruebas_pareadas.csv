@@ -1,0 +1,4 @@
+Comparacion,t,p_valor,Significativo_5pct,Superior
+HistGradientBoosting vs MLP,-1.976,0.1194,No,Equivalentes
+HistGradientBoosting vs RandomForest,-17.28,0.0001,Sí,HistGradientBoosting
+MLP vs RandomForest,-4.874,0.0082,Sí,MLP

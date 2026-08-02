@@ -1,0 +1,151 @@
+{
+  "EFECTIVR": {
+    "peso": 0.37,
+    "features": [
+      "simce_lect_4b",
+      "simce_mate_4b",
+      "simce_lect_6b",
+      "simce_mate_6b",
+      "simce_lect_8b",
+      "simce_mate_8b",
+      "simce_lect_2m",
+      "simce_mate_2m"
+    ],
+    "r2": 0.8322,
+    "mae": 2.495,
+    "best_params": {
+      "n_estimators": 500,
+      "min_samples_split": 20,
+      "min_samples_leaf": 10,
+      "max_features": "log2",
+      "max_depth": null
+    }
+  },
+  "SUPERAR": {
+    "peso": 0.28,
+    "features": [
+      "dif_simce_lect_4b",
+      "dif_simce_mate_4b",
+      "dif_simce_lect_6b",
+      "dif_simce_mate_6b",
+      "dif_simce_lect_8b",
+      "dif_simce_mate_8b",
+      "dif_simce_lect_2m",
+      "dif_simce_mate_2m",
+      "simce_lect_4b",
+      "simce_mate_4b",
+      "simce_lect_6b",
+      "simce_mate_6b",
+      "simce_lect_8b",
+      "simce_mate_8b",
+      "simce_lect_2m",
+      "simce_mate_2m"
+    ],
+    "r2": 0.1999,
+    "mae": 4.191,
+    "best_params": {
+      "n_estimators": 500,
+      "min_samples_split": 20,
+      "min_samples_leaf": 10,
+      "max_features": "log2",
+      "max_depth": null
+    }
+  },
+  "IGUALDR": {
+    "peso": 0.22,
+    "features": [
+      "tasa_aprobacion",
+      "tasa_reprobacion",
+      "tasa_retiro",
+      "procesos_con_sancion",
+      "procesos_privacion_subvencion",
+      "procesos_multa",
+      "denuncias_juridica",
+      "denuncias_fiscalizacion",
+      "denuncias_total",
+      "matricula_total",
+      "n_vulnerables",
+      "n_beneficiarios_sep",
+      "ive_consolidado",
+      "ive_basica",
+      "tiene_convenio_sep"
+    ],
+    "r2": 0.1284,
+    "mae": 3.979,
+    "best_params": {
+      "n_estimators": 800,
+      "min_samples_split": 20,
+      "min_samples_leaf": 10,
+      "max_features": 0.5,
+      "max_depth": 8
+    }
+  },
+  "INICIAR": {
+    "peso": 0.06,
+    "features": [
+      "n_docentes",
+      "horas_docentes",
+      "n_directivos",
+      "n_asistentes",
+      "idps_am_4b",
+      "idps_cc_4b",
+      "idps_pf_4b",
+      "idps_hv_4b"
+    ],
+    "r2": 0.0843,
+    "mae": 14.947,
+    "best_params": {
+      "n_estimators": 300,
+      "min_samples_split": 100,
+      "min_samples_leaf": 20,
+      "max_features": "sqrt",
+      "max_depth": 10
+    }
+  },
+  "INTEGRAR": {
+    "peso": 0.05,
+    "features": [
+      "idps_cc_4b",
+      "idps_pf_4b",
+      "idps_cc_2m",
+      "idps_pf_2m",
+      "n_asistentes",
+      "denuncias_total",
+      "mediaciones_total"
+    ],
+    "r2": 0.1321,
+    "mae": 18.013,
+    "best_params": {
+      "n_estimators": 800,
+      "min_samples_split": 20,
+      "min_samples_leaf": 40,
+      "max_features": 0.5,
+      "max_depth": 8
+    }
+  },
+  "MEJORAR": {
+    "peso": 0.02,
+    "features": [
+      "procesos_total",
+      "procesos_con_sancion",
+      "procesos_multa",
+      "denuncias_total",
+      "denuncias_fiscalizacion",
+      "denuncias_juridica"
+    ],
+    "r2": 0.0238,
+    "mae": 1.97,
+    "best_params": {
+      "n_estimators": 300,
+      "min_samples_split": 20,
+      "min_samples_leaf": 20,
+      "max_features": "sqrt",
+      "max_depth": 5
+    }
+  },
+  "_INDICER": {
+    "formula": "suma ponderada de los 6 factores",
+    "r2_reconstruido": 0.583,
+    "mae": 2.51
+  }
+}

@@ -1,0 +1,141 @@
+# ============================================================
+#  indice-sned — .gitignore
+#  Regla de arquitectura: el repositorio versiona CODIGO, CONTRATOS
+#  y METADATOS. Nunca datos crudos ni artefactos binarios pesados.
+# ============================================================
+
+# ---------- Entornos virtuales ----------
+.venv/
+venv/
+env/
+ENV/
+.python-version
+.conda/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ---------- Testing / calidad ----------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+profile_default/
+ipython_config.py
+
+# ============================================================
+#  DATOS  (CTRL-01 / OE1)
+#  Origen publico y re-descargable: ver docs/FUENTES.md
+# ============================================================
+data/raw/**
+data/interim/**
+data/processed/**
+data/external/**
+!data/**/.gitkeep
+!data/**/README.md
+
+# Extensiones de datos en cualquier ubicacion
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+*.pkl
+*.feather
+*.dta
+*.sav
+*.zip
+*.7z
+*.rar
+*.gz
+
+# Excepcion: metadatos de modelos y benchmarks SI se versionan (CTRL-05)
+!models/metadata/**
+!models/metadata/*.csv
+!models/metadata/*.json
+!contratos/**
+!db/semillas/*.csv
+
+# ============================================================
+#  REGISTRO DE MODELOS  (CTRL-05)
+#  Artefactos serializados: fuera de git. Sus metadatos: dentro.
+# ============================================================
+models/registry/**
+!models/registry/.gitkeep
+*.joblib
+*.keras
+*.h5
+*.pt
+*.onnx
+*.pb
+
+# ---------- Secretos y configuracion local ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credenciales*.json
+secrets/
+
+# ---------- Node / frontend ----------
+node_modules/
+.pnp/
+.pnp.js
+dist/
+dist-ssr/
+.vite/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Base de datos ----------
+*.sqlite
+*.sqlite3
+*.db
+pgdata/
+dumps/
+
+# ---------- Sistema operativo ----------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# ---------- IDE ----------
+.vscode/*
+!.vscode/settings.json.example
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ---------- Temporales / limpieza ----------
+_to_delete/
+tmp/
+temp/
+*.log
+*.bak
+*.tmp

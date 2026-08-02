@@ -1,0 +1,38 @@
+# ------------------------------------------------------------------
+# Dependencias de ejecucion — indice-sned
+# Python 3.11 recomendado (3.10 minimo)
+# ------------------------------------------------------------------
+
+# --- Cuanto 1: ingesta y preprocesamiento ---
+pandas==2.2.3
+numpy==1.26.4
+pyarrow==17.0.0
+openpyxl==3.1.5
+xlrd==2.0.1
+python-dateutil==2.9.0.post0
+
+# --- Cuanto 2: modelamiento y explicabilidad ---
+scikit-learn==1.5.2
+joblib==1.4.2
+tensorflow-cpu==2.17.0 ; sys_platform != "darwin"
+shap==0.46.0
+matplotlib==3.9.2
+
+# --- Cuanto 3: servicio ---
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.9.2
+pydantic-settings==2.6.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.17
+
+# --- Persistencia ---
+sqlalchemy==2.0.36
+psycopg[binary]==3.2.3
+alembic==1.14.0
+
+# --- Utilidades ---
+python-dotenv==1.0.1
+typer==0.13.1
+rich==13.9.4
