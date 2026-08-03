@@ -29,7 +29,7 @@ WITH ciclo AS (
     LEFT JOIN core.establecimiento_periodo ep
            ON ep.rbd = sr.rbd AND ep.periodo_id = sr.periodo_id
     WHERE sr.rbd = :rbd
-      AND (:ciclo IS NULL OR p.etiqueta = :ciclo)
+      AND (CAST(:ciclo AS text) IS NULL OR p.etiqueta = CAST(:ciclo AS text))
     ORDER BY p.anio_inicio DESC
     LIMIT 1
 ),
@@ -138,15 +138,12 @@ CONSULTA_RANKING = """
            r.posicion_en_grupo, r.n_grupo, ROUND(r.percentil::numeric, 4) AS percentil, r.sel
     FROM hechos.v_ranking_intra_cluster r
     JOIN core.periodo p ON p.periodo_id = r.periodo_id AND p.tipo='CICLO_SNED'
-    WHERE r.rbd = :rbd AND (:ciclo IS NULL OR p.etiqueta = :ciclo)
+    WHERE r.rbd = :rbd AND (CAST(:ciclo AS text) IS NULL OR p.etiqueta = CAST(:ciclo AS text))
     ORDER BY p.anio_inicio DESC
     LIMIT 1
 """
 
-CONSULTA_COLUMNAS = """
-    SELECT column_name FROM information_schema.columns
-    WHERE table_schema='ml' AND table_name='mv_matriz_entrenamiento'
-"""
+CONSULTA_RBD_MUESTRA = "SELECT rbd FROM core.conjunto_entrenamiento ORDER BY rbd LIMIT 1"
 
 
 class RepositorioPostgres(RepositorioEstablecimientos):
@@ -155,6 +152,7 @@ class RepositorioPostgres(RepositorioEstablecimientos):
     def __init__(self, url: str | None = None) -> None:
         self._url = url
         self._motor = None
+        self._columnas: set[str] | None = None
 
     def _conectar(self):
         if self._motor is None:
@@ -211,13 +209,22 @@ class RepositorioPostgres(RepositorioEstablecimientos):
         return d
 
     def variables_disponibles(self) -> set[str]:
-        from sqlalchemy import text
+        """Las variables que este adaptador entrega de verdad.
 
-        try:
-            with self._conectar().connect() as cx:
-                return {f[0] for f in cx.execute(text(CONSULTA_COLUMNAS)).all()}
-        except Exception:
-            return set()
+        Se obtienen de una observacion real, no del catalogo de columnas de la
+        vista materializada: la consulta reconstruye la representacion ancha
+        desde varias tablas y la vista no la refleja.
+        """
+        if self._columnas is None:
+            from sqlalchemy import text
+
+            try:
+                with self._conectar().connect() as cx:
+                    rbd = cx.execute(text(CONSULTA_RBD_MUESTRA)).scalar()
+                self._columnas = set(self.obtener(str(rbd))) if rbd is not None else set()
+            except Exception:
+                self._columnas = set()
+        return self._columnas
 
     def existe(self, rbd: str) -> bool:
         try:

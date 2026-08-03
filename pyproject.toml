@@ -31,6 +31,9 @@ markers = [
   "datos: pruebas sobre el pipeline de datos (QA-A)",
   "modelo: pruebas estadisticas sobre el motor predictivo (QA-B)",
   "api: pruebas sobre el servicio y RBAC (QA-C)",
+  "paridad: paridad entre los adaptadores del puerto RepositorioEstablecimientos (QA-D)",
+  "requiere_datos: necesita data/ o models/registry, que no se versionan",
+  "requiere_bd: necesita PostgreSQL levantado",
 ]
 
 [tool.mypy]

@@ -17,6 +17,11 @@ from pathlib import Path
 
 import pytest
 
+# Toda la suite compara las respuestas CONGELADAS de ambos adaptadores. No
+# necesita ni PostgreSQL ni los artefactos: por eso puede correr en CI.
+# Regenerarlas si necesita ambos, pero eso lo hace el arnes, no esta prueba.
+pytestmark = pytest.mark.paridad
+
 RAIZ = Path(__file__).parent
 BASE = RAIZ / "baseline_parquet" / "respuestas.json"
 PG = RAIZ / "resultado_postgres" / "respuestas.json"
@@ -123,6 +128,22 @@ def test_el_ranking_queda_excluido_de_la_paridad_con_razon_documentada():
     """No es un defecto: el parquet no contiene la poblacion completa del ciclo."""
     assert "ranking" in ENDPOINTS_EXCLUIDOS
     assert ENDPOINTS_EXCLUIDOS.issubset(set(_cargar()[0]))
+
+
+def test_todas_las_llamadas_son_exitosas():
+    """Paridad no basta: dos adaptadores pueden coincidir en estar rotos.
+
+    Esta prueba existe porque ocurrio: `shapley` devolvia 422 en ambos y la
+    comparacion lo daba por verde. Comparar igualdad sin exigir exito deja
+    pasar endpoints caidos.
+    """
+    a, b = _cargar()
+    malos = [
+        f"{ep}/{clave}: parquet={a[ep][clave]['status']} postgres={b[ep][clave]['status']}"
+        for ep in a for clave in a[ep]
+        if not (200 <= a[ep][clave]["status"] < 300 and 200 <= b[ep][clave]["status"] < 300)
+    ]
+    assert not malos, f"{len(malos)} llamadas sin exito:\n" + "\n".join(malos[:15])
 
 
 def test_todas_las_llamadas_devuelven_el_mismo_estado_http():

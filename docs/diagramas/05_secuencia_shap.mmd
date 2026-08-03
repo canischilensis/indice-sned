@@ -40,6 +40,10 @@ sequenceDiagram
         E->>E: _matriz: imputa medianas y<br/>calcula <variable>_ausente
     end
 
+    E->>P: materializar()
+    Note right of P: TreeExplainer inspecciona el TIPO del modelo<br/>y no acepta el proxy: necesita el<br/>artefacto real. Es el precio de la carga<br/>diferida y se paga aqui, una sola vez.
+    P-->>E: RandomForestRegressor
+    E->>X: TreeExplainer(artefacto real)
     E->>X: shap_values(X)
     X->>P: recorre los arboles del RandomForest
     P-->>X: contribuciones por arbol
@@ -49,9 +53,10 @@ sequenceDiagram
     E->>P: predict(X) para la prediccion puntual
     P-->>E: valor del factor
 
-    loop por cada variable del factor
+    loop por cada una de las 16 variables del factor
         E->>Et: etiqueta_de(variable)
         Et-->>E: nombre legible
+        Note right of Et: las banderas se etiquetan desde su<br/>variable base: "Sin medicion de SIMCE..."
     end
     E->>E: ordena por |contribucion| descendente
     E-->>F: ExplicacionLocal

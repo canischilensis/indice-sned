@@ -116,7 +116,10 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
         if codigo not in self._explicadores:
             import shap
 
-            self._explicadores[codigo] = shap.TreeExplainer(self._modelo(codigo))
+            # TreeExplainer inspecciona el TIPO del modelo, de modo que no
+            # acepta el proxy: hay que entregarle el artefacto materializado.
+            # Es el precio de la carga diferida y se paga aqui, una sola vez.
+            self._explicadores[codigo] = shap.TreeExplainer(self._modelo(codigo).materializar())
         return self._explicadores[codigo]
 
     def explicar(self, observacion: dict, factor: str | None = None) -> ExplicacionLocal:

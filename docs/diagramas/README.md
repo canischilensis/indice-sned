@@ -53,6 +53,11 @@ defecto que documenta el README.
 El caché va por fuera, así que un acierto de caché **no** registra la inferencia. Es una
 consecuencia real del orden y está dibujada en el diagrama 3 como la rama `alt`.
 
+**El proxy virtual tiene un límite y el diagrama lo muestra.** `TreeExplainer` inspecciona el
+tipo del modelo, así que no acepta el `ArtefactoDiferido`: hay que entregarle el artefacto
+materializado. Es el precio de la carga diferida y aparece explícito en el diagrama 5, porque
+costó un endpoint caído descubrirlo.
+
 **El simulador consulta al Builder antes de armar la malla.** `ConstructorDeEscenario.rango_valido()`
 acota los puntos para que la curva nunca proponga un valor que el propio constructor
 rechazaría. Aparece en el diagrama 4.

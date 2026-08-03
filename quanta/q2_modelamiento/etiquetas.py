@@ -55,18 +55,29 @@ def etiqueta_de(variable: str) -> str:
     if variable in _EXPLICITAS:
         return _EXPLICITAS[variable]
 
+    # Las banderas de ausencia acompanan a cada variable imputada: se etiquetan
+    # a partir de la variable base para no duplicar el diccionario.
+    if variable.endswith("_ausente"):
+        return f"Sin medicion de {etiqueta_de(variable[: -len('_ausente')])}"
+
     partes = variable.split("_")
     if variable.startswith("dif_simce_"):
+        if len(partes) != 4:
+            return variable.replace('_', ' ').capitalize()
         _, _, asignatura, nivel = partes
         materia = "Lectura" if asignatura == "lect" else "Matematica"
         return f"Variacion SIMCE {materia} {_NIVEL.get(nivel, nivel)}"
     if variable.startswith("simce_prom_"):
         return f"Promedio SIMCE {_NIVEL.get(partes[-1], partes[-1])}"
     if variable.startswith("simce_"):
+        if len(partes) != 3:
+            return variable.replace('_', ' ').capitalize()
         _, asignatura, nivel = partes
         materia = "Lectura" if asignatura == "lect" else "Matematica"
         return f"SIMCE {materia} {_NIVEL.get(nivel, nivel)}"
     if variable.startswith("idps_"):
+        if len(partes) != 3:
+            return variable.replace('_', ' ').capitalize()
         _, dimension, nivel = partes
         return f"IDPS {_IDPS.get(dimension, dimension)} {_NIVEL.get(nivel, nivel)}"
     return variable.replace("_", " ").capitalize()

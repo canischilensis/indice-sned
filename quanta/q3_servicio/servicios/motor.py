@@ -158,7 +158,12 @@ class ServicioDePrediccion:
         imputan por mediana. Funciona, pero degrada la estimacion en silencio:
         este diagnostico lo vuelve observable en lugar de invisible.
         """
-        requeridas = set(self._estrategia.variables_requeridas)
+        # Las banderas `<variable>_ausente` las calcula la estrategia al armar
+        # la matriz: nunca se almacenan y exigirlas al repositorio daria una
+        # cobertura de cero, falsa.
+        requeridas = {
+            v for v in self._estrategia.variables_requeridas if not v.endswith("_ausente")
+        }
         disponibles = getattr(self._repositorio, "variables_disponibles", lambda: None)()
         if disponibles is None:
             return {"evaluable": False, "motivo": "El repositorio no declara sus columnas."}

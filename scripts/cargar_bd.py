@@ -42,10 +42,15 @@ def ins(cx, tabla, df, cols):
     raw = cx.connection.dbapi_connection
     cur = raw.cursor()
     cur.execute(f"DROP TABLE IF EXISTS {tmp}; CREATE TEMP TABLE {tmp} (LIKE {tabla} INCLUDING DEFAULTS)")
-    buf = io.StringIO()
-    df[cols].to_csv(buf, index=False, header=False, na_rep='\\N')
-    buf.seek(0)
-    cur.copy_expert(f"COPY {tmp} ({','.join(cols)}) FROM STDIN WITH (FORMAT csv, NULL '\\N')", buf)
+
+    datos = df[cols].to_csv(index=False, header=False, na_rep='\\N')
+    orden = f"COPY {tmp} ({','.join(cols)}) FROM STDIN WITH (FORMAT csv, NULL '\\N')"
+    if hasattr(cur, 'copy_expert'):          # psycopg2
+        cur.copy_expert(orden, io.StringIO(datos))
+    else:                                     # psycopg3
+        with cur.copy(orden) as copiador:
+            copiador.write(datos)
+
     cur.execute(f"INSERT INTO {tabla} ({','.join(cols)}) SELECT {','.join(cols)} FROM {tmp} ON CONFLICT DO NOTHING")
     n = cur.rowcount
     cur.execute(f"DROP TABLE {tmp}")

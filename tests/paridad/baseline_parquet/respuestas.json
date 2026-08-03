@@ -3451,123 +3451,2503 @@
   "shapley": {
     "10": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -3.1554,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 204.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -2.9187,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 194.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -1.4372,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 228.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 1.4307,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 243.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.601,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 250.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.3912,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 245.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.1806,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.1617,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.1297,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0673,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.064,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0632,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0607,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0218,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0189,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0184,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta -3.16; SIMCE Lectura 6to basico aporta -2.92; SIMCE Matematica 4to basico aporta -1.44",
+        "prediccion": 33.21,
+        "rbd": "10",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "11": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -3.3755,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 200.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -1.967,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 235.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -1.2155,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 218.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -1.2056,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 201.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -1.0105,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 225.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.2853,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 235.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 0.1336,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.1252,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.1029,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0367,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0212,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.02,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0174,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0173,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0119,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": 0.0046,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 4to basico aporta -3.38; SIMCE Lectura 4to basico aporta -1.97; SIMCE Matematica 8vo basico aporta -1.22",
+        "prediccion": 31.19,
+        "rbd": "11",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "1418": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 7.1088,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 304.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 5.1548,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 313.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 4.5049,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 319.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 4.2573,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 293.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.6106,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.6096,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.1855,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.1308,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.1001,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0916,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": 0.0842,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0833,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0696,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0649,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0554,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0358,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta +7.11; SIMCE Lectura 6to basico aporta +5.15; SIMCE Lectura 4to basico aporta +4.50",
+        "prediccion": 62.7,
+        "rbd": "1418",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "16816": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -1.9754,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 225.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -1.6427,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 219.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.6836,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 252.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.384,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 240.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.2485,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.1359,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.1122,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.1089,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0823,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0453,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0332,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0311,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0293,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0245,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0153,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0102,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 4to basico aporta -1.98; SIMCE Matematica 6to basico aporta -1.64; SIMCE Lectura 4to basico aporta -0.68",
+        "prediccion": 34.9,
+        "rbd": "16816",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "16942": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -1.3928,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 228.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.7238,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 237.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.609,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 253.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.4822,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 236.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.4384,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.2427,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 243.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.2203,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 236.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.1913,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.0631,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.056,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0465,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0375,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.0276,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0259,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0118,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.0073,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 8vo basico aporta -1.39; SIMCE Lectura 8vo basico aporta +0.72; SIMCE Lectura 2do medio aporta +0.61",
+        "prediccion": 38.39,
+        "rbd": "16942",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "20008": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -1.6833,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 220.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -1.1215,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 242.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.8498,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 224.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.4933,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 220.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.395,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 238.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.3024,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 247.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.2337,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 232.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.1843,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 236.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 0.0804,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": 0.0734,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": 0.0708,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.0666,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.0648,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.044,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": 0.009,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.0005,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 4to basico aporta -1.68; SIMCE Lectura 4to basico aporta -1.12; SIMCE Matematica 6to basico aporta -0.85",
+        "prediccion": 35.93,
+        "rbd": "20008",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "26110": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 2.4839,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 262.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 1.634,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 260.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 0.9189,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 261.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.6338,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 231.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.3658,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 262.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.3134,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 258.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.2901,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 267.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 0.1378,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 253.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.057,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0546,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.054,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0537,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0476,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0282,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0195,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": 0.0095,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta +2.48; SIMCE Lectura 6to basico aporta +1.63; SIMCE Lectura 2do medio aporta +0.92",
+        "prediccion": 45.39,
+        "rbd": "26110",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "2829": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -3.4428,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 218.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 2.2096,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 258.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -1.7423,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 227.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.9322,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 232.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.8916,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 219.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.4901,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 244.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.1314,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.1041,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.0547,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.048,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0385,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0227,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0178,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0128,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0096,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0078,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Lectura 4to basico aporta -3.44; SIMCE Lectura 6to basico aporta +2.21; SIMCE Matematica 4to basico aporta -1.74",
+        "prediccion": 34.8,
+        "rbd": "2829",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "2997": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -1.5665,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 241.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -1.4429,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 180.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 1.2302,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 243.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.6197,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 232.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.4062,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 240.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.3902,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 242.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.0734,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": 0.0495,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": 0.0339,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.0331,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.0266,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0163,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0157,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.0101,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0093,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0048,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Lectura 4to basico aporta -1.57; SIMCE Lectura 8vo basico aporta -1.44; SIMCE Matematica 6to basico aporta +1.23",
+        "prediccion": 37.2,
+        "rbd": "2997",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "31": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 1.7222,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 256.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.8905,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 252.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.8717,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 235.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.8317,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 244.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 0.2959,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 248.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.0541,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0521,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.0499,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": 0.0374,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0359,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0344,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.0316,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": 0.0254,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0171,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.014,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0113,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Lectura 6to basico aporta +1.72; SIMCE Lectura 4to basico aporta -0.89; SIMCE Matematica 8vo basico aporta -0.87",
+        "prediccion": 41.37,
+        "rbd": "31",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "3215": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -0.5937,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 236.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.5542,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.3631,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 243.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.3353,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.2353,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 0.2229,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": 0.1928,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.1593,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.0965,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0618,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.0439,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": 0.0388,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0385,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0331,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0157,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.0006,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta -0.59; SIMCE Matematica 4to basico aporta -0.55; SIMCE Lectura 6to basico aporta -0.36",
+        "prediccion": 38.26,
+        "rbd": "3215",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "3640": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -0.8403,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 236.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.8018,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.5264,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 243.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.5263,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 235.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.4691,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.405,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.2986,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.2938,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 237.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.2432,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.2233,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.1375,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.1167,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.1054,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0594,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.051,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0053,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta -0.84; SIMCE Matematica 4to basico aporta -0.80; SIMCE Lectura 6to basico aporta -0.53",
+        "prediccion": 35.08,
+        "rbd": "3640",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "381": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 2.9999,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 254.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -2.9157,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 215.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -2.1272,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 235.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -1.4817,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 219.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.7764,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 220.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.4191,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 241.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.125,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0929,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": 0.0541,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0358,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0288,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0178,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0173,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0104,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0078,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": 0.0034,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta +3.00; SIMCE Matematica 4to basico aporta -2.92; SIMCE Lectura 4to basico aporta -2.13",
+        "prediccion": 35.37,
+        "rbd": "381",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "4288": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -0.7637,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 236.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.7429,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 233.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.7219,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.4928,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 246.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.4677,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 243.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.4023,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.3931,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.2461,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.219,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.1807,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.1216,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.1155,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0916,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0461,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0299,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.0093,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta -0.76; SIMCE Matematica 2do medio aporta -0.74; SIMCE Matematica 4to basico aporta -0.72",
+        "prediccion": 36.14,
+        "rbd": "4288",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "4432": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 2.5749,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 258.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.7514,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 254.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 0.5099,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 242.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -0.226,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.1248,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.1211,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.1139,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.1045,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.1007,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": 0.0759,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.059,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": 0.0429,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.0377,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0352,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.0236,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.0045,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Lectura 6to basico aporta +2.57; SIMCE Lectura 4to basico aporta -0.75; SIMCE Matematica 6to basico aporta +0.51",
+        "prediccion": 42.84,
+        "rbd": "4432",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "4505": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -2.5707,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 216.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -1.1891,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 236.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -1.1251,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 247.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": -0.9129,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 228.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.7608,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -0.759,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 243.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -0.5106,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 248.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.387,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.3087,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 233.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.2376,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.1748,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.1441,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.1394,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 1.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.1374,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.094,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 1.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0709,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 1.0,
+            "variable": "simce_mate_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 2do medio aporta -2.57; SIMCE Matematica 6to basico aporta -1.19; SIMCE Matematica 4to basico aporta -1.13",
+        "prediccion": 30.66,
+        "rbd": "4505",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "7388": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 4.3565,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 300.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 2.6962,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 307.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 2.2201,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 302.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 1.9654,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 272.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 1.8109,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 273.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 1.3711,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 269.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.8555,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 274.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 0.4819,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 260.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0581,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0573,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0538,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0362,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0332,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.024,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0227,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": 0.0028,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta +4.36; SIMCE Matematica 8vo basico aporta +2.70; SIMCE Matematica 2do medio aporta +2.22",
+        "prediccion": 55.66,
+        "rbd": "7388",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "8376": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": -2.4389,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 210.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": -2.1073,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 215.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": -1.0874,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 245.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": -1.0526,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 216.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.5885,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 240.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.4244,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 252.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.119,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0601,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": 0.0508,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.046,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": 0.0431,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": 0.037,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0342,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0331,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.0272,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": 0.0102,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Lectura 6to basico aporta -2.44; SIMCE Matematica 6to basico aporta -2.11; SIMCE Lectura 4to basico aporta -1.09",
+        "prediccion": 33.27,
+        "rbd": "8376",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "9": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 3.5188,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 288.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 2.6609,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 299.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 2.0319,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 258.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 1.9404,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 265.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 1.3567,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 275.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": 0.9026,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 249.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": -0.155,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 247.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": 0.0992,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 1.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": 0.088,
+            "direccion": "positiva",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 1.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.0605,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 245.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.046,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0294,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          },
+          {
+            "contribucion": -0.0241,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0183,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0115,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0043,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 4to basico aporta +3.52; SIMCE Lectura 4to basico aporta +2.66; SIMCE Matematica 6to basico aporta +2.03",
+        "prediccion": 52.43,
+        "rbd": "9",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     },
     "9911": {
       "cuerpo": {
-        "detail": "Model type not yet supported by TreeExplainer: <class 'q2_modelamiento.artefactos.ArtefactoDiferido'>"
+        "aditividad_verificada": true,
+        "contribuciones": [
+          {
+            "contribucion": 2.9509,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 6to basico",
+            "valor": 268.0,
+            "variable": "simce_mate_6b"
+          },
+          {
+            "contribucion": 1.6647,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 4to basico",
+            "valor": 284.0,
+            "variable": "simce_lect_4b"
+          },
+          {
+            "contribucion": 1.5831,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 6to basico",
+            "valor": 262.0,
+            "variable": "simce_lect_6b"
+          },
+          {
+            "contribucion": 1.278,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 4to basico",
+            "valor": 267.0,
+            "variable": "simce_mate_4b"
+          },
+          {
+            "contribucion": 0.5339,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Lectura 8vo basico",
+            "valor": 245.0,
+            "variable": "simce_lect_8b"
+          },
+          {
+            "contribucion": 0.4473,
+            "direccion": "positiva",
+            "etiqueta": "SIMCE Matematica 8vo basico",
+            "valor": 261.0,
+            "variable": "simce_mate_8b"
+          },
+          {
+            "contribucion": -0.1443,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 2do medio",
+            "valor": 0.0,
+            "variable": "simce_lect_2m_ausente"
+          },
+          {
+            "contribucion": -0.1397,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Matematica 2do medio",
+            "valor": 256.0,
+            "variable": "simce_mate_2m"
+          },
+          {
+            "contribucion": -0.136,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 2do medio",
+            "valor": 0.0,
+            "variable": "simce_mate_2m_ausente"
+          },
+          {
+            "contribucion": -0.1321,
+            "direccion": "negativa",
+            "etiqueta": "SIMCE Lectura 2do medio",
+            "valor": 246.0,
+            "variable": "simce_lect_2m"
+          },
+          {
+            "contribucion": -0.0712,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_lect_8b_ausente"
+          },
+          {
+            "contribucion": -0.0569,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 8vo basico",
+            "valor": 0.0,
+            "variable": "simce_mate_8b_ausente"
+          },
+          {
+            "contribucion": -0.0295,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 4to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_4b_ausente"
+          },
+          {
+            "contribucion": -0.0217,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 4to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_4b_ausente"
+          },
+          {
+            "contribucion": -0.0195,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Matematica 6to basico",
+            "valor": 0.0,
+            "variable": "simce_mate_6b_ausente"
+          },
+          {
+            "contribucion": -0.0021,
+            "direccion": "negativa",
+            "etiqueta": "Sin medicion de SIMCE Lectura 6to basico",
+            "valor": 0.0,
+            "variable": "simce_lect_6b_ausente"
+          }
+        ],
+        "factor": "EFECTIVR",
+        "lectura": "SIMCE Matematica 6to basico aporta +2.95; SIMCE Lectura 4to basico aporta +1.66; SIMCE Lectura 6to basico aporta +1.58",
+        "prediccion": 47.89,
+        "rbd": "9911",
+        "valor_base": 40.18
       },
-      "status": 422
+      "status": 200
     }
   },
   "simulacion": {

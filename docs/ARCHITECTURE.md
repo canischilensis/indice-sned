@@ -204,3 +204,16 @@ Mermaid más exportación PNG.
 |---------|-------|--------|
 | Simulación en 4,6 s | 54 inferencias por llamada (9 puntos × 6 modelos); el caché no aplica porque cada punto es una observación distinta | Sin resolver |
 | Ranking 2,5× más lento en PostgreSQL | `v_ranking_intra_cluster` recalcula funciones de ventana sobre 54.298 filas en cada consulta | Sin resolver |
+
+## Normas de los planes de prueba
+
+Los tres planes —integración, aceptación y compatibilidad de navegadores— se redactan
+siguiendo **IEEE 829** e **ISO/IEC/IEEE 29119**, en conjunto y no como alternativas:
+
+| Norma | Qué aporta |
+|-------|-----------|
+| IEEE 829 | La estructura documental: identificador, alcance, elementos a probar, criterios de aprobación y suspensión, entregables y responsabilidades |
+| ISO/IEC/IEEE 29119 | El marco de proceso: política y estrategia de pruebas, gestión, diseño de casos por técnica y documentación dinámica |
+
+IEEE 829 fija la forma del documento; ISO 29119 fija el proceso que lo produce. Declararlas
+juntas evita la pregunta obvia en una defensa: por qué se eligió una y se descartó la otra.

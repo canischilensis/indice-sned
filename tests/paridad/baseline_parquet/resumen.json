@@ -13,38 +13,38 @@
   "tiempos_ms": {
     "listado": {
       "n": 1,
-      "media": 255.9,
-      "max": 255.9
+      "media": 177.5,
+      "max": 177.5
     },
     "detalle": {
       "n": 20,
-      "media": 41.9,
-      "max": 82.5
+      "media": 43.2,
+      "max": 94.9
     },
     "ranking": {
       "n": 20,
-      "media": 47.2,
-      "max": 92.4
+      "media": 41.9,
+      "max": 92.2
     },
     "prediccion": {
       "n": 20,
-      "media": 955.9,
-      "max": 10448.8
+      "media": 575.6,
+      "max": 2776.4
     },
     "alertas": {
       "n": 20,
       "media": 6.8,
-      "max": 8.6
+      "max": 8.4
     },
     "shapley": {
       "n": 20,
-      "media": 406.7,
-      "max": 8018.7
+      "media": 252.1,
+      "max": 1531.6
     },
     "simulacion": {
       "n": 20,
-      "media": 4435.2,
-      "max": 4874.2
+      "media": 4659.5,
+      "max": 4965.5
     }
   }
 }

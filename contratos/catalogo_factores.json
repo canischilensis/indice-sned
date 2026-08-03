@@ -74,7 +74,7 @@
       "mae": 1.97,
       "restriccion": "Varianza del objetivo proxima a cero.",
       "descripcion": "Cumplimiento normativo y condiciones de trabajo.",
-      "es_accionable": false,
+      "es_accionable": true,
       "fuente_oficial": "Ley 19.410 y Decreto Supremo que fija ponderaciones del SNED"
     }
   ],
@@ -90,6 +90,6 @@
     "nota": "Cinco de los seis factores estan limitados por informacion que solo el organismo emisor posee."
   },
   "notas": {
-    "es_accionable": "Un factor es accionable si el establecimiento puede influir en sus insumos dentro del ciclo y el sistema puede simular al menos una variable que lo alimente. Distinto de `restriccion`, que marca los factores acotados por informacion que solo posee el organismo emisor."
+    "es_accionable": "El establecimiento puede influir en los insumos del factor dentro del ciclo. MEJORAR es accionable: reducir procesos sancionatorios es gestion de cumplimiento normativo. Distinto de `restriccion`, que marca los factores acotados por informacion que solo posee el organismo emisor. La fuente unica es core.factor_sned en el DDL; este JSON es el contrato que consume el codigo y se valida contra la tabla al inicializar."
   }
 }

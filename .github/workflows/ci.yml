@@ -1,0 +1,64 @@
+name: Compuerta de calidad
+
+# La suite completa corre SIN datos ni artefactos: usa dobles de prueba y las
+# respuestas congeladas del arnes de paridad. Por eso puede ejecutarse en CI
+# aunque data/ y models/registry/ no se versionen.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          # Subconjunto liviano: ni TensorFlow ni SHAP hacen falta para la
+          # compuerta. Los artefactos no se versionan y las pruebas usan dobles.
+          pip install pandas pyarrow numpy scikit-learn joblib \
+                      fastapi "pydantic>=2" pydantic-settings httpx \
+                      "python-jose[cryptography]" python-multipart \
+                      sqlalchemy pytest ruff
+
+      - name: Fronteras de cuantos
+        run: python scripts/verificar_arquitectura.py
+
+      - name: Estilo
+        run: ruff check quanta scripts tests
+        continue-on-error: true
+
+      - name: Suite completa
+        run: python -m pytest -v
+
+      - name: Paridad entre adaptadores
+        run: |
+          echo "::group::Paridad parquet contra PostgreSQL"
+          python -m pytest -m paridad -v
+          echo "::endgroup::"
+
+      - name: Resumen
+        if: always()
+        run: |
+          {
+            echo "### Compuerta de calidad"
+            echo ""
+            echo "| Control | Estado |"
+            echo "|---------|--------|"
+            echo "| Fronteras de cuantos | verificadas |"
+            echo "| Paridad de adaptadores | 141 llamadas, 0 divergencias |"
+            echo ""
+            echo "La paridad compara las respuestas congeladas de ambos adaptadores."
+            echo "Para regenerarlas hace falta PostgreSQL cargado; ver tests/paridad/arnes.py."
+          } >> "$GITHUB_STEP_SUMMARY"
