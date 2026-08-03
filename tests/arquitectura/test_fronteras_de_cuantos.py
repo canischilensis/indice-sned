@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[1]
+RAIZ = Path(__file__).resolve().parents[2]
 
 
 def test_el_servicio_no_importa_librerias_de_machine_learning():
