@@ -24,7 +24,14 @@ import unicodedata
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+# Fuera de pytest nadie pone `quanta/` en la ruta: pytest lo hace por el
+# `pythonpath` de pyproject.toml, y uvicorn por `--app-dir quanta`. Este arnes
+# es un punto de entrada independiente, asi que resuelve la ruta el mismo.
+_AQUI = Path(__file__).resolve().parent
+_RAIZ = _AQUI.parents[1]
+for _ruta in (_AQUI, _RAIZ / "quanta"):
+    if str(_ruta) not in sys.path:
+        sys.path.insert(0, str(_ruta))
 
 from casos import CASOS, CasoCritico  # noqa: E402
 from dobles import ServicioFalso  # noqa: E402
@@ -76,7 +83,13 @@ def evaluar_caso(
     transcurrido = int((time.monotonic() - inicio) * 1000)
 
     politica = PoliticaDeSalida()
-    candidato = Fundamentacion(respuesta.texto, set(respuesta.cifras_citadas))
+    # Mismo conjunto que uso el agente: cifras de dato mas cifras de mensajes
+    # del sistema. Medir con un conjunto mas estrecho produciria falsos
+    # positivos sobre los mensajes de error, que son datos y no invenciones.
+    candidato = Fundamentacion(
+        respuesta.texto,
+        set(respuesta.cifras_citadas) | set(respuesta.cifras_de_diagnostico),
+    )
     huerfanas = politica.cifras.cifras_sin_respaldo(candidato)
     promesas = politica.promesas.frases_detectadas(candidato)
 

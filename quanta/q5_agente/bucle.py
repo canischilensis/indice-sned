@@ -116,6 +116,9 @@ class AgenteDeBucleSimple(AsesorDeGestion):
         # directivo fijo) no son invencion del modelo: son dato de la sesion, y
         # el agente debe poder repetirlas al explicar un error.
         cifras: set[float] = _cifras_del_contexto(consulta)
+        # Conjunto aparte: magnitudes que aparecen en mensajes del sistema. Se
+        # admiten al validar, pero no se presentan como evidencia de dato.
+        diagnostico: set[float] = set()
         uso = Uso()
 
         for _ in range(self._max_pasos):
@@ -141,7 +144,7 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             )
 
             if not paso.quiere_herramienta:
-                return self._cerrar(paso.texto or "", llamadas, cifras, uso)
+                return self._cerrar(paso.texto or "", llamadas, cifras, uso, diagnostico)
 
             resultado, registro = self._ejecutar(
                 paso.peticion.nombre, paso.peticion.parametros, consulta
@@ -149,6 +152,7 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             llamadas.append(registro)
             cifras |= resultado.cifras
             cifras |= _cifras_de_parametros(registro.parametros)
+            diagnostico |= resultado.cifras_diagnostico
             mensajes.append(
                 Mensaje("herramienta", json.dumps(self._observacion(resultado), ensure_ascii=False))
             )
@@ -158,6 +162,7 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             llamadas,
             cifras,
             uso,
+            diagnostico,
         )
 
     # --- ejecucion de herramientas ---------------------------------------
@@ -213,8 +218,9 @@ class AgenteDeBucleSimple(AsesorDeGestion):
         llamadas: list[LlamadaHerramienta],
         cifras: set[float],
         uso: Uso,
+        diagnostico: set[float] | None = None,
     ) -> RespuestaAsesor:
-        aceptado, codigo, motivo = self._politica.evaluar(texto, cifras)
+        aceptado, codigo, motivo = self._politica.evaluar(texto, cifras | (diagnostico or set()))
         if not aceptado:
             return RespuestaAsesor(
                 texto=(
@@ -232,6 +238,7 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             llamadas=llamadas,
             uso=uso,
             cifras_citadas=sorted(cifras),
+            cifras_de_diagnostico=sorted(diagnostico or set()),
             guardarrailes_aplicados=["G-01", "G-02", "G-03"],
         )
 

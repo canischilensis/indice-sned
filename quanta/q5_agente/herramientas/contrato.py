@@ -33,7 +33,17 @@ def _recolectar_cifras(nodo: Any, acumulado: set[float]) -> None:
 
 @dataclass
 class ResultadoHerramienta:
-    """Lo que una herramienta entrega al bucle."""
+    """Lo que una herramienta entrega al bucle.
+
+    Distingue dos conjuntos de cifras, y la distincion importa:
+
+    - `cifras` son magnitudes del **dato**: el indice, un aporte, un percentil.
+      Son las que respaldan una afirmacion sobre el establecimiento.
+    - `cifras_diagnostico` son magnitudes que aparecen en un **mensaje del
+      sistema**: un RBD dentro de un 403, un puerto dentro de un error de
+      conexion. No son una afirmacion sobre el establecimiento, pero tampoco
+      son invencion del modelo: repetirlas literalmente es lo correcto.
+    """
 
     herramienta: str
     datos: dict[str, Any]
@@ -41,6 +51,7 @@ class ResultadoHerramienta:
     exito: bool = True
     error: str | None = None
     cifras: set[float] = field(default_factory=set)
+    cifras_diagnostico: set[float] = field(default_factory=set)
 
     @classmethod
     def desde(cls, herramienta: str, datos: dict[str, Any], origen: str) -> ResultadoHerramienta:
@@ -50,7 +61,16 @@ class ResultadoHerramienta:
 
     @classmethod
     def fallida(cls, herramienta: str, error: str) -> ResultadoHerramienta:
-        return cls(herramienta=herramienta, datos={}, origen="ninguno", exito=False, error=error)
+        from q5_agente.guardarrailes import extraer_magnitudes  # noqa: PLC0415
+
+        return cls(
+            herramienta=herramienta,
+            datos={},
+            origen="ninguno",
+            exito=False,
+            error=error,
+            cifras_diagnostico=set(extraer_magnitudes(error)),
+        )
 
 
 class Herramienta(ABC):

@@ -82,6 +82,10 @@ que gobierna la cuarentena de la ingesta y las reglas de alerta del servicio.
 | **G-03** | Promesas de obtencion del beneficio | `SinPromesasDeRetorno` | 4 pruebas; CP-07 |
 | **G-04** | Responder cuando el proveedor esta caido | Bucle y cortacircuitos | 4 pruebas de decorador |
 
+El gateway traduce ademas los fallos de **transporte** —servicio apagado, tiempo
+agotado— a `ServicioNoDisponible`, de modo que un puerto cerrado se comunica
+como una condicion del dominio y no como una traza de httpx.
+
 Dos precisiones sobre G-02, porque su alcance importa mas que su existencia:
 
 1. Solo evalua **magnitudes**: decimales, porcentajes y enteros de dos digitos o
@@ -90,6 +94,11 @@ Dos precisiones sobre G-02, porque su alcance importa mas que su existencia:
 2. Las cifras del **propio pedido** —el RBD, el bienio, los valores que el
    directivo fijo en el escenario— cuentan como respaldadas. No son invencion
    del modelo, y el agente debe poder repetirlas al explicar un error.
+3. Las cifras que aparecen en un **mensaje del sistema** —el RBD dentro de un
+   403, el puerto dentro de un error de conexion, el rango dentro de un 422—
+   viajan en un conjunto aparte, `cifras_de_diagnostico`. Se admiten al validar,
+   pero no se presentan como evidencia de dato. La respuesta transporta ambos
+   conjuntos para que la auditoria vea con cual exacto se evaluo G-02.
 
 G-01 incorpora ademas la regla que CTRL-02 impone al modelamiento: el indice, los
 seis factores y la agrupacion de comparacion **no pueden entrar como parametro**.
@@ -167,6 +176,11 @@ cumple se declare:
 
 ## 12. Como se ejecuta
 
+Los cuantos viven en `quanta/`, que no esta en la ruta de Python salvo que algo
+la ponga: pytest lo hace por el `pythonpath` de `pyproject.toml` y uvicorn por
+`--app-dir quanta`. Por eso la consola se invoca con el lanzador de `scripts/`,
+que resuelve la ruta el mismo.
+
 ```bash
 # 1. El servicio del indice, en un proceso
 uvicorn q3_servicio.main:app --reload --app-dir quanta --port 8000
@@ -174,9 +188,29 @@ uvicorn q3_servicio.main:app --reload --app-dir quanta --port 8000
 # 2. El agente, en otro proceso (unidad de despliegue propia)
 uvicorn q5_agente.app:app --reload --app-dir quanta --port 8010
 
-# 3. O directamente por consola
+# 3. O directamente por consola, desde la raiz del repositorio
+python scripts/asesor.py --rbd 25520 --trazas "por que se nos cae la superacion"
+```
+
+Equivalente sin el lanzador, si prefiere la variable de entorno:
+
+```powershell
+$env:PYTHONPATH = "quanta"
 python -m q5_agente.cli --rbd 25520 --trazas "por que se nos cae la superacion"
 ```
 
+Y la evaluacion, tambien desde la raiz:
+
+```bash
+python tests/evaluacion/arnes.py
+python tests/evaluacion/arnes.py --json informe_evaluacion.json
+```
+
 Con `AGENTE_PROVEEDOR=determinista`, el valor por defecto, no se requiere clave
-ni salida a internet.
+ni salida a internet. Si el servicio del indice no esta levantado, el agente lo
+dice y devuelve codigo de salida distinto de cero: no inventa cifras ni muestra
+una traza.
+
+`tests/arquitectura/test_puntos_de_entrada.py` ejecuta estos puntos de entrada
+como subprocesos, desde la raiz y con `PYTHONPATH` borrado, para que esta clase
+de fallo la detecte la suite y no el usuario.

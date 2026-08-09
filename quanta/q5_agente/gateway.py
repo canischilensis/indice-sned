@@ -11,6 +11,7 @@ tanto queda sometido a CTRL-04 igual que la interfaz.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any, Protocol
 
 import httpx
@@ -63,9 +64,11 @@ class ServicioSnedGateway:
     # --- sesion -----------------------------------------------------------
 
     def autenticar(self) -> str:
-        respuesta = self._cliente.post(
-            f"{self._base}{self._prefijo}/auth/token",
-            data={"username": self._usuario, "password": self._clave},
+        respuesta = self._intentar(
+            lambda: self._cliente.post(
+                f"{self._base}{self._prefijo}/auth/token",
+                data={"username": self._usuario, "password": self._clave},
+            )
         )
         if respuesta.status_code == 401:
             raise SesionExpirada("Credenciales invalidas para el servicio del indice.")
@@ -82,24 +85,49 @@ class ServicioSnedGateway:
     # --- verbos -----------------------------------------------------------
 
     def obtener(self, ruta: str, parametros: dict[str, Any] | None = None) -> dict:
+        cabeceras = self._cabeceras
         return self._resolver(
-            self._cliente.get(
-                f"{self._base}{self._prefijo}{ruta}",
-                params={k: v for k, v in (parametros or {}).items() if v is not None},
-                headers=self._cabeceras,
+            self._intentar(
+                lambda: self._cliente.get(
+                    f"{self._base}{self._prefijo}{ruta}",
+                    params={k: v for k, v in (parametros or {}).items() if v is not None},
+                    headers=cabeceras,
+                )
             )
         )
 
     def enviar(self, ruta: str, cuerpo: dict[str, Any]) -> dict:
+        cabeceras = self._cabeceras
         return self._resolver(
-            self._cliente.post(
-                f"{self._base}{self._prefijo}{ruta}",
-                json=cuerpo,
-                headers=self._cabeceras,
+            self._intentar(
+                lambda: self._cliente.post(
+                    f"{self._base}{self._prefijo}{ruta}",
+                    json=cuerpo,
+                    headers=cabeceras,
+                )
             )
         )
 
     # --- traduccion de errores -------------------------------------------
+
+    def _intentar(self, llamada: Callable[[], httpx.Response]) -> httpx.Response:
+        """Traduce el fallo de transporte a una condicion del dominio.
+
+        Sin esto, un servicio apagado sube como httpx.ConnectError hasta la
+        consola y se ve como una traza. El agente debe decir que no puede
+        responder, igual que cuando falta un artefacto.
+        """
+        try:
+            return llamada()
+        except httpx.TimeoutException as exc:
+            raise ServicioNoDisponible(
+                f"El servicio del indice no respondio dentro del tiempo previsto ({self._base})."
+            ) from exc
+        except httpx.TransportError as exc:
+            raise ServicioNoDisponible(
+                f"No fue posible conectar con el servicio del indice en {self._base}. "
+                "Verifique que este levantado."
+            ) from exc
 
     @staticmethod
     def _resolver(respuesta: httpx.Response) -> dict:

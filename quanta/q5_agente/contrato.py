@@ -63,6 +63,11 @@ class RespuestaAsesor:
     llamadas: list[LlamadaHerramienta] = field(default_factory=list)
     uso: Uso = field(default_factory=Uso)
     cifras_citadas: list[float] = field(default_factory=list)
+    #: Magnitudes provenientes de mensajes del sistema (un RBD dentro de un 403,
+    #: un puerto dentro de un error de conexion). Se admiten al validar pero no
+    #: son evidencia de dato. Viajan aparte para que la auditoria vea con que
+    #: conjunto exacto se evaluo G-02.
+    cifras_de_diagnostico: list[float] = field(default_factory=list)
     guardarrailes_aplicados: list[str] = field(default_factory=list)
     rechazada: bool = False
     motivo_rechazo: str | None = None

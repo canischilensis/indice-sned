@@ -3,6 +3,7 @@
 import sys
 from pathlib import Path
 
+import httpx
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "evaluacion"))
@@ -20,6 +21,7 @@ from q5_agente.errores import (  # noqa: E402
     ParametroInvalido,
     ServicioNoDisponible,
 )
+from q5_agente.gateway import ServicioSnedGateway  # noqa: E402
 from q5_agente.herramientas.catalogo import construir_catalogo  # noqa: E402
 
 
@@ -68,7 +70,19 @@ def test_un_rbd_ajeno_devuelve_fallo_controlado_y_menciona_la_jurisdiccion(catal
     resultado = catalogo["diagnostico_de_establecimiento"].ejecutar(rbd=RBD_AJENO)
     assert not resultado.exito
     assert "jurisdiccion" in resultado.error
-    assert resultado.cifras == set(), "un fallo no puede aportar cifras"
+    assert resultado.cifras == set(), "un fallo no puede aportar cifras de dato"
+
+
+def test_un_fallo_aporta_cifras_de_diagnostico_pero_no_de_dato(catalogo):
+    """El RBD dentro de un 403 no es invencion del modelo: es dato del sistema.
+
+    Sin esta distincion, G-02 rechazaba el mensaje de error por citar el propio
+    identificador que el servicio habia devuelto, y el usuario recibia un aviso
+    generico en lugar de la causa.
+    """
+    resultado = catalogo["diagnostico_de_establecimiento"].ejecutar(rbd=RBD_AJENO)
+    assert resultado.cifras == set()
+    assert float(RBD_AJENO) in resultado.cifras_diagnostico
 
 
 def test_un_rbd_depurado_devuelve_fallo_controlado(catalogo):
@@ -129,6 +143,32 @@ def test_un_valor_fuera_de_rango_lo_rechaza_el_servicio(catalogo):
     )
     assert not resultado.exito
     assert "rango" in resultado.error
+
+
+# --- fallos de transporte ---------------------------------------------------
+
+
+def test_el_gateway_traduce_la_conexion_rechazada_a_condicion_del_dominio():
+    """Un servicio apagado no puede subir como httpx.ConnectError hasta la consola."""
+
+    def sin_servidor(peticion: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("Connection refused", request=peticion)
+
+    cliente = httpx.Client(transport=httpx.MockTransport(sin_servidor))
+    puerta = ServicioSnedGateway("http://127.0.0.1:9", "u", "c", cliente=cliente)
+    with pytest.raises(ServicioNoDisponible, match="[Nn]o fue posible conectar"):
+        puerta.obtener("/prediccion/11")
+
+
+def test_el_gateway_traduce_el_tiempo_agotado_a_condicion_del_dominio():
+
+    def demasiado_lento(peticion: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout("tardo demasiado", request=peticion)
+
+    cliente = httpx.Client(transport=httpx.MockTransport(demasiado_lento))
+    puerta = ServicioSnedGateway("http://127.0.0.1:9", "u", "c", cliente=cliente)
+    with pytest.raises(ServicioNoDisponible, match="tiempo previsto"):
+        puerta.obtener("/prediccion/11")
 
 
 # --- pertinencia del ruteo --------------------------------------------------
