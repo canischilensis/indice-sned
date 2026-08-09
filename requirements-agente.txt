@@ -1,17 +1,24 @@
 # ------------------------------------------------------------------
-# Cuanto 5 · Agente asesor — dependencias opcionales
+# Cuanto 5 · Agente asesor — dependencias
 # ------------------------------------------------------------------
-# El agente funciona sin ninguna de estas: el adaptador determinista no
-# necesita red ni credenciales, y httpx ya viene en requirements-dev.
-#
 #   pip install -r requirements-agente.txt
+#
+# La consola (scripts/asesor.py) necesita UNA sola dependencia de terceros:
+# httpx. La configuracion del cuanto 5 usa biblioteca estandar a proposito, de
+# modo que el agente arranca sin la pila del servicio. Hay una prueba que lo
+# comprueba bloqueando esos modulos: tests/arquitectura/test_puntos_de_entrada.py
+#
+# El servicio HTTP del agente (q5_agente/app.py) si necesita FastAPI y Pydantic,
+# que ya vienen en requirements.txt.
 # ------------------------------------------------------------------
 
 -r requirements.txt
 
-# Cliente HTTP del gateway hacia el servicio del indice
+# Cliente HTTP del gateway hacia el servicio del indice. Unica dependencia
+# obligatoria del cuanto 5.
 httpx==0.27.2
 
-# Proveedores de modelo. Instale solo el que vaya a usar.
+# Proveedores de modelo. Opcionales: instale solo el que vaya a usar. Sin
+# ninguno de los dos, el proveedor determinista funciona igual.
 anthropic==0.40.0
 openai==1.57.0

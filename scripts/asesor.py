@@ -9,6 +9,10 @@ invocacion con `python -m` no tiene ninguna de las dos.
 
 Equivale a `python -m q5_agente.cli` con PYTHONPATH=quanta, sin obligar a
 recordar la variable de entorno.
+
+La consola necesita httpx y nada mas: la configuracion del cuanto 5 no usa
+pydantic-settings a proposito. Si aun asi falta algo, este lanzador lo dice en
+una linea en lugar de mostrar una traza de importacion.
 """
 
 from __future__ import annotations
@@ -21,7 +25,24 @@ QUANTA = RAIZ / "quanta"
 if str(QUANTA) not in sys.path:
     sys.path.insert(0, str(QUANTA))
 
-from q5_agente.cli import main  # noqa: E402
+try:
+    from q5_agente.cli import main
+except ImportError as exc:  # dependencia ausente o entorno equivocado
+    faltante = getattr(exc, "name", None)
+    cabeza = (
+        f"No se pudo iniciar el agente: falta el modulo '{faltante}'."
+        if faltante
+        else "No se pudo iniciar el agente: falta una dependencia."
+    )
+    print(
+        f"{cabeza}\n"
+        f"Detalle: {exc}\n"
+        f"Interprete en uso: {sys.executable}\n"
+        "Si trabaja con entorno virtual, activelo antes: .\\env\\Scripts\\Activate.ps1\n"
+        "Para instalar lo necesario: pip install -r requirements-agente.txt",
+        file=sys.stderr,
+    )
+    raise SystemExit(1) from exc
 
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -119,6 +119,15 @@ lo exige, y esa evidencia no existe todavia.
 | `anthropic` | Operacion | Paquete `anthropic` y `ANTHROPIC_API_KEY` |
 | `openai` | Operacion | Paquete `openai` y `OPENAI_API_KEY` |
 
+**Dependencias del cuanto.** La consola necesita **httpx y nada mas**: la
+configuracion se resuelve con biblioteca estandar, no con pydantic-settings.
+No es una preferencia de estilo, es lo que hace cierta la frase "si el cuanto 5
+se retira, el sistema sigue operando": tambien al reves, el cuanto 5 arranca sin
+la pila del servicio. El servicio HTTP del agente si necesita FastAPI y Pydantic,
+que ya vienen en `requirements.txt`.
+`tests/arquitectura/test_puntos_de_entrada.py` lo comprueba bloqueando esos
+modulos e importando la cadena del CLI.
+
 **El adaptador determinista no es un modelo de lenguaje.** Es la implementacion
 de referencia del puerto: rutea por pertinencia y redacta por plantilla sobre
 los datos que la herramienta devolvio. Existe por tres razones. Permite que la

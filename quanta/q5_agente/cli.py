@@ -31,7 +31,7 @@ def main(argv: list[str] | None = None) -> int:
 
     cfg = config_agente()
     if args.proveedor:
-        cfg = cfg.model_copy(update={"agente_proveedor": args.proveedor})
+        cfg = cfg.con(agente_proveedor=args.proveedor)
 
     try:
         agente = crear_agente(cfg)

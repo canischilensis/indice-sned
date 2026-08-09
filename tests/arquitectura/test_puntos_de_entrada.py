@@ -50,6 +50,72 @@ def test_la_consola_del_agente_arranca_desde_la_raiz():
     assert "ModuleNotFoundError" not in resultado.stderr
 
 
+# Modulos que la consola NO debe necesitar. pydantic-settings y FastAPI viven en
+# el servicio; la consola solo necesita httpx. Si algun dia alguien los importa
+# desde la cadena del CLI, esta prueba lo detiene.
+_PROHIBIDOS_EN_LA_CONSOLA = ("pydantic_settings", "pydantic", "fastapi", "anthropic", "openai")
+
+_GUION_SIN_DEPENDENCIAS = """
+import sys
+from pathlib import Path
+
+BLOQUEADOS = {bloqueados}
+
+class Bloqueador:
+    def find_spec(self, nombre, ruta=None, destino=None):
+        if nombre.split(".")[0] in BLOQUEADOS:
+            raise ImportError("bloqueado por la prueba: " + nombre)
+        return None
+
+sys.meta_path.insert(0, Bloqueador())
+sys.path.insert(0, str(Path({raiz!r}) / "quanta"))
+import q5_agente.cli  # noqa: F401
+import q5_agente.fabrica  # noqa: F401
+print("ARRANQUE OK")
+"""
+
+
+def test_la_consola_no_necesita_pydantic_settings_ni_fastapi():
+    """La configuracion del cuanto 5 es de biblioteca estandar, a proposito.
+
+    Nace de un fallo real: `scripts/asesor.py` reventaba con ModuleNotFoundError
+    de pydantic_settings en un interprete que no tenia instaladas las
+    dependencias del servicio. Un cuanto que se declara retirable no puede
+    arrastrar media pila de la aplicacion para imprimir una linea en consola.
+    """
+    guion = _GUION_SIN_DEPENDENCIAS.format(
+        bloqueados=set(_PROHIBIDOS_EN_LA_CONSOLA), raiz=str(RAIZ)
+    )
+    resultado = subprocess.run(
+        [sys.executable, "-c", guion],
+        cwd=RAIZ, env=_entorno_limpio(), capture_output=True, text=True, timeout=120,
+    )
+    assert resultado.returncode == 0, resultado.stdout + resultado.stderr
+    assert "ARRANQUE OK" in resultado.stdout
+
+
+def test_el_lanzador_explica_la_dependencia_ausente_en_vez_de_mostrar_una_traza():
+    """Si el interprete es el equivocado, el mensaje debe decir cual y que hacer."""
+    guion = (
+        "import sys, runpy\n"
+        "class Bloqueador:\n"
+        "    def find_spec(self, nombre, ruta=None, destino=None):\n"
+        "        if nombre.split('.')[0] == 'httpx':\n"
+        "            raise ImportError('bloqueado por la prueba: httpx')\n"
+        "        return None\n"
+        "sys.meta_path.insert(0, Bloqueador())\n"
+        "sys.argv = ['asesor.py', '--help']\n"
+        "runpy.run_path('scripts/asesor.py', run_name='__main__')\n"
+    )
+    resultado = subprocess.run(
+        [sys.executable, "-c", guion],
+        cwd=RAIZ, env=_entorno_limpio(), capture_output=True, text=True, timeout=120,
+    )
+    assert "No se pudo iniciar el agente" in resultado.stderr
+    assert "httpx" in resultado.stderr
+    assert "Interprete en uso" in resultado.stderr
+
+
 def test_la_consola_avisa_en_vez_de_reventar_si_el_servicio_no_esta():
     """Un servicio apagado es una condicion esperable, no un error de programa."""
     entorno = _entorno_limpio()
