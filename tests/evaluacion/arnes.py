@@ -1,0 +1,184 @@
+"""Arnes de evaluacion del agente asesor.
+
+Ejecuta los veinte casos criticos contra un doble del servicio y mide cinco
+cosas, todas verificables y ninguna opinable:
+
+  1. Ruteo de herramienta: eligio la herramienta que el caso declara.
+  2. Fundamentacion de cifras: no cito ninguna magnitud que el servicio no
+     devolviera. Es G-02 medido, no declarado.
+  3. Ausencia de promesas de retorno: G-03.
+  4. Resiliencia: ante 403, 404, 422 y 503 responde sin inventar cifras.
+  5. Latencia propia del agente, excluida la del servicio.
+
+    python tests/evaluacion/arnes.py            # informe por consola
+    python tests/evaluacion/arnes.py --json out.json
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+import unicodedata
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from casos import CASOS, CasoCritico  # noqa: E402
+from dobles import ServicioFalso  # noqa: E402
+from q5_agente.bucle import AgenteDeBucleSimple  # noqa: E402
+from q5_agente.contrato import Consulta  # noqa: E402
+from q5_agente.guardarrailes import (  # noqa: E402
+    Fundamentacion,
+    PoliticaDeSalida,
+    SanitizadorDeParametros,
+)
+from q5_agente.herramientas.catalogo import construir_catalogo  # noqa: E402
+from q5_agente.proveedores.determinista import AdaptadorDeterminista  # noqa: E402
+
+
+def _plano(texto: str) -> str:
+    descompuesto = unicodedata.normalize("NFD", texto.lower())
+    return "".join(c for c in descompuesto if unicodedata.category(c) != "Mn")
+
+
+@dataclass
+class ResultadoCaso:
+    id: str
+    categoria: str
+    descripcion: str
+    aprobado: bool
+    herramienta_usada: str | None
+    ruteo_correcto: bool
+    cifras_sin_respaldo: list[float]
+    promesas_detectadas: list[str]
+    milisegundos: int
+    rechazada: bool
+    motivo: str | None
+    fallos: list[str]
+
+
+def construir_agente(servicio: ServicioFalso) -> AgenteDeBucleSimple:
+    herramientas = construir_catalogo(servicio, SanitizadorDeParametros())
+    proveedor = AdaptadorDeterminista({h.nombre: h.disparadores for h in herramientas.values()})
+    return AgenteDeBucleSimple(proveedor, herramientas, PoliticaDeSalida(), max_pasos=3)
+
+
+def evaluar_caso(
+    caso: CasoCritico, agente: AgenteDeBucleSimple, servicio: ServicioFalso
+) -> ResultadoCaso:
+    inicio = time.monotonic()
+    respuesta = agente.asesorar(
+        Consulta(texto=caso.consulta, rbd=caso.rbd, usuario="evaluacion")
+    )
+    transcurrido = int((time.monotonic() - inicio) * 1000)
+
+    politica = PoliticaDeSalida()
+    candidato = Fundamentacion(respuesta.texto, set(respuesta.cifras_citadas))
+    huerfanas = politica.cifras.cifras_sin_respaldo(candidato)
+    promesas = politica.promesas.frases_detectadas(candidato)
+
+    herramienta_usada = respuesta.llamadas[0].herramienta if respuesta.llamadas else None
+    ruteo_correcto = herramienta_usada == caso.herramienta_esperada
+
+    fallos: list[str] = []
+    if not ruteo_correcto:
+        fallos.append(
+            f"ruteo: esperaba {caso.herramienta_esperada or 'ninguna herramienta'}, "
+            f"uso {herramienta_usada or 'ninguna'}"
+        )
+    if huerfanas:
+        fallos.append(f"G-02: cifras sin respaldo {[round(c, 2) for c in huerfanas]}")
+    if promesas:
+        fallos.append(f"G-03: promesas detectadas {promesas}")
+
+    if caso.espera_fallo_de_herramienta:
+        fallo_real = bool(respuesta.llamadas) and not respuesta.llamadas[0].exito
+        if not fallo_real:
+            fallos.append("resiliencia: se esperaba un fallo controlado de la herramienta")
+    if caso.espera_rechazo and not respuesta.rechazada:
+        fallos.append("politica: se esperaba que la respuesta fuera rechazada")
+
+    plano = _plano(respuesta.texto)
+    for frase in caso.frases_requeridas:
+        if _plano(frase) not in plano:
+            fallos.append(f"contenido: falta la frase requerida '{frase}'")
+    for frase in caso.frases_prohibidas:
+        if _plano(frase) in plano:
+            fallos.append(f"contenido: aparece la frase prohibida '{frase}'")
+    if caso.max_milisegundos is not None and transcurrido > caso.max_milisegundos:
+        fallos.append(
+            f"latencia: {transcurrido} ms supera el presupuesto de {caso.max_milisegundos}"
+        )
+
+    return ResultadoCaso(
+        id=caso.id,
+        categoria=caso.categoria,
+        descripcion=caso.descripcion,
+        aprobado=not fallos,
+        herramienta_usada=herramienta_usada,
+        ruteo_correcto=ruteo_correcto,
+        cifras_sin_respaldo=[round(c, 4) for c in huerfanas],
+        promesas_detectadas=promesas,
+        milisegundos=transcurrido,
+        rechazada=respuesta.rechazada,
+        motivo=respuesta.motivo_rechazo,
+        fallos=fallos,
+    )
+
+
+def ejecutar() -> list[ResultadoCaso]:
+    resultados = []
+    for caso in CASOS:
+        servicio = ServicioFalso()
+        agente = construir_agente(servicio)
+        resultados.append(evaluar_caso(caso, agente, servicio))
+    return resultados
+
+
+def informe(resultados: list[ResultadoCaso]) -> str:
+    aprobados = sum(1 for r in resultados if r.aprobado)
+    ruteo = sum(1 for r in resultados if r.ruteo_correcto)
+    sin_huerfanas = sum(1 for r in resultados if not r.cifras_sin_respaldo)
+    sin_promesas = sum(1 for r in resultados if not r.promesas_detectadas)
+    total = len(resultados)
+    p95 = sorted(r.milisegundos for r in resultados)[int(total * 0.95) - 1]
+
+    lineas = [
+        "EVALUACION DEL AGENTE ASESOR · 20 casos criticos",
+        "=" * 62,
+        f"  Casos aprobados            {aprobados}/{total}",
+        f"  Ruteo de herramienta       {ruteo}/{total}",
+        f"  Sin cifras sin respaldo    {sin_huerfanas}/{total}   (G-02)",
+        f"  Sin promesas de retorno    {sin_promesas}/{total}   (G-03)",
+        f"  Latencia propia p95        {p95} ms",
+        "=" * 62,
+    ]
+    for r in resultados:
+        marca = "OK  " if r.aprobado else "FALLA"
+        lineas.append(f"{marca} {r.id} · {r.categoria:<15} {r.descripcion}")
+        for fallo in r.fallos:
+            lineas.append(f"        - {fallo}")
+    return "\n".join(lineas)
+
+
+def main(argv: list[str] | None = None) -> int:
+    analizador = argparse.ArgumentParser(description="Arnes de evaluacion del agente")
+    analizador.add_argument("--json", default=None, help="Ruta donde escribir el detalle en JSON")
+    args = analizador.parse_args(argv)
+
+    resultados = ejecutar()
+    print(informe(resultados))
+    if args.json:
+        Path(args.json).write_text(
+            json.dumps([asdict(r) for r in resultados], ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        print(f"\nDetalle escrito en {args.json}")
+    return 0 if all(r.aprobado for r in resultados) else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

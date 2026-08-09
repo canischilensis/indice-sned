@@ -1,0 +1,17 @@
+# ------------------------------------------------------------------
+# Cuanto 5 · Agente asesor — dependencias opcionales
+# ------------------------------------------------------------------
+# El agente funciona sin ninguna de estas: el adaptador determinista no
+# necesita red ni credenciales, y httpx ya viene en requirements-dev.
+#
+#   pip install -r requirements-agente.txt
+# ------------------------------------------------------------------
+
+-r requirements.txt
+
+# Cliente HTTP del gateway hacia el servicio del indice
+httpx==0.27.2
+
+# Proveedores de modelo. Instale solo el que vaya a usar.
+anthropic==0.40.0
+openai==1.57.0
