@@ -173,7 +173,7 @@ Fuente editable del diagrama: pendiente de exportar a `docs/diagramas/06_casos_d
 | **Actor principal** | Ingeniero de datos |
 | **Requisito** | RF-12, RNF-06 |
 | **Flujo principal** | 1. El artefacto entrenado se deposita en el registro con sus metadatos. 2. El registro expone inventario: nombre, tamaño, estado de materialización y métricas. 3. El servicio solo carga el artefacto cuando la primera petición lo exige. |
-| **Deuda declarada** | Los metadatos aún no registran la versión de la librería de aprendizaje; los artefactos están acoplados a scikit-learn 1.5.2 |
+| **Deuda declarada** | Los metadatos no registran la versión de la librería. Medido: los artefactos se serializaron con scikit-learn 1.6.1 y el entorno de servicio fija 1.5.2 |
 | **Realización** | `q2_modelamiento/registro_modelos.py`, `artefactos.py` |
 
 ### CU-12 · Conmutar la fuente de datos

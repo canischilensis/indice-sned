@@ -61,6 +61,19 @@ class SolicitudSimulacion(BaseModel):
     variables: dict[str, float | None] = Field(default_factory=dict)
 
 
+class SolicitudEscenario(BaseModel):
+    """Escenario completo: varias variables de gestion movidas a la vez.
+
+    Complementa a SolicitudSimulacion, que recorre UNA variable y devuelve su
+    curva. Aqui el equipo directivo fija un conjunto de valores y pregunta que
+    indice resultaria. Las variables no enviadas conservan su valor observado, y
+    las que quedan fuera del rango admisible se recortan en el dominio, no aqui.
+    """
+
+    periodo: str | None = None
+    variables: dict[str, float | None] = Field(default_factory=dict)
+
+
 class RespuestaSimulacion(BaseModel):
     rbd: str
     variable: str

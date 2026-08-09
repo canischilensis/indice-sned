@@ -70,8 +70,14 @@ class EstrategiaPredictiva(ABC):
 
 | Clase | Cómo estima | Explicabilidad | R² |
 |-------|-------------|----------------|-----|
-| `EstrategiaDesagregada` | Un modelo por factor; el índice se reconstruye ponderando | Sí, por factor | 0,583 |
-| `EstrategiaGlobal` | Un modelo sobre el índice completo | No por factor | 0,637 |
+| `EstrategiaDesagregada` | Seis modelos de bosque aleatorio, uno por factor; el índice se reconstruye ponderando | Sí, por factor | 0,583 |
+| `EstrategiaGlobal` | Un modelo de árboles con potenciación por histograma sobre el índice completo | No por factor | 0,637 |
+
+**Los dos motores usan algoritmos distintos, y conviene no confundirlos.** El benchmark de
+arquitecturas eligió potenciación por histograma **para el motor global**; el motor desagregado
+—que es el que alimenta la interfaz, el simulador y la explicabilidad— se entrenó con bosque
+aleatorio. Ambos son ensambles de árboles, de modo que el explicador exacto de Shapley aplica a
+los dos.
 
 Conviven porque responden preguntas distintas: la global estima mejor, la desagregada dice
 **qué mover**. El simulador usa la desagregada, y por eso su R² inferior es un costo aceptado y

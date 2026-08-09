@@ -185,9 +185,13 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
    notebook de entrenamiento y no se persisten; el servicio las imputa por mediana (cobertura
    35/43 = 81,4 %). Observable vía `GET /api/v1/salud/composicion`. La solución de fondo es
    materializarlas en `hechos.indicador_anual` durante la ingesta.
-6. **Versión de librería no registrada.** Los artefactos `.joblib` están acoplados a la versión
-   de scikit-learn con que se entrenaron (1.5.2; fallan con 1.8). Los metadatos del registro
-   deben incorporar la versión de la librería.
+6. **Desajuste de version entre entrenamiento y ejecucion.** Los artefactos `.joblib` se
+   serializaron con **scikit-learn 1.6.1** —la version del entorno de los cuadernos— y el
+   entorno de servicio fija **1.5.2** en `requirements.txt`. Cargar un artefacto de una version
+   posterior en una anterior emite `InconsistentVersionWarning` y, segun la documentacion de
+   scikit-learn, puede producir resultados invalidos. Medido en ejecucion, no supuesto. La
+   solucion es registrar la version en los metadatos y alinear el entorno; mientras tanto, la
+   advertencia queda declarada.
 7. **Staging de git desde el bridge.** `git add` no puede finalizar objetos sobre la carpeta
    montada (`Operation not permitted` al liberar temporales). El repositorio esta inicializado
    y `.gitignore` verificado; el primer commit debe hacerse con git nativo en Windows.

@@ -454,7 +454,7 @@ vuelve observable ese desajuste y lo expone en `GET /api/v1/salud/composicion`. 
 fondo —materializar las variables derivadas en la capa de persistencia— queda como deuda
 declarada, no como sorpresa.
 
-**2. Acoplamiento de versión en los artefactos.** Los `.joblib` no cargan con scikit-learn 1.8
+**2. Acoplamiento de versión en los artefactos.** Los `.joblib` se serializaron con scikit-learn 1.6.1 y el entorno de servicio fija 1.5.2
 (`AttributeError: _RemainderColsList`). Requieren la versión con la que fueron entrenados, que
 es la fijada en `requirements.txt` (1.5.2). Refuerza el argumento de CTRL-05: los metadatos del
 registro deben incluir la versión de la librería, no solo los hiperparámetros.

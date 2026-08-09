@@ -20,9 +20,10 @@ descubre roto tres pasos más tarde.
 | Node.js | 18 o superior | `node --version` |
 | Git | cualquiera reciente | `git --version` |
 
-**Advertencia sobre versiones:** los artefactos de modelo están acoplados a la versión de
-scikit-learn con la que se entrenaron (1.5.2). Con una versión mayor distinta fallan al cargar.
-El archivo de requisitos fija las versiones; no las actualice sin reentrenar.
+**Advertencia sobre versiones:** los artefactos de modelo se serializaron con **scikit-learn
+1.6.1**, mientras que `requirements.txt` fija **1.5.2** para el entorno de servicio. Al cargarlos
+verá `InconsistentVersionWarning`: el sistema funciona, pero es una desalineación real y está
+declarada como deuda. No actualice las versiones sin reentrenar.
 
 ---
 

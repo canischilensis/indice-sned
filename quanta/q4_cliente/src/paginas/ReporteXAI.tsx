@@ -1,87 +1,152 @@
 import { useEffect, useState } from 'react'
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { obtenerShapley } from '../api'
-import type { Explicacion } from '../tipos'
+import { obtenerPrediccion, obtenerShapley } from '../api'
+import type { Contribucion, Explicacion, FactorPredicho } from '../tipos'
 
-const FACTORES = [
-  { codigo: 'EFECTIVR', nombre: 'Efectividad (37 %)' },
-  { codigo: 'SUPERAR', nombre: 'Superacion (28 %)' },
-  { codigo: 'IGUALDR', nombre: 'Igualdad (22 %)' },
-  { codigo: 'INICIAR', nombre: 'Iniciativa (6 %)' },
-  { codigo: 'INTEGRAR', nombre: 'Integracion (5 %)' },
-  { codigo: 'MEJORAR', nombre: 'Mejoramiento (2 %)' },
-]
+function fmt(n: number, decimales = 2): string {
+  return n.toLocaleString('es-CL', { minimumFractionDigits: decimales, maximumFractionDigits: decimales })
+}
+
+function Barra({ c, maximo }: { c: Contribucion; maximo: number }) {
+  const positiva = c.contribucion >= 0
+  const ancho = Math.min(50, (Math.abs(c.contribucion) / maximo) * 50)
+  return (
+    <div className="fila-b">
+      <div className="et">
+        {c.etiqueta}
+        <small>{c.valor === null ? 'sin medicion' : `valor observado: ${fmt(c.valor, 2)}`}</small>
+      </div>
+      <div className="pista">
+        <div className="mitad" />
+        <div className={`barra ${positiva ? 'pos' : 'neg'}`} style={{ width: `${ancho}%` }} />
+      </div>
+      <div className={`cifra ${positiva ? 'pos' : 'neg'}`}>
+        {positiva ? '+' : ''}{fmt(c.contribucion)}
+      </div>
+    </div>
+  )
+}
 
 export default function ReporteXAI({ rbd }: { rbd: string }) {
-  const [factor, setFactor] = useState('EFECTIVR')
+  const [factores, setFactores] = useState<FactorPredicho[]>([])
+  const [factor, setFactor] = useState<string>('')
   const [datos, setDatos] = useState<Explicacion | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let vigente = true
+    setFactores([]); setDatos(null); setError(null)
+    obtenerPrediccion(rbd)
+      .then((p) => {
+        if (!vigente) return
+        setFactores(p.factores)
+        setFactor(p.factores[0]?.codigo ?? '')
+      })
+      .catch((e) => { if (vigente) setError((e as Error).message) })
+    return () => { vigente = false }
+  }, [rbd])
+
+  useEffect(() => {
+    if (!factor) return
+    let vigente = true
     setDatos(null); setError(null)
-    obtenerShapley(rbd, factor).then(setDatos).catch((e) => setError((e as Error).message))
+    obtenerShapley(rbd, factor)
+      .then((d) => { if (vigente) setDatos(d) })
+      .catch((e) => { if (vigente) setError((e as Error).message) })
+    return () => { vigente = false }
   }, [rbd, factor])
 
-  const serie = datos
-    ? datos.contribuciones.slice(0, 12).map((c) => ({ etiqueta: c.etiqueta, contribucion: c.contribucion }))
-    : []
+  const actual = factores.find((f) => f.codigo === factor)
+  const positivas = (datos?.contribuciones ?? []).filter((c) => c.contribucion >= 0)
+  const negativas = (datos?.contribuciones ?? []).filter((c) => c.contribucion < 0)
+  const maximo = Math.max(1e-6, ...(datos?.contribuciones ?? []).map((c) => Math.abs(c.contribucion)))
+  const diferencia = datos ? datos.prediccion - datos.valor_base : 0
 
   return (
     <>
-      <div className="panel">
-        <h3 style={{ marginTop: 0 }}>Reporte de explicabilidad &mdash; valores de Shapley</h3>
-        <p style={{ color: 'var(--tenue)', fontSize: 13 }}>
-          Descompone la estimacion de este establecimiento en la contribucion individual de cada
-          variable, con signo y magnitud. Las contribuciones suman exactamente la diferencia entre
-          la prediccion y el valor base.
-        </p>
-        <select value={factor} onChange={(e) => setFactor(e.target.value)}>
-          {FACTORES.map((f) => <option key={f.codigo} value={f.codigo}>{f.nombre}</option>)}
-        </select>
+      <div className="cab">
+        <div>
+          <h2>Reporte de explicabilidad</h2>
+          <p>Que variables sostienen la estimacion de cada factor, y con cuanto peso.</p>
+        </div>
       </div>
 
-      {error && <div className="panel error">{error}</div>}
-      {!datos && !error && <div className="panel cargando">Calculando valores de Shapley...</div>}
+      <div className="selector">
+        {factores.map((f) => (
+          <button
+            key={f.codigo}
+            className={`chip ${f.codigo === factor ? 'on' : ''}`}
+            onClick={() => setFactor(f.codigo)}
+          >
+            {f.es_acotado && <span className="ac" />}
+            {f.nombre}
+            <span className="peso">{(f.peso * 100).toFixed(0)}%</span>
+          </button>
+        ))}
+      </div>
+
+      {error && <div className="error">{error}</div>}
+      {!error && !datos && <div className="panel"><div className="cargando">Calculando valores de Shapley...</div></div>}
 
       {datos && (
         <>
-          <div className="rejilla">
+          <div className="rejilla-3">
             <div className="metrica">
-              <div className="rotulo">Valor base</div>
-              <div className="valor" style={{ fontSize: 24 }}>{datos.valor_base.toFixed(2)}</div>
-              <div style={{ color: 'var(--tenue)', fontSize: 12 }}>promedio del conjunto</div>
+              <div className="metrica-cab"><span className="rotulo">Punto de partida</span></div>
+              <div className="valor">{fmt(datos.valor_base)}</div>
+              <div className="nota">Promedio del factor en el conjunto nacional</div>
             </div>
             <div className="metrica">
-              <div className="rotulo">Estimacion del factor</div>
-              <div className="valor" style={{ fontSize: 24 }}>{datos.prediccion.toFixed(2)}</div>
-              <div style={{ color: 'var(--tenue)', fontSize: 12 }}>
-                {(datos.prediccion - datos.valor_base >= 0 ? '+' : '')}
-                {(datos.prediccion - datos.valor_base).toFixed(2)} respecto del promedio
+              <div className="metrica-cab"><span className="rotulo">Estimacion del factor</span></div>
+              <div className="valor">{fmt(datos.prediccion)}</div>
+              <div className={`nota ${diferencia >= 0 ? 'sube' : 'baja'}`}>
+                {diferencia >= 0 ? '+' : ''}{fmt(diferencia)} respecto del promedio
               </div>
             </div>
             <div className="metrica">
-              <div className="rotulo">Aditividad</div>
-              <div className="valor" style={{ fontSize: 24 }}>{datos.aditividad_verificada ? 'OK' : 'Revisar'}</div>
-              <div style={{ color: 'var(--tenue)', fontSize: 12 }}>base + contribuciones = prediccion</div>
+              <div className="metrica-cab"><span className="rotulo">Explicacion verificada</span></div>
+              <div className="valor" style={{ fontSize: 25, color: datos.aditividad_verificada ? 'var(--verde)' : 'var(--rojo)' }}>
+                {datos.aditividad_verificada ? 'Si' : 'Revisar'}
+              </div>
+              <div className="nota">
+                {datos.aditividad_verificada
+                  ? 'Las contribuciones suman exactamente la diferencia'
+                  : 'La suma de contribuciones no reproduce la prediccion'}
+              </div>
             </div>
           </div>
 
           <div className="panel">
-            <ResponsiveContainer width="100%" height={360}>
-              <BarChart data={serie} layout="vertical" margin={{ left: 140 }}>
-                <XAxis type="number" stroke="#9aacbd" />
-                <YAxis type="category" dataKey="etiqueta" stroke="#9aacbd" width={230} tick={{ fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: '#17222e', border: '1px solid #24323f' }} />
-                <Bar dataKey="contribucion" radius={[0, 4, 4, 0]}>
-                  {serie.map((s, i) => (
-                    <Cell key={i} fill={s.contribucion >= 0 ? '#3fa87a' : '#d97a7a'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+            <div className="panel-cab">
+              <h3>Que empuja el resultado hacia arriba y hacia abajo</h3>
+              <div className="sub">
+                Cada barra es cuanto aporta esa variable respecto del promedio nacional, ordenadas
+                por magnitud. Una variable sin medicion se declara como tal, no se trata como cero.
+              </div>
+            </div>
+            <div className="panel-cuerpo">
+              {positivas.length > 0
+                ? positivas.map((c) => <Barra key={c.variable} c={c} maximo={maximo} />)
+                : <div className="nota">Ninguna variable empuja este factor por encima del promedio.</div>}
 
-          <div className="aviso"><strong>Lectura:</strong> {datos.lectura}</div>
+              <div className="separador">Promedio nacional del factor</div>
+
+              {negativas.length > 0
+                ? negativas.map((c) => <Barra key={c.variable} c={c} maximo={maximo} />)
+                : <div className="nota">Ninguna variable empuja este factor por debajo del promedio.</div>}
+
+              <div className="lectura">
+                <div className="tit">Como leerlo</div>
+                <p>{datos.lectura}</p>
+                {actual?.es_acotado && (
+                  <p style={{ marginTop: 10 }}>
+                    <b style={{ color: 'var(--ambar)' }}>Factor acotado.</b>{' '}
+                    {actual.restriccion ?? 'Parte de la informacion que el organismo usa para calcularlo no es publica.'}{' '}
+                    Esta estimacion tiene menos respaldo que la de los factores sin restriccion.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </>
       )}
     </>

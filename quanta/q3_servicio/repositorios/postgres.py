@@ -169,9 +169,20 @@ class RepositorioPostgres(RepositorioEstablecimientos):
                 raise ConjuntoNoDisponible("SQLAlchemy no esta instalado.") from exc
             import os
 
+            # Orden de resolucion: inyeccion explicita, entorno del proceso y,
+            # por ultimo, la configuracion de la aplicacion, que es la unica que
+            # lee el archivo .env. Sin ese tercer paso el adaptador solo funciona
+            # si alguien exporto la variable a mano en la terminal.
             url = self._url or os.getenv("DATABASE_URL")
             if not url:
-                raise ConjuntoNoDisponible("Falta DATABASE_URL.")
+                from q3_servicio.core.config import config
+
+                url = config().database_url
+            if not url or "cambiar-en-local" in url:
+                raise ConjuntoNoDisponible(
+                    "Falta DATABASE_URL: definala en el archivo .env de la raiz del "
+                    "repositorio o exportela como variable de entorno."
+                )
             self._motor = create_engine(url, future=True)
         return self._motor
 

@@ -46,6 +46,7 @@ class Usuario:
 DIRECTORIO: dict[str, Usuario] = {
     "sostenedor.demo": Usuario("sostenedor.demo", "Sostenedor Demo", Rol.SOSTENEDOR, ["25520", "9012", "10156"]),
     "directora.demo": Usuario("directora.demo", "Directora Demo", Rol.DIRECTIVO, ["25520"]),
+    "sagrado.demo": Usuario("sagrado.demo", "Sagrados Corazones de La Reina", Rol.DIRECTIVO, ["25520"]),
     "auditor.demo": Usuario("auditor.demo", "Auditoria", Rol.AUDITOR, []),
 }
 

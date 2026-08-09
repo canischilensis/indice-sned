@@ -1,4 +1,14 @@
-import type { Alerta, Explicacion, Prediccion, Sesion, Simulacion } from './tipos'
+import type {
+  Alerta,
+  Composicion,
+  Explicacion,
+  Observacion,
+  Prediccion,
+  Ranking,
+  RespuestaEstablecimientos,
+  Sesion,
+  Simulacion,
+} from './tipos'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api/v1'
 
@@ -37,12 +47,44 @@ export function cerrarSesion(): void {
   sesion = null
 }
 
+/* -------------------------------------------------------------------------
+ * Lecturas. El cliente no calcula: solo pide y muestra.
+ * ---------------------------------------------------------------------- */
+
 export const obtenerPrediccion = (rbd: string) => pedir<Prediccion>(`/prediccion/${rbd}`)
-export const obtenerAlertas = (rbd: string) => pedir<{ rbd: string; alertas: Alerta[] }>(`/prediccion/${rbd}/alertas`)
+
+export const obtenerAlertas = (rbd: string) =>
+  pedir<{ rbd: string; alertas: Alerta[] }>(`/prediccion/${rbd}/alertas`)
+
 export const obtenerShapley = (rbd: string, factor: string) =>
   pedir<Explicacion>(`/xai/${rbd}/shapley?factor=${factor}`)
+
+export const listarEstablecimientos = () =>
+  pedir<RespuestaEstablecimientos>('/establecimientos')
+
+export const obtenerObservacion = (rbd: string) =>
+  pedir<Observacion>(`/establecimientos/${rbd}`)
+
+export const obtenerRanking = (rbd: string) =>
+  pedir<Ranking>(`/establecimientos/${rbd}/ranking`)
+
+export const obtenerComposicion = () =>
+  pedir<Composicion>('/salud/composicion')
+
+/* -------------------------------------------------------------------------
+ * Escenarios. La estimacion siempre viene del motor, nunca del navegador.
+ * ---------------------------------------------------------------------- */
+
+/** Curva de sensibilidad de UNA variable. */
 export const simular = (rbd: string, variable: string, nPuntos = 25) =>
   pedir<Simulacion>('/xai/simular', {
     method: 'POST',
     body: JSON.stringify({ rbd, variable, n_puntos: nPuntos, variables: {} }),
+  })
+
+/** Indice estimado con VARIAS variables de gestion modificadas a la vez. */
+export const evaluarEscenario = (rbd: string, variables: Record<string, number>) =>
+  pedir<Prediccion>(`/prediccion/${rbd}/escenario`, {
+    method: 'POST',
+    body: JSON.stringify({ variables }),
   })

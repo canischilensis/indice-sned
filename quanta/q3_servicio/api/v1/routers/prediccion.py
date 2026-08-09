@@ -4,7 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from q2_modelamiento import ArtefactoNoDisponible
 from q3_servicio.core.seguridad import Usuario, exigir_jurisdiccion, usuario_actual
-from q3_servicio.esquemas.predictivo import RespuestaAlertas, RespuestaPrediccion
+from q3_servicio.esquemas.predictivo import (
+    RespuestaAlertas,
+    RespuestaPrediccion,
+    SolicitudEscenario,
+)
 from q3_servicio.repositorios import ConjuntoNoDisponible, EstablecimientoNoEncontrado
 from q3_servicio.servicios.motor import ServicioDePrediccion, servicio_de_prediccion
 
@@ -50,3 +54,25 @@ def alertas(
     except ArtefactoNoDisponible as exc:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
     return RespuestaAlertas(rbd=rbd, alertas=servicio.evaluar_alertas(prediccion, variables))
+
+
+@router.post("/{rbd}/escenario", response_model=RespuestaPrediccion)
+def escenario(
+    rbd: str,
+    cuerpo: SolicitudEscenario,
+    usuario: Usuario = Depends(usuario_actual),
+    servicio: ServicioDePrediccion = Depends(servicio_de_prediccion),
+) -> RespuestaPrediccion:
+    """Estima el indice bajo un conjunto de variables de gestion modificadas.
+
+    Aditivo: no altera GET /prediccion/{rbd}, que sigue devolviendo la situacion
+    observada. El escenario se construye con el mismo constructor que valida
+    rangos, de modo que un valor fuera de dominio se recorta en lugar de
+    rechazarse. El calculo lo hace el motor; el cliente no pondera nada.
+    """
+    exigir_jurisdiccion(rbd, usuario)
+    variables = variables_o_error(servicio, rbd, cuerpo.periodo, cuerpo.variables)
+    try:
+        return servicio.predecir(rbd, variables)
+    except ArtefactoNoDisponible as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc

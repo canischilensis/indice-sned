@@ -60,3 +60,63 @@ export interface Sesion {
   rol: string
   rbds: string[]
 }
+
+/** Fila del listado que devuelve GET /establecimientos. */
+export interface ResumenEstablecimiento {
+  rbd: number | string
+  bienio_premio: string | null
+  cluster_codigo: number | null
+  indicer: number | null
+}
+
+export interface RespuestaEstablecimientos {
+  rol: string
+  rbds: string[]
+  origen: string
+  detalle: ResumenEstablecimiento[]
+}
+
+export interface Ranking {
+  rbd: string
+  ciclo: string
+  cluster_codigo: number
+  indicer: number
+  posicion_en_grupo: number
+  n_grupo: number
+  percentil: number
+  sel: number | null
+}
+
+/** Diagnostico de cobertura tal como lo devuelve el servicio. */
+export interface DiagnosticoCobertura {
+  evaluable: boolean
+  motivo?: string
+  n_requeridas?: number
+  n_disponibles?: number
+  cobertura?: number
+  faltantes?: string[]
+  efecto?: string
+}
+
+/** GET /salud/composicion devuelve la composicion completa del servicio. */
+export interface Composicion {
+  estrategia: Record<string, unknown>
+  repositorio: Record<string, unknown>
+  reglas_de_alerta: string[]
+  cobertura_de_variables: DiagnosticoCobertura
+}
+
+/** Observacion ancha de un establecimiento: nombres de variable como claves. */
+export type Observacion = Record<string, number | string | null>
+
+/** Fila consolidada del tablero del sostenedor. */
+export interface FilaTablero {
+  rbd: string
+  nombre: string
+  matricula: number | null
+  cluster: number | null
+  bienio: string | null
+  indicerOficial: number | null
+  estimacion: number | null
+  error: string | null
+}
