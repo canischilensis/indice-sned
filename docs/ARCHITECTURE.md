@@ -40,6 +40,19 @@ la prueba `tests/arquitectura/test_fronteras_de_cuantos.py` lo verifica en cada 
 Tres ventanas funcionales. Consume exclusivamente JSON tipado. Desconoce por completo
 que algoritmo esta detras.
 
+### Precision: cuatro cuantos logicos, tres unidades de despliegue
+
+Contrastados contra los tres criterios de Ford et al. (2021, cap. 2, pp. 29-30), Q1 y Q4 son
+cuantos fisicos: se despliegan solos. **Q2 y Q3 comparten espacio de proceso y binarios**, de modo
+que constituyen un unico cuanto fisico; la forma resultante es un **monolito modular** (Richards y
+Ford, 2020, cap. 8, p. 115). Es deliberado: la conascencia sincrona entre servicio y motor es un
+requisito de latencia del simulador, y separarlos en servicios independientes anadiria
+coordinacion de despliegue y latencia de red que este sistema, de baja concurrencia y ciclo
+bianual, no necesita.
+
+La particion logica en cuatro se conserva: organiza el codigo y esta verificada por maquina. El
+contraste completo esta en `docs/arquitectura/ARQUITECTURA_AD_HOC.md`, seccion 1.
+
 ### Grafo de dependencias permitido
 
 ```
@@ -88,6 +101,11 @@ El esquema tiene **38 tablas**: `core` 16, `hechos` 6, `ml` 8 y `app` 8. Las 21 
 `hechos` derivan del modelo entidad-relación; `core.conjunto_entrenamiento` —la lista maestra
 del conjunto depurado— más `ml` y `app` no provienen del diagrama y se declaran como
 infraestructura.
+
+Los archivos columnares no son respaldo de la base: constituyen un **cuanto de producto de datos**
+(Ford et al., 2021, cap. 14, p. 390), con ciclo de vida propio y un consumidor identificado —el
+entrenamiento—. Por eso el adaptador de parquet se conserva tras migrar a PostgreSQL: son dos
+productos de datos con propositos distintos, no una redundancia.
 
 ### Vistas de consumo
 

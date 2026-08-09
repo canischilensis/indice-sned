@@ -19,3 +19,12 @@ publica del motor. La resolucion concreta se hace en `fabrica.obtener_estrategia
 - Verificado empiricamente: tres arquitecturas comparadas sin alterar la capa de servicio.
 - Anadir una arquitectura = registrar una clase. Nada aguas arriba se entera.
 - Costo: los objetos de transferencia (`Prediccion`, `ExplicacionLocal`) deben mantenerse.
+
+## Consecuencias negativas
+- El puerto es un **contrato estricto** (Ford et al., 2021, cap. 13, p. 365): cualquier cambio
+  en su firma invalida a todos los consumidores de forma inmediata.
+- Los objetos de transferencia `Prediccion`, `ExplicacionLocal` y `CurvaSensibilidad` pasan a ser
+  parte del contrato publico y deben evolucionar con compatibilidad hacia atras.
+- La indireccion oculta el costo real de cada implementacion: dos estrategias con la misma
+  interfaz pueden diferir en un orden de magnitud de latencia sin que la firma lo declare.
+

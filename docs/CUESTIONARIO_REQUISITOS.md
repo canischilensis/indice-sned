@@ -133,7 +133,7 @@ de Q2; `test_qa_api` → integración y aceptación de Q3; `test_arquitectura` �
 *Recomendación:* 80 % en dominio (Q1, Q2), 60 % global, 0 % exigido en notebooks.
 
 **C4. ¿Las pruebas pueden cargar los modelos `.joblib` reales?**
-*Por qué importa:* son 220 MB y tardan; si las pruebas dependen de ellos, nadie las corre y no
+*Por qué importa:* son 210 MB y tardan; si las pruebas dependen de ellos, nadie las corre y no
 funcionan en un entorno limpio donde los artefactos están git-ignorados.
 *Recomendación:* unitarias con dobles de prueba; un único test de integración marcado como `lento`
 que sí cargue el artefacto real y se excluya por defecto.

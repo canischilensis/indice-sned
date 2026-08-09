@@ -16,7 +16,7 @@ responde a tres necesidades del dominio.
 | Necesidad | Consecuencia |
 |-----------|--------------|
 | El dato del índice tiene consecuencia monetaria y debe respaldarse y auditarse con reglas propias | La base vive en un servidor con su propio ciclo de respaldo y su propia superficie de acceso |
-| El servidor de aplicación mantiene 210 MB de artefactos en memoria | Su dimensionamiento se rige por memoria, no por almacenamiento |
+| El servidor de aplicación mantiene en memoria 145 MB de artefactos (registro completo: 209 MiB) | Su dimensionamiento se rige por memoria, no por almacenamiento |
 | La interfaz se compila a archivos estáticos | No requiere proceso propio y puede servirse desde el borde |
 
 Consecuencia directa: **el servidor de aplicación es reemplazable y sin estado persistente**.
@@ -77,9 +77,22 @@ Todo lo que sobrevive a un reinicio está en la base o en el registro de artefac
 
 ## 3. Dimensionamiento y su justificación
 
+> **El dimensionamiento es una propuesta, no una restricción medida.** Las cifras de esta sección
+> son un punto de partida derivado del consumo observado, no un límite impuesto por infraestructura
+> existente ni un techo verificado en carga. Ninguna decisión de arquitectura de este proyecto se
+> justifica por una restricción de hardware: el descarte de microservicios se sostiene por baja
+> concurrencia y ciclo bianual (ver `ARQUITECTURA_AD_HOC.md`, sección 1).
+>
+> **Unidades.** El registro de artefactos ocupa **209 MiB** en disco, que se redondea a **210 MB**
+> en el resto de la documentación. De ese total, el motor desagregado —el que sirve la interfaz—
+> carga **145 MB**; los 65 MB restantes son el bosque aleatorio de comparación y la red neuronal
+> del banco de pruebas, que no se materializan nunca.
+
+
+
 | Recurso | Valor | Por qué |
 |---------|-------|---------|
-| Memoria del servidor de aplicación | 8 GB | 210 MB de artefactos, más el margen del explicador de Shapley, que materializa estructuras intermedias |
+| Memoria del servidor de aplicación | 8 GB | El motor desagregado carga **145 MB** de artefactos, no los 210 MB del registro completo: 65 MB corresponden a modelos de comparación que nunca se materializan. El margen restante cubre el explicador de Shapley, que construye estructuras intermedias |
 | CPU del servidor de aplicación | 4 vCPU | La simulación ejecuta 54 inferencias por llamada; es el pico de cómputo del sistema |
 | Almacenamiento de la base | 50 GB | ≈ 838.000 filas más índices, vista materializada y margen para dos ciclos adicionales |
 | Memoria de la base | 8 GB | La vista de ordenamiento intragrupo recorre 54.298 filas por consulta; conviene que quepa en memoria compartida |

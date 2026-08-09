@@ -21,6 +21,59 @@ No es una elección de catálogo. Se deriva de cuatro fuerzas del dominio:
 | El directivo necesita saber *qué mover*, no solo *cuánto obtendrá* | La explicabilidad es núcleo, no anexo |
 | El fenómeno es bianual | Se excluye la orquestación de MLOps por deuda técnica |
 
+### Precisión: cuatro cuantos lógicos, tres unidades de despliegue
+
+El sistema se organiza en **cuatro cuantos lógicos** con fronteras verificadas por prueba
+automatizada, desplegados como **monolito modular** (Richards y Ford, 2020, cap. 8, p. 115).
+Contrastados uno por uno contra los tres criterios de Ford et al. (2021, cap. 2, pp. 29-30):
+
+| Cuanto | Desplegable de forma independiente | Alta cohesión funcional | Acoplamiento estático | Veredicto |
+|--------|-----------------------------------|-------------------------|-----------------------|-----------|
+| **Q1 · Ingesta** | Sí: proceso por lotes, se ejecuta solo | Sí: transformación del dato crudo | Bajo, limitado a librerías de procesamiento | **Cuanto físico** |
+| **Q2 · Modelamiento** | No: vive en el proceso del servicio | Sí | **Extremo con Q3**: comparten proceso y binarios | Parte de un cuanto con Q3 |
+| **Q3 · Servicio** | No: importa Q2 directamente | Sí | **Extremo con Q2** | Parte de un cuanto con Q2 |
+| **Q4 · Cliente** | Sí: se compila a estáticos | Sí | Nulo con el backend, solo HTTP/JSON | **Cuanto físico** |
+
+**Q2 y Q3 constituyen un único cuanto físico.** Comparten espacio de proceso —el mismo servidor
+de aplicación—, comparten binarios y el grafo de dependencias declara `q3_servicio → q2_modelamiento`.
+Bajo la definición que este documento cita, eso anula la independencia de despliegue.
+
+**La decisión es deliberada, no un descuido.** La conascencia síncrona entre ambos es un requisito
+de latencia: el simulador exige respuesta inmediata y una comunicación asíncrona degradaría la
+interactividad. Separarlos en microservicios introduciría coordinación de despliegue,
+observabilidad distribuida y latencia de red para resolver un problema que este sistema no tiene:
+baja concurrencia, usuarios acotados y un fenómeno de periodicidad bianual. Es la aplicación del
+criterio de la **arquitectura menos mala** (Richards y Ford, 2020, cap. 4, p. 63): no la mejor en
+abstracto, sino la que mejor equilibra los compromisos de este dominio.
+
+La partición lógica en cuatro se conserva porque es real: organiza el código, delimita
+responsabilidades y está verificada por máquina. Lo que se precisa es cómo se declara el
+despliegue.
+
+---
+
+### Taxonomía de las características de arquitectura
+
+Las fuerzas de la tabla anterior se clasifican, según Richards y Ford (2020, cap. 4), en tres
+categorías. La clasificación no es decorativa: determina dónde se verifica cada característica.
+
+| Fuerza del dominio | Característica | Categoría |
+|--------------------|----------------|-----------|
+| Consecuencia monetaria del índice | Auditabilidad e integridad | Transversal |
+| Escrutinio político y técnico | Explicabilidad y transparencia | Transversal |
+| Datos de desempeño docente | Seguridad | Transversal |
+| Simulación intensiva | Rendimiento | Operacional |
+| Periodicidad bianual | Mantenibilidad y simplicidad | Estructural |
+
+Los autores distinguen además entre características **explícitas**, derivadas de los requisitos
+declarados, e **implícitas**, que el arquitecto infiere del contexto sin que nadie las pida
+(Richards y Ford, 2020, cap. 5, p. 73). En este sistema son explícitas la estimación del índice,
+el desglose por factor y la explicabilidad. Son implícitas la integridad de la serie histórica y
+la seguridad del acceso: nadie escribió "el sistema no debe perder datos de establecimientos",
+y sin embargo perderlos invalidaría el proyecto entero.
+
+---
+
 Un **cuanto de arquitectura** es una unidad desplegable de forma independiente, con alta
 cohesión funcional y acoplamiento controlado (Ford, Richards, Sadalage y Dehghani, 2021,
 *Software Architecture: The Hard Parts*). El sistema tiene cuatro.
@@ -83,6 +136,60 @@ algoritmo hay detrás: ese desconocimiento es el criterio de éxito de la fronte
 Patrones de dominio: ninguno, por diseño. Un patrón de dominio en el cliente sería dominio
 duplicado.
 
+## 3.bis Estilos internos, conascencia y contratos
+
+El estilo hexagonal describe la relación entre dominio e infraestructura, pero no dice nada sobre
+cómo se organiza cada cuanto por dentro. Richards y Ford (2020) catalogan tres estilos que este
+sistema aplica sin haberlos declarado hasta ahora.
+
+| Cuanto | Estilo interno | Cita | Cómo se reconoce |
+|--------|----------------|------|------------------|
+| Q1 · Ingesta | Tubería y filtros | cap. 11, p. 143 | La secuencia leer → normalizar → filtrar → particionar → persistir es unidireccional y cada etapa transforma sin conocer a las demás |
+| Q3 · Servicio | Capas con capas cerradas | cap. 10, p. 135 | `router → servicio → repositorio`. El router no accede a la persistencia: la fachada se interpone y esa clausura protege las reglas de negocio de cambios en el esquema |
+| Q2 · Modelamiento | Microkernel | cap. 12, p. 150 | El registro de artefactos resuelve estrategias por clave y las estrategias se auto-registran. Corresponde a la topología de núcleo con componentes enchufables: añadir una arquitectura algorítmica no modifica el núcleo |
+
+La correspondencia del microkernel es de topología, no de identidad: a nivel de patrón, el mismo
+mecanismo se documenta en `docs/PATRONES_DE_DISENO.md` como Registry más Factory Method. Los dos
+niveles describen la misma estructura con vocabularios distintos.
+
+### Conascencia entre cuantos
+
+La conascencia mide el grado de acoplamiento por el cual un cambio en un elemento obliga a
+cambiar otro para conservar la corrección (Richards y Ford, 2020, cap. 3, p. 48).
+
+| Frontera | Tipo de conascencia | Consecuencia |
+|----------|--------------------|--------------|
+| Q3 → Q2 | Estática, de nombre y de tipo | Es la forma deseable: el sistema de tipos la detecta antes de ejecutar |
+| Q3 → Q4 | Dinámica, de valor | Un cambio en el contrato JSON solo se manifiesta en tiempo de ejecución |
+
+La **regla de localidad** (cap. 3, p. 52) explica por qué la primera es aceptable: Q3 y Q2 se
+despliegan en el mismo proceso, y formas fuertes de conascencia son tolerables cuando los
+elementos están próximos. Si fueran servicios separados, la misma conascencia obligaría a
+coordinar despliegues.
+
+### Clasificación de los contratos
+
+| Contrato | Clasificación | Fundamento |
+|----------|--------------|------------|
+| `EstrategiaPredictiva` | **Estricto** (Ford et al., 2021, cap. 13, p. 365) | Cualquier cambio de firma invalida al consumidor de inmediato. Es lo correcto en el núcleo: impide que el simulador produzca resultados inconsistentes |
+| Interfaz JSON hacia Q4 | Debería ser **laxo** (p. 367) | El cliente debe tolerar campos añadidos sin romperse, para que la interfaz evolucione sin despliegues acoplados |
+
+### Acoplamiento de estampilla: caso verificado
+
+Ford et al. (2021, cap. 13, p. 376) advierten sobre el *stamp coupling*: enviar una estructura
+completa cuando el consumidor solo necesita una parte. **En este sistema no es un riesgo
+hipotético, está ocurriendo y es medible.**
+
+`GET /api/v1/establecimientos/{rbd}` devuelve la observación ancha completa —66 variables— y el
+tablero del sostenedor utiliza exactamente **dos**: `nom_rbd` y `matricula_total`. El resto viaja
+por la red, se deserializa y se descarta.
+
+Queda declarado como deuda: la solución es un objeto de transferencia acotado a lo que el
+consumidor consume, o un parámetro de proyección de campos. No se corrige aquí porque alteraría
+un contrato hoy verificado por la prueba de paridad.
+
+---
+
 ## 4. La frontera crítica
 
 ```python
@@ -112,6 +219,13 @@ campo sobre 141 llamadas.
 ## 5. Controles de arquitectura
 
 Un control es una restricción que el sistema se impone y verifica sobre sí mismo.
+
+`scripts/verificar_arquitectura.py` corresponde a una **función de aptitud atómica** (Richards y
+Ford, 2020, cap. 6, p. 83): una comprobación objetiva y automatizable que gobierna una
+característica arquitectónica —aquí, la mantenibilidad— y que se ejecuta en cada integración. Su
+valor es que convierte la frontera entre cuantos en algo que una máquina puede refutar, no en una
+convención que depende de la disciplina de quien escribe el código.
+
 
 | ID | Riesgo mitigado | Dónde actúa | Evidencia que produce |
 |----|-----------------|-------------|----------------------|
@@ -163,3 +277,105 @@ replicabilidad externa del cálculo estatal.
 **El 63 % de la ponderación está acotada.** El campo `es_acotado` viaja en cada respuesta de la
 interfaz de programación y se renderiza en el tablero: la limitación es parte del producto, no
 una nota al pie.
+
+---
+
+## 9. Impulsores de modularidad
+
+Ford et al. (2021, cap. 3) catalogan las razones legítimas para partir un sistema. De ese
+catálogo, dos aplican a este proyecto y el resto no:
+
+| Impulsor | Cita | Cómo opera aquí |
+|----------|------|-----------------|
+| Mantenibilidad | pp. 50 | Permite modificar la lógica de cálculo ante un cambio normativo sin efectos colaterales en la ingesta ni en la interfaz |
+| Testabilidad | pp. 54 | Cada cuanto se prueba por separado: la suite corre sin base de datos ni artefactos gracias a los marcadores de exclusión |
+
+**Escalabilidad y tolerancia a fallos no son impulsores de esta partición.** El sistema no tiene
+escalabilidad elástica ni la necesita: no existen picos de carga, sino consultas de equipos
+directivos sobre un fenómeno que se calcula cada dos años. Y la explicabilidad, que en algún
+análisis podría confundirse con tolerancia a fallos, es una característica transversal de
+transparencia: no protege al sistema de fallar, sino que hace legible su resultado.
+
+## 10. El módulo compartido como componente de dominio común
+
+`quanta/compartido/` corresponde a lo que Ford et al. (2021, cap. 5, p. 94) denominan
+**componente de dominio común**: código que los cuatro cuantos necesitan por igual y que no
+pertenece a ninguno.
+
+La advertencia de la fuente es pertinente: si un componente así acumula lógica de negocio, se
+vuelve rígido sin volverse abstracto y se desplaza hacia la zona de dolor en la métrica de
+distancia a la secuencia principal (p. 69). Hoy contiene únicamente el mecanismo componible de
+especificaciones y la resolución de rutas del proyecto. **Ese es su límite y conviene vigilarlo:**
+la señal de alarma es que alguna regla del dominio SNED aparezca ahí en lugar de en el cuanto que
+la posee.
+
+### Una simetría entre el código y los datos
+
+El esquema `core` cumple en la base de datos exactamente el mismo papel que `quanta/compartido/`
+cumple en el código. La verificación del modelo físico lo confirma: las 27 claves foráneas que
+cruzan esquemas apuntan **todas** hacia `core` —18 desde `hechos`, 5 desde `ml` y 4 desde `app`—
+y no existe ninguna referencia lateral entre `hechos`, `ml` y `app`. Es una topología de estrella
+con el catálogo al centro.
+
+La consecuencia es que la separación de dominios de datos **es efectiva**, no ilusoria: ingesta y
+servicio no comparten tablas. El único punto donde se tocan es la vista materializada
+`ml.mv_matriz_entrenamiento`, que lee de `hechos` y de `core`; pero es lectura, no restricción
+estructural, y tender ese puente es precisamente su función.
+
+Ambos componentes comparten también el mismo riesgo: son referenciados por todos y no dependen de
+nadie, de modo que cualquier lógica de negocio que se filtre en ellos se propaga a todo el
+sistema sin que ninguna frontera la detenga.
+
+## 11. El parquet como cuanto de producto de datos
+
+Los archivos columnares no son una copia de la base ni un respaldo. Constituyen un **cuanto de
+producto de datos** (Ford et al., 2021, cap. 14, p. 390): un artefacto analítico con su propio
+ciclo de vida, distinto del de la base operacional, servido a un consumidor identificado —el
+entrenamiento— y optimizado para su patrón de acceso.
+
+Eso explica por qué el adaptador de parquet se conserva incluso después de migrar a PostgreSQL:
+no es redundancia, son dos productos de datos con propósitos diferentes.
+
+## 12. Declaración de no aplicabilidad
+
+Declarar qué no aplica es parte del rigor: evita que un lector suponga omisiones donde hay
+decisiones.
+
+| Elemento de la bibliografía | Por qué no aplica |
+|------------------------------|-------------------|
+| Sagas transaccionales y compensatorias (Ford et al., 2021, cap. 12) | Una sola base de datos, sin escrituras concurrentes distribuidas. No hay consistencia eventual que gestionar |
+| Propiedad distribuida de datos | Todos los esquemas viven en la misma instancia, bajo integridad referencial |
+| Coreografía y orquestación de flujos distribuidos | El flujo es lineal y consultivo: una petición, una respuesta |
+| Malla de datos descentralizada | El sistema es un único producto de datos, no un nodo de una malla |
+| Vehículos secundarios para funcionalidad transversal | Sobrecarga operacional injustificada para un sistema por lotes de ciclo bianual |
+
+## 13. Reconocimiento del sesgo metodológico
+
+Aplicar a este sistema un marco concebido para arquitecturas distribuidas de gran escala conlleva
+el riesgo del **análisis fuera de contexto** (Ford et al., 2021, cap. 15, p. 405). Las métricas de
+acoplamiento, los criterios de cuanto y las clasificaciones de contrato fueron formulados para
+sistemas con decenas de servicios y equipos independientes; este es un simulador con dos unidades
+de despliegue y un solo desarrollador.
+
+El análisis se conserva por dos razones. La primera es que los criterios de cuanto revelaron una
+imprecisión real en la documentación —la independencia de despliegue que se afirmaba de Q2 y Q3—
+que de otro modo habría llegado sin corregir a la defensa. La segunda es que el vocabulario
+permite declarar con precisión qué se hizo y qué no, que es el propósito de un documento de
+arquitectura.
+
+Lo que **no** debe inferirse es que este sistema necesite crecer hacia esa escala para ser válido.
+
+---
+
+## Referencias
+
+- Cockburn, A. (2005). *Hexagonal Architecture (Ports and Adapters)*.
+- Ford, N., Richards, M., Sadalage, P. y Dehghani, Z. (2021). *Software Architecture: The Hard
+  Parts*. O'Reilly Media.
+- Richards, M. y Ford, N. (2020). *Fundamentals of Software Architecture: An Engineering
+  Approach*. O'Reilly Media.
+
+**Nota de atribución.** Ninguna de las dos obras de Ford y Richards documenta la arquitectura
+hexagonal: ese estilo se atribuye a Cockburn (2005). El respaldo que aportan opera sobre la
+partición en cuantos, los estilos internos de cada uno y la clasificación de contratos, no sobre
+el estilo hexagonal en sí.

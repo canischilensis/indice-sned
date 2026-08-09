@@ -32,6 +32,16 @@ el **puerto**: una abstracción cuyo propósito es aislar una dimensión de camb
 | `EstrategiaPredictiva` | El algoritmo de estimación | Desagregada por factor; global |
 | `RepositorioEstablecimientos` | El medio de persistencia | Parquet; PostgreSQL |
 
+### Clasificación de los contratos
+
+| Contrato | Clasificación | Consecuencia |
+|----------|--------------|--------------|
+| `EstrategiaPredictiva` | **Estricto** (Ford et al., 2021, cap. 13, p. 365) | Un cambio de firma invalida al consumidor de inmediato. Correcto en el núcleo: impide resultados inconsistentes |
+| Interfaz JSON hacia Q4 | Debería ser **laxo** (p. 367) | El cliente debe tolerar campos añadidos sin romperse |
+
+Existe además un caso verificado de **acoplamiento de estampilla** (p. 376): la ruta de detalle
+devuelve 66 variables y el tablero usa dos. Documentado como deuda en `ARQUITECTURA_AD_HOC.md`.
+
 ### Entidades del dominio
 
 ```
@@ -139,6 +149,13 @@ La regla no es una convención escrita: `scripts/verificar_arquitectura.py` reco
 `tests/arquitectura/test_fronteras_de_cuantos.py`, de modo que una violación rompe la suite,
 no solo la disciplina.
 
+
+`quanta/compartido/` corresponde a un **componente de dominio común** (Ford et al., 2021, cap. 5,
+p. 94): código que los cuatro cuantos necesitan por igual y que no pertenece a ninguno. La fuente
+advierte que un componente así se degrada si acumula lógica de negocio, porque se vuelve rígido
+sin volverse abstracto (p. 69). Hoy contiene solo el mecanismo componible de especificaciones y la
+resolución de rutas.
+
 ### Estructura de las pruebas
 
 Híbrida: por tipo en el primer nivel, por cuanto adentro. Marcadores declarados en
@@ -149,8 +166,26 @@ Híbrida: por tipo en el primer nivel, por cuanto adentro. Marcadores declarados
 
 ## 4. Vista física
 
-Describe el despliegue. El detalle completo, con la separación entre servidor de base de datos
-y servidor de aplicación, está en `PLATAFORMA_DE_OPERACION.md`.
+Describe el despliegue. El detalle completo, con la separación entre servidor de base de datos y
+servidor de aplicación, está en `PLATAFORMA_DE_OPERACION.md`.
+
+### El sistema se despliega como monolito modular
+
+Los cuatro cuantos son **lógicos**; las unidades de despliegue son **tres**. Q1 se ejecuta como
+proceso por lotes independiente y Q4 se compila a archivos estáticos, de modo que ambos cumplen
+los tres criterios de cuanto de Ford et al. (2021, cap. 2, pp. 29-30). **Q2 y Q3 comparten
+espacio de proceso**, comparten binarios y el grafo declara `q3_servicio → q2_modelamiento`: bajo
+esos mismos criterios constituyen un único cuanto físico. La forma resultante corresponde a un
+**monolito modular** (Richards y Ford, 2020, cap. 8, p. 115).
+
+La decisión es deliberada. La conascencia síncrona entre el servicio y el motor es un requisito de
+latencia del simulador: una comunicación asíncrona entre ambos degradaría la interactividad que
+justifica el producto. Y separarlos en servicios independientes introduciría coordinación de
+despliegue y latencia de red para resolver un problema que este sistema no tiene, dado su volumen
+de usuarios y su ciclo bianual.
+
+El desarrollo del contraste está en `ARQUITECTURA_AD_HOC.md`, sección 1.
+
 
 ```
 ┌──────────────┐  HTTPS   ┌────────────────────┐  TCP 5432  ┌─────────────────┐
@@ -188,3 +223,18 @@ El escenario CU-12 es el que valida la arquitectura entera: si el puerto de repo
 bien trazado, cambiar de parquet a PostgreSQL no debe alterar ninguna respuesta. Se midió: 141
 llamadas, cero divergencias. Cuando falló, no falló la arquitectura sino tres supuestos del
 arnés de prueba, y ese hallazgo está documentado en `docs/planes/PLAN_INTEGRACION.md`.
+
+---
+
+## Referencias
+
+- Cockburn, A. (2005). *Hexagonal Architecture (Ports and Adapters)*.
+- Ford, N., Richards, M., Sadalage, P. y Dehghani, Z. (2021). *Software Architecture: The Hard
+  Parts*. O'Reilly Media.
+- Kruchten, P. (1995). Architectural Blueprints — The 4+1 View Model of Software Architecture.
+  *IEEE Software, 12*(6), 42-50.
+- Richards, M. y Ford, N. (2020). *Fundamentals of Software Architecture: An Engineering
+  Approach*. O'Reilly Media.
+
+**Nota de atribución.** Ninguna de las dos obras de Ford y Richards documenta la arquitectura
+hexagonal: ese estilo se atribuye a Cockburn (2005).

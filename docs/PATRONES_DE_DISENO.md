@@ -288,7 +288,7 @@ definiendo una interfaz de nivel superior que lo hace mas facil de usar"*.
 la reciben por inyección de dependencias de FastAPI.
 
 **Consecuencia.** Las pruebas de aceptación pueden inyectar un motor falso y ejercitar la API
-completa sin cargar 220 MB de artefactos.
+completa sin cargar 210 MB de artefactos.
 
 ---
 
@@ -326,8 +326,8 @@ Valida que la variable exista y que el valor caiga en rango antes de construir.
 
 ### P9 · Virtual Proxy / Lazy Load — *artefactos de 60 MB*
 
-**Fuerza observada.** `modelo_EFECTIVR.joblib` pesa 63 MB y `modelo_global_RF_comparacion.joblib`
-65 MB. Cargar los nueve artefactos al arrancar la API costaría cientos de MB de memoria y varios
+**Fuerza observada.** `modelo_EFECTIVR.joblib` pesa 60,1 MB y `modelo_global_RF_comparacion.joblib`
+62,1 MB. Cargar los nueve artefactos al arrancar la API costaría cientos de MB de memoria y varios
 segundos, cuando una petición típica usa uno o dos. Hoy la carga diferida existe **de manera
 implícita** mediante `lru_cache` y comprobaciones `if self._modelo is None`.
 
@@ -551,7 +551,7 @@ scikit-learn 1.5.2 y el conjunto `tabla_modelo_largo.parquet` (23.111 observacio
 | Reglas de negocio con prueba unitaria aislada | 0 | 9 | 26 pruebas en `tests/unitarias/q2/test_patrones_del_motor.py` |
 | Líneas para incorporar una fuente nueva | ~120 (notebook completo) | ~15 (una subclase) | Revisión de código |
 | Estrategias que deben implementar la auditoría | cada una | 0 (la aporta el decorador) | `test_decorador_de_auditoria_registra_sin_tocar_la_estrategia` |
-| Artefactos materializados al arrancar la API | potencialmente 9 (220 MB) | **0** | `GET /api/v1/salud/registro` → `n_materializados: 0` |
+| Artefactos materializados al arrancar la API | potencialmente 9 (210 MB) | **0** | `GET /api/v1/salud/registro` → `n_materializados: 0` |
 | Latencia de una predicción repetida | 2.548 ms | **0,09 ms** | Decorador de caché, factor 29.844× |
 | Coste de carga diferido fuera del arranque | — | 2,50 s | `ArtefactoDiferido.segundos_de_carga` |
 | Pruebas totales de la suite | 18 | **44** | `pytest -q` |
