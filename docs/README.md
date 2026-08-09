@@ -33,8 +33,8 @@ al índice del Capítulo IV de la tesis.
 
 | Documento | ID | Contenido |
 |-----------|-----|-----------|
-| `arquitectura/ARQUITECTURA_AD_HOC.md` | AR-SNED-01 | La arquitectura hexagonal por cuantos, y **dónde se observa en cada artefacto UML** |
-| `arquitectura/VISTAS_4MAS1.md` | V41-SNED-01 | Las cinco vistas de Kruchten: lógica, procesos, desarrollo, física y escenarios |
+| `arquitectura/ARQUITECTURA_AD_HOC.md` | AR-SNED-01 | La arquitectura hexagonal por cuantos y dónde se observa en cada artefacto UML. Incluye el contraste contra los tres criterios de cuanto, taxonomía de características, estilos internos, conascencia, contratos, no aplicabilidad y sesgo metodológico |
+| `arquitectura/VISTAS_4MAS1.md` | V41-SNED-01 | Las cinco vistas de Kruchten. La vista física declara el despliegue como monolito modular |
 | `arquitectura/PLATAFORMA_DE_OPERACION.md` | PO-SNED-01 | Despliegue con servidores separados de datos y aplicación, dimensionamiento y contingencia |
 | `ARCHITECTURE.md` | — | Documento vivo: motores de la arquitectura, decisiones y deuda conocida |
 | `PATRONES_DE_DISENO.md` | — | 12 patrones aplicados y 12 descartados, con fuentes citadas |
@@ -47,7 +47,7 @@ al índice del Capítulo IV de la tesis.
 | `diseno/DISENO_DEL_SOFTWARE.md` | DS-SNED-01 | Modelo de clases por cuanto, responsabilidades y deuda de diseño |
 | `diseno/DISENO_BASE_DATOS.md` | DB-SNED-01 | 38 tablas, seis decisiones de normalización, precisión numérica y verificación del cálculo |
 | `diseno/MOCKUPS_Y_PANTALLAS.md` | UI-SNED-01 | Maquetas de las cuatro pantallas y procedimiento de captura |
-| `diagramas/` | — | 7 imágenes y 5 fuentes Mermaid, derivadas del código |
+| `diagramas/` | — | 8 imágenes y 6 fuentes Mermaid, derivadas del código. Incluye la vista de despliegue |
 | `Anexo_mapeo_conceptual_fisico.docx` | — | Reglas de transformación de modelo conceptual a físico |
 
 ## 4. Gestión del proyecto
@@ -123,6 +123,8 @@ al índice del Capítulo IV de la tesis.
 | Requisitos funcionales con verificación | 13 de 13 |
 | Niveles de prueba implementados | 4 de 6 |
 | Ponderación acotada por información no publicada | 63 % |
+| Unidades de despliegue | 3 (cuatro cuantos lógicos) |
+| Artefactos: registro completo / carga efectiva | 210 MB / 145 MB |
 
 ## 9. Lo que está declarado como pendiente
 

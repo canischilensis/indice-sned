@@ -353,6 +353,12 @@ insumo directo para el presupuesto de latencia que el plan de pruebas de integra
 
 ---
 
+> **Nota de nivel.** El mismo mecanismo que aquí se describe como Registry más Factory Method
+> corresponde, a nivel de estilo arquitectónico, a un **microkernel** (Richards y Ford, 2020,
+> cap. 12, p. 150): un núcleo que resuelve componentes enchufables por clave. Los dos niveles
+> describen la misma estructura con vocabularios distintos; el desarrollo del estilo está en
+> `docs/arquitectura/ARQUITECTURA_AD_HOC.md`, sección 3.bis.
+
 ### P10 · Registry — *catálogo de factores y de modelos*
 
 **Fuerza.** Las ponderaciones oficiales y los metadatos de modelos se consultan desde varios

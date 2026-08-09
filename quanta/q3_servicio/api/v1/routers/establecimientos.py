@@ -1,34 +1,39 @@
+"""Rutas de establecimientos.
+
+Capas cerradas (Richards y Ford, 2020, cap. 10, p. 135): la capa de rutas no
+alcanza la persistencia. Toda lectura pasa por `ServicioDePrediccion`, que es la
+fachada del cuanto 3. La clausura no es una convencion: es lo que permite que el
+arnes de paridad reconstruya el servicio y con el se resuelva el adaptador activo
+en un unico punto.
+"""
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from q3_servicio.core.seguridad import Usuario, exigir_jurisdiccion, usuario_actual
 from q3_servicio.esquemas.predictivo import RespuestaEstablecimientos, RespuestaRanking
-from q3_servicio.repositorios import (
-    ConjuntoNoDisponible,
-    EstablecimientoNoEncontrado,
-    RepositorioEstablecimientos,
-    obtener_repositorio,
-)
+from q3_servicio.repositorios import ConjuntoNoDisponible, EstablecimientoNoEncontrado
+from q3_servicio.servicios.motor import ServicioDePrediccion, servicio_de_prediccion
 
 router = APIRouter(prefix="/establecimientos", tags=["establecimientos"])
-
-
-def repositorio() -> RepositorioEstablecimientos:
-    """Adaptador activo, resuelto por REPOSITORIO_DATOS."""
-    return obtener_repositorio()
 
 
 @router.get("", response_model=RespuestaEstablecimientos)
 def mis_establecimientos(
     usuario: Usuario = Depends(usuario_actual),
-    repo: RepositorioEstablecimientos = Depends(repositorio),
+    servicio: ServicioDePrediccion = Depends(servicio_de_prediccion),
 ) -> dict:
     try:
-        detalle = repo.listar(usuario.rbds)
+        detalle = servicio.listar_establecimientos(usuario.rbds)
     except ConjuntoNoDisponible as exc:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
-    return {"rol": usuario.rol.value, "rbds": usuario.rbds, "origen": repo.origen, "detalle": detalle}
+    return {
+        "rol": usuario.rol.value,
+        "rbds": usuario.rbds,
+        "origen": servicio.origen_de_datos,
+        "detalle": detalle,
+    }
 
 
 @router.get("/{rbd}")
@@ -36,11 +41,11 @@ def detalle(
     rbd: str,
     periodo: str | None = None,
     usuario: Usuario = Depends(usuario_actual),
-    repo: RepositorioEstablecimientos = Depends(repositorio),
+    servicio: ServicioDePrediccion = Depends(servicio_de_prediccion),
 ) -> dict:
     exigir_jurisdiccion(rbd, usuario)
     try:
-        return repo.obtener(rbd, periodo)
+        return servicio.variables_de(rbd, periodo)
     except EstablecimientoNoEncontrado as exc:
         raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
     except ConjuntoNoDisponible as exc:
@@ -52,12 +57,12 @@ def ranking(
     rbd: str,
     periodo: str | None = None,
     usuario: Usuario = Depends(usuario_actual),
-    repo: RepositorioEstablecimientos = Depends(repositorio),
+    servicio: ServicioDePrediccion = Depends(servicio_de_prediccion),
 ) -> dict:
     """Posicion dentro del grupo homogeneo: la mecanica real de la seleccion."""
     exigir_jurisdiccion(rbd, usuario)
     try:
-        return repo.ranking(rbd, periodo)
+        return servicio.ranking_de(rbd, periodo)
     except EstablecimientoNoEncontrado as exc:
         raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
     except ConjuntoNoDisponible as exc:

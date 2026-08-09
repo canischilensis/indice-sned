@@ -145,8 +145,8 @@ sistema aplica sin haberlos declarado hasta ahora.
 | Cuanto | Estilo interno | Cita | Cómo se reconoce |
 |--------|----------------|------|------------------|
 | Q1 · Ingesta | Tubería y filtros | cap. 11, p. 143 | La secuencia leer → normalizar → filtrar → particionar → persistir es unidireccional y cada etapa transforma sin conocer a las demás |
-| Q3 · Servicio | Capas con capas cerradas | cap. 10, p. 135 | `router → servicio → repositorio`. El router no accede a la persistencia: la fachada se interpone y esa clausura protege las reglas de negocio de cambios en el esquema |
-| Q2 · Modelamiento | Microkernel | cap. 12, p. 150 | El registro de artefactos resuelve estrategias por clave y las estrategias se auto-registran. Corresponde a la topología de núcleo con componentes enchufables: añadir una arquitectura algorítmica no modifica el núcleo |
+| Q3 · Servicio | Capas con capas cerradas | cap. 10, p. 135 | `router → servicio → repositorio`. Ningún router alcanza la persistencia: la fachada se interpone siempre, y esa clausura protege las reglas de negocio de cambios en el esquema |
+| Q2 · Modelamiento | Microkernel | cap. 12, p. 150 | El registro resuelve estrategias por clave y el núcleo no las conoce: añadir una arquitectura algorítmica es registrar una clase. El registro es **explícito**, no por descubrimiento —`fabrica.registrar(...)` al final del módulo—, de modo que la topología es de microkernel pero la carga no es dinámica |
 
 La correspondencia del microkernel es de topología, no de identidad: a nivel de patrón, el mismo
 mecanismo se documenta en `docs/PATRONES_DE_DISENO.md` como Registry más Factory Method. Los dos
@@ -187,6 +187,17 @@ por la red, se deserializa y se descarta.
 Queda declarado como deuda: la solución es un objeto de transferencia acotado a lo que el
 consumidor consume, o un parámetro de proyección de campos. No se corrige aquí porque alteraría
 un contrato hoy verificado por la prueba de paridad.
+
+---
+
+### Deudas que este análisis dejó declaradas
+
+| Deuda | Evidencia | Solución de fondo |
+|-------|-----------|-------------------|
+| Acoplamiento de estampilla | 66 variables enviadas, 2 utilizadas | Objeto de transferencia acotado o proyección por parámetro |
+| El contrato hacia Q4 no es laxo | Tipos escritos a mano en vez de generados desde el esquema publicado | Adoptar `npm run tipos` y declarar tolerancia a campos añadidos |
+| CTRL-03 sin evidencia | No existe línea base de distribuciones en `models/metadata/` | Generarla en la próxima publicación de artefactos |
+| CTRL-04 y CTRL-05 apuntan a tablas vacías | `app.auditoria`, `ml.inferencia` e `ml.inferencia_atribucion` creadas y sin escrituras | Depende de migrar el directorio de usuarios a `app.usuario` |
 
 ---
 

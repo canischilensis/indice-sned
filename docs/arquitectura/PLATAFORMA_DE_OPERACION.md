@@ -24,6 +24,9 @@ Todo lo que sobrevive a un reinicio está en la base o en el registro de artefac
 
 ## 2. Entorno de operación previsto
 
+Representacion grafica: `docs/diagramas/06_despliegue.png`.
+
+
 ```
                          Internet
                              │

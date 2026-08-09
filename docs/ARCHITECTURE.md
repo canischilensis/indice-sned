@@ -23,6 +23,10 @@ que la valida.
 Un cuanto es una unidad desplegable de forma independiente, con alta cohesion funcional
 y acoplamiento estatico y dinamico controlado (Ford et al., 2021).
 
+> **Lease con la precision de mas abajo:** los cuatro cuantos son **logicos**. Q1 y Q4 cumplen
+> los tres criterios y se despliegan solos; Q2 y Q3 comparten proceso y constituyen un unico
+> cuanto fisico. Ver "Precision: cuatro cuantos logicos, tres unidades de despliegue".
+
 ### Q1 — `q1_ingesta`
 Unico cuanto autorizado a tocar archivos crudos. Entrega parquet normalizado.
 **No conoce** el motor predictivo ni FastAPI.
@@ -214,7 +218,20 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
    scikit-learn, puede producir resultados invalidos. Medido en ejecucion, no supuesto. La
    solucion es registrar la version en los metadatos y alinear el entorno; mientras tanto, la
    advertencia queda declarada.
-7. **Staging de git desde el bridge.** `git add` no puede finalizar objetos sobre la carpeta
+7. **Acoplamiento de estampilla, verificado.** `GET /api/v1/establecimientos/{rbd}` devuelve la
+   observacion ancha completa —66 variables— y el tablero del sostenedor usa dos: `nom_rbd` y
+   `matricula_total`. Es *stamp coupling* (Ford et al., 2021, cap. 13, p. 376). La solucion es un
+   objeto de transferencia acotado o un parametro de proyeccion de campos; no se aplica aun
+   porque alteraria un contrato hoy verificado por la prueba de paridad.
+8. **El contrato hacia el cuanto 4 no es laxo.** Los tipos del cliente se escriben a mano en vez
+   de generarse desde el esquema publicado (`npm run tipos`), y nada declara tolerancia a campos
+   anadidos. Debiera ser un contrato laxo (p. 367) y hoy no lo es.
+9. **CTRL-03 declara evidencia que no existe.** No hay linea base de distribuciones en
+   `models/metadata/`: la verificacion de deriva esta disenada pero no ejercida.
+10. **CTRL-04 y CTRL-05 apuntan a tablas vacias.** `app.auditoria`, `ml.inferencia` e
+   `ml.inferencia_atribucion` estan creadas pero no se escriben, porque el directorio de
+   usuarios vive en memoria.
+11. **Staging de git desde el bridge.** `git add` no puede finalizar objetos sobre la carpeta
    montada (`Operation not permitted` al liberar temporales). El repositorio esta inicializado
    y `.gitignore` verificado; el primer commit debe hacerse con git nativo en Windows.
 

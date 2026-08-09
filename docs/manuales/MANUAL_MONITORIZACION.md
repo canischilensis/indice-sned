@@ -45,7 +45,8 @@ Debe responder 200. Es la comprobación mínima para un supervisor externo.
 | Latencia de simulación | ≈ 4,6 s | > 8 s |
 
 **Sobre la memoria:** es normal que el proceso crezca de golpe la primera vez que alguien pide una
-predicción o una explicación. Es la carga diferida de los artefactos, que pesan 210 MB. Lo anómalo
+predicción o una explicación. Es la carga diferida de los artefactos: el motor desagregado carga
+**145 MB** de los 210 MB del registro completo. Lo anómalo
 es que siga creciendo después.
 
 ---

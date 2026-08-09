@@ -1,0 +1,13 @@
+# Normalizacion de finales de linea.
+# El repositorio se edita desde Windows y desde Linux: sin esta regla, cualquier
+# herramienta que reescriba un archivo produce un diff de archivo completo y el
+# historial deja de ser legible como evidencia.
+* text=auto eol=lf
+
+# Binarios: nunca normalizar.
+*.png binary
+*.xlsx binary
+*.docx binary
+*.parquet binary
+*.joblib binary
+*.keras binary

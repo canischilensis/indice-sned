@@ -22,11 +22,17 @@ mediante el desarrollo de un prototipo predictivo basado en XAI para la anticipa
 
 ---
 
-## Arquitectura: cuatro cuantos
+## Arquitectura: cuatro cuantos logicos, tres unidades de despliegue
 
 El sistema se organiza en **Cuantos de Arquitectura** (Ford et al., 2021): unidades de alta
-cohesion y despliegue independiente. Cada uno vive en `quanta/` y solo se comunica con los
-demas a traves de contratos explicitos.
+cohesion cuyas fronteras se verifican por maquina. Cada uno vive en `quanta/` y solo se comunica
+con los demas a traves de contratos explicitos.
+
+Contrastados contra los tres criterios de la fuente, **Q1 y Q4 son cuantos fisicos** —se
+despliegan solos— mientras que **Q2 y Q3 comparten espacio de proceso y constituyen uno solo**.
+La forma resultante es un monolito modular, y es deliberada: la conascencia sincrona entre
+servicio y motor es un requisito de latencia del simulador. Detalle en
+`docs/arquitectura/ARQUITECTURA_AD_HOC.md`, seccion 1.
 
 ```
                 data/raw (11 fuentes MINEDUC)

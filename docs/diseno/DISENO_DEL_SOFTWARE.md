@@ -185,3 +185,5 @@ artefactos costosos; los de comportamiento donde viven las reglas que cambian po
 | 2 | Ocho variables derivadas se calculan en el entrenamiento y no se persisten | Cobertura de 35/43 = 81,4 %; el servicio las imputa | Materializarlas en `hechos.indicador_anual` durante la ingesta |
 | 3 | Los artefactos están acoplados a la versión de la librería con que se entrenaron | Fallan con una versión mayor distinta | Registrar la versión en los metadatos y verificarla al cargar |
 | 4 | La simulación no reutiliza cómputo entre puntos de la malla | 4,6 s por llamada | Vectorizar la malla en una sola inferencia por modelo |
+| 5 | La ruta de detalle devuelve 66 variables y el tablero usa 2 | Acoplamiento de estampilla verificado: ancho de banda y acoplamiento innecesarios | Objeto de transferencia acotado o proyección de campos por parámetro |
+| 6 | Los tipos del cliente se escriben a mano en vez de generarse del esquema publicado | El contrato hacia el cuanto 4 no tolera campos añadidos y los errores de forma llegan al navegador | Adoptar los tipos generados por `npm run tipos` |

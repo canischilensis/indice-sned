@@ -66,6 +66,19 @@ class ServicioDePrediccion:
             return constructor.construir().variables
         return base
 
+    def listar_establecimientos(self, rbds: list[str], limite: int = 50) -> list[dict]:
+        """Delegacion pura. Existe para que la capa de rutas no salte la fachada."""
+        return self._repositorio.listar(rbds, limite)
+
+    def ranking_de(self, rbd: str, periodo: str | None = None) -> dict:
+        """Delegacion pura: posicion dentro del grupo homogeneo del periodo."""
+        return self._repositorio.ranking(rbd, periodo)
+
+    @property
+    def origen_de_datos(self) -> str:
+        """Adaptador activo. La ruta lo publica sin conocer al repositorio."""
+        return self._repositorio.origen
+
     # -- casos de uso ------------------------------------------------------
 
     def predecir(self, rbd: str, variables: dict) -> RespuestaPrediccion:

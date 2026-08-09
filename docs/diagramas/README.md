@@ -61,3 +61,14 @@ costó un endpoint caído descubrirlo.
 **El simulador consulta al Builder antes de armar la malla.** `ConstructorDeEscenario.rango_valido()`
 acota los puntos para que la curva nunca proponga un valor que el propio constructor
 rechazaría. Aparece en el diagrama 4.
+
+## 06 · Vista de despliegue
+
+`06_despliegue.png` (fuente: `06_despliegue.mmd`). Muestra las **tres unidades de despliegue** y
+los cuatro cuantos logicos: la estacion de ingesta por lotes, el servidor de aplicacion —donde Q2
+y Q3 comparten un solo proceso— y el nodo de estaticos, mas el servidor de base de datos.
+
+Es el unico diagrama que representa el despliegue: los cinco anteriores son de clases y de
+secuencia. Se genero para dar soporte grafico a la precision de que **Q2 y Q3 constituyen un
+unico cuanto fisico** (Ford et al., 2021, cap. 2, pp. 29-30) y de que la forma resultante es un
+monolito modular.

@@ -171,6 +171,9 @@ servidor de aplicación, está en `PLATAFORMA_DE_OPERACION.md`.
 
 ### El sistema se despliega como monolito modular
 
+Diagrama: `docs/diagramas/06_despliegue.png`.
+
+
 Los cuatro cuantos son **lógicos**; las unidades de despliegue son **tres**. Q1 se ejecuta como
 proceso por lotes independiente y Q4 se compila a archivos estáticos, de modo que ambos cumplen
 los tres criterios de cuanto de Ford et al. (2021, cap. 2, pp. 29-30). **Q2 y Q3 comparten

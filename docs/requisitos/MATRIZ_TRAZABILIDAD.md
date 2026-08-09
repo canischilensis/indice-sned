@@ -56,7 +56,7 @@ Requisito ──▶ Caso de uso ──▶ Componente de diseño ──▶ Unidad
 | `compartido/especificacion.py` | RF-05, RF-11 | Las reglas de admisión y de alerta dejarían de ser componibles y volverían a ser condicionales anidados |
 | `q1_ingesta/ingestor.py` | RF-11 | Cada fuente reimplementaría el mismo orden de pasos, con divergencias silenciosas |
 | `q2_modelamiento/decoradores.py` | RNF-06, RNF-08 | Auditoría y caché tendrían que incrustarse en cada estrategia |
-| `q2_modelamiento/artefactos.py` | RNF-08 | El arranque del servicio cargaría 210 MB de artefactos que quizá nadie pida |
+| `q2_modelamiento/artefactos.py` | RNF-08 | El arranque del servicio cargaría 145 MB de artefactos que quizá nadie pida |
 | `q2_modelamiento/escenario.py` | RF-07 | La construcción de escenarios quedaría dispersa en el router, sin validación de rango |
 | `q3_servicio/repositorios/parquet.py` | RNF-04, RNF-11 | Se perdería la capacidad de demostrar el sistema sin base de datos, y la paridad dejaría de tener contra qué comparar |
 | `q3_servicio/servicios/motor.py` | RF-04, RF-10 | Los routers hablarían directamente con el motor y el cuanto 3 se acoplaría al 2 |

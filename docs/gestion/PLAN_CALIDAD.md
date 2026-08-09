@@ -74,7 +74,7 @@ incumplimiento visible en lugar de rebajar la meta.
 | Actividad | Cuándo | Responsable | Salida |
 |-----------|--------|-------------|--------|
 | Análisis estático y de tipos | Cada cambio | Desarrollador | Salida de `ruff` y `mypy` |
-| Verificación de fronteras de cuantos | Cada cambio | Automatizada | Código de retorno del script |
+| Verificación de fronteras de cuantos | Cada cambio | Automatizada | Código de retorno del script. Es una **función de aptitud atómica** (Richards y Ford, 2020, cap. 6, p. 83) |
 | Suite de pruebas | Cada envío | Integración continua | Reporte de `pytest` |
 | Prueba de paridad entre adaptadores | Cada envío | Integración continua | Resumen con conteo de divergencias |
 | Verificación del cálculo del índice en SQL | Tras cada carga | Desarrollador | Discrepancia máxima, media y filas comparadas |

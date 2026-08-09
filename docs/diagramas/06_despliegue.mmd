@@ -1,0 +1,53 @@
+---
+title: "Indice SNED - Vista de despliegue: cuatro cuantos logicos, tres unidades de despliegue"
+---
+flowchart TB
+    NAV(["Navegador<br/>equipo directivo o sostenedor"])
+
+    subgraph U3["UNIDAD DE DESPLIEGUE 3 - Nodo de estaticos"]
+        Q4["<b>Q4 · q4_cliente</b><br/>HTML, JS y CSS compilados<br/><i>cuanto fisico: acoplamiento nulo</i><br/>sin patrones de dominio, por diseno"]
+    end
+
+    subgraph U2["UNIDAD DE DESPLIEGUE 2 - Servidor de aplicacion (UN SOLO PROCESO)"]
+        direction TB
+        Q3["<b>Q3 · q3_servicio</b><br/>estilo: capas cerradas<br/>router → fachada → repositorio<br/>Repository · Facade · Adapter · Specification"]
+        Q2["<b>Q2 · q2_modelamiento</b><br/>estilo: microkernel<br/>registro + estrategias enchufables<br/>Strategy · Decorator · Factory · Proxy · Builder"]
+        REG[("models/registry<br/>210 MB en disco<br/>145 MB cargados por el motor activo")]
+        Q3 -->|"conascencia estatica de nombre y tipo<br/>regla de localidad: aceptable por compartir proceso"| Q2
+        Q2 -.->|"carga diferida (Virtual Proxy)"| REG
+    end
+
+    subgraph U1["UNIDAD DE DESPLIEGUE 1 - Estacion de ingesta (por lotes, bianual)"]
+        direction LR
+        RAW[("data/raw<br/>134 archivos CSV y XLSX<br/>11 fuentes integradas")]
+        Q1["<b>Q1 · q1_ingesta</b><br/>estilo: tuberia y filtros<br/>leer → normalizar → filtrar → particionar → persistir<br/><i>cuanto fisico</i>"]
+        PQ[("data/processed<br/>parquet<br/>cuanto de producto de datos")]
+        CU[("cuarentena<br/>lo rechazado se conserva")]
+        RAW --> Q1
+        Q1 --> PQ
+        Q1 --> CU
+    end
+
+    BD[("<b>SERVIDOR DE BASE DE DATOS</b><br/>PostgreSQL 16<br/>38 tablas en 4 esquemas<br/>aprox. 838.000 filas")]
+
+    NAV -->|HTTPS| Q4
+    NAV -->|"HTTPS · JSON tipado<br/>contrato laxo: deuda declarada"| Q3
+    Q3 -->|"TCP 5432 · red privada"| BD
+    PQ -.->|"carga idempotente, bianual"| BD
+    PQ -.->|"modo contingencia<br/>REPOSITORIO_DATOS=parquet"| Q3
+
+    NOTA["<b>Q2 y Q3 comparten espacio de proceso y binarios.</b><br/>Bajo los tres criterios de Ford et al. (2021, cap. 2, pp. 29-30)<br/>constituyen UN UNICO CUANTO FISICO: la forma es un monolito modular.<br/>Es deliberado: la conascencia sincrona es un requisito de latencia del simulador."]
+
+    U2 -.- NOTA
+
+    classDef unidad fill:#f7f9fb,stroke:#0C1B33,stroke-width:2px,color:#111C2E
+    classDef cuanto fill:#ffffff,stroke:#0C1B33,stroke-width:1.5px,color:#111C2E
+    classDef almacen fill:#eef2f7,stroke:#5a6b82,stroke-width:1px,color:#111C2E
+    classDef nota fill:#FDF4E4,stroke:#B4740F,stroke-width:1.5px,color:#6B4E14
+    classDef actor fill:#0C1B33,stroke:#0C1B33,color:#ffffff
+
+    class Q1,Q2,Q3,Q4 cuanto
+    class RAW,PQ,CU,REG,BD almacen
+    class NOTA nota
+    class NAV actor
+    class U1,U2,U3 unidad

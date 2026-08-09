@@ -106,7 +106,7 @@ prueba que se aprueba a sí misma— que reaparece en cualquier proyecto.
 | `pytest` con marcadores | Permite ejecutar subconjuntos: sin base de datos, sin artefactos, solo paridad |
 | Integración continua | Ejecuta la suite ejecutable sin base ni artefactos en cada envío |
 | `ruff`, `mypy` | Barrera 1 |
-| `scripts/verificar_arquitectura.py` | Convierte la regla de dependencias en una verificación automática |
+| `scripts/verificar_arquitectura.py` | **Función de aptitud atómica** (Richards y Ford, 2020, cap. 6, p. 83): convierte la regla de dependencias en una verificación objetiva que gobierna la mantenibilidad |
 | Cuadernos de trabajo | Exploración y entrenamiento; no forman parte del sistema desplegado |
 
 ## 8. Riesgos gestionados durante el proyecto
