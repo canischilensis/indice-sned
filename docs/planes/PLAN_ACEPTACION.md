@@ -2,7 +2,10 @@
 
 **Identificador:** PPA-SNED-01 · **Versión:** 1.0 · **Sistema:** Ecosistema predictivo del Índice SNED
 
-> Estructura documental según **IEEE 829**. Proceso y diseño de casos según **ISO/IEC/IEEE 29119**.
+> Documentación estructurada según **ISO/IEC/IEEE 29119**, norma vigente, que en su parte 3
+> reemplazó formalmente a **IEEE 829** en 2013. Se cita 829 como antecedente: su estructura
+> documental se conserva casi íntegra en 29119-3 y sigue siendo la referencia clásica en la
+> enseñanza, pero la norma que se sigue aquí es la vigente.
 
 ---
 

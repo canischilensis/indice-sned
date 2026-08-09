@@ -2,8 +2,10 @@
 
 **Identificador:** PPI-SNED-01 · **Versión:** 1.0 · **Sistema:** Ecosistema predictivo del Índice SNED
 
-> Estructura documental según **IEEE 829**. Proceso, estrategia y diseño de casos según
-> **ISO/IEC/IEEE 29119**. La primera fija la forma; la segunda, el proceso que la produce.
+> Documentación estructurada según **ISO/IEC/IEEE 29119**, norma vigente, que en su parte 3
+> reemplazó formalmente a **IEEE 829** en 2013. Se cita 829 como antecedente: su estructura
+> documental se conserva casi íntegra en 29119-3 y sigue siendo la referencia clásica en la
+> enseñanza, pero la norma que se sigue aquí es la vigente.
 
 ---
 
@@ -74,12 +76,26 @@ el tesista. Validador: el profesor guía.
 | El cálculo de Shapley es costoso | Presupuesto explícito de 2 s por explicación, verificado una sola vez |
 | Deriva entre el JSON de contrato y la tabla | `inicializar_bd.py` valida y falla si difieren |
 
-## 9. Estado actual
+## 9. Hallazgo de INT-04
+
+Al escribir la prueba de contrato se descubrio que **dos de las seis rutas que consume la
+interfaz devolvian `dict` sin modelo de respuesta**: `/establecimientos` y
+`/establecimientos/{rbd}/ranking`. En el esquema OpenAPI aparecian como
+`additionalProperties: true`, que acepta cualquier cosa. Un cliente TypeScript no puede generar
+tipos desde eso: no es un contrato laxo, es la ausencia de contrato.
+
+Se agregaron `RespuestaEstablecimientos` y `RespuestaRanking`. Las seis rutas quedan tipadas.
+
+La prueba incluye ademas una verificacion de si misma
+—`test_la_validacion_del_contrato_rechaza_cuerpos_que_no_cumplen`— porque la primera version
+validaba contra esquemas vacios y pasaba sin comprobar nada.
+
+## 10. Estado actual
 
 | ID | Estado | Evidencia |
 |----|--------|-----------|
 | INT-01 | Cubierto | `tests/integracion/q1/test_pipeline_calidad.py` |
 | INT-02 | Cubierto | `tests/integracion/q3/test_api_y_rbac.py` |
 | INT-03 | Cubierto | Adaptador PostgreSQL verificado contra la base cargada |
-| INT-04 | **Pendiente** | Falta validar las respuestas contra el esquema OpenAPI |
+| INT-04 | Cubierto | `tests/integracion/q3/test_contrato_openapi.py` |
 | INT-05 | Cubierto | 141 llamadas, 0 divergencias, ejecutable en CI |

@@ -1656,9 +1656,151 @@
   "listado": {
     "_": {
       "cuerpo": {
-        "detalle": [],
+        "detalle": [
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1511,
+            "indicer": 71.087,
+            "rbd": "9"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1511,
+            "indicer": 63.828,
+            "rbd": "10"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1512,
+            "indicer": 57.837,
+            "rbd": "11"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1522,
+            "indicer": 60.044,
+            "rbd": "31"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 312,
+            "indicer": 61.975,
+            "rbd": "381"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 521,
+            "indicer": 74.494,
+            "rbd": "1418"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 721,
+            "indicer": 61.833,
+            "rbd": "2829"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 732,
+            "indicer": 60.514,
+            "rbd": "2997"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 724,
+            "indicer": 63.537,
+            "rbd": "3215"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1632,
+            "indicer": 61.771,
+            "rbd": "3640"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 833,
+            "indicer": 64.086,
+            "rbd": "4288"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 822,
+            "indicer": 63.217,
+            "rbd": "4432"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 833,
+            "indicer": 61.608,
+            "rbd": "4505"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1032,
+            "indicer": 72.076,
+            "rbd": "7388"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1112,
+            "indicer": 62.47,
+            "rbd": "8376"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1332,
+            "indicer": 67.029,
+            "rbd": "9911"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1313,
+            "indicer": 64.473,
+            "rbd": "16816"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 932,
+            "indicer": 64.558,
+            "rbd": "16942"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 932,
+            "indicer": 64.786,
+            "rbd": "20008"
+          },
+          {
+            "bienio_premio": "2024-25",
+            "cluster_codigo": 1331,
+            "indicer": 66.871,
+            "rbd": "26110"
+          }
+        ],
         "origen": "postgres",
-        "rbds": [],
+        "rbds": [
+          "9",
+          "10",
+          "11",
+          "31",
+          "381",
+          "1418",
+          "2829",
+          "2997",
+          "3215",
+          "3640",
+          "4288",
+          "4432",
+          "4505",
+          "7388",
+          "8376",
+          "9911",
+          "16816",
+          "16942",
+          "20008",
+          "26110"
+        ],
         "rol": "auditor"
       },
       "status": 200

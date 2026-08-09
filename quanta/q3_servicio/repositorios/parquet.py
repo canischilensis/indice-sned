@@ -41,6 +41,18 @@ CANDIDATOS = (
 )
 
 
+def _texto(v):
+    return None if v is None or pd.isna(v) else str(v)
+
+
+def _entero(v):
+    return None if v is None or pd.isna(v) else int(float(v))
+
+
+def _decimal(v):
+    return None if v is None or pd.isna(v) else round(float(v), 3)
+
+
 class RepositorioParquet(RepositorioEstablecimientos):
     origen = "parquet"
 
@@ -85,10 +97,29 @@ class RepositorioParquet(RepositorioEstablecimientos):
         return {k: (None if pd.isna(v) else v) for k, v in fila.to_dict().items()}
 
     def listar(self, rbds: list[str], limite: int = 50) -> list[dict]:
+        """Un registro por establecimiento, el del ciclo mas reciente.
+
+        La nomenclatura de salida es la del contrato `ResumenEstablecimiento`,
+        no la de las columnas del parquet: el adaptador traduce, el servicio no
+        deberia saber que el origen usa mayusculas.
+        """
         df = self._conjunto()
-        subset = df[df["rbd"].isin([str(r) for r in rbds])].head(limite)
-        columnas = [c for c in ("rbd", "BIENIO_PREMIO", "CLUSTER", "INDICER", "SEL") if c in subset.columns]
-        return subset[columnas].to_dict(orient="records") if columnas else []
+        subset = df[df["rbd"].isin([str(r) for r in rbds])]
+        if subset.empty:
+            return []
+        if "BIENIO_PREMIO" in subset.columns:
+            subset = subset.sort_values("BIENIO_PREMIO").drop_duplicates("rbd", keep="last")
+        salida = []
+        for _, fila in subset.head(limite).iterrows():
+            salida.append(
+                {
+                    "rbd": str(fila["rbd"]),
+                    "bienio_premio": _texto(fila.get("BIENIO_PREMIO")),
+                    "cluster_codigo": _entero(fila.get("CLUSTER")),
+                    "indicer": _decimal(fila.get("INDICER")),
+                }
+            )
+        return salida
 
     def variables_disponibles(self) -> set[str]:
         """Columnas efectivamente presentes en el conjunto activo."""

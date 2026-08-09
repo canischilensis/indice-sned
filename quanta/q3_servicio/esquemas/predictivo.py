@@ -83,3 +83,41 @@ class Alerta(BaseModel):
 class RespuestaAlertas(BaseModel):
     rbd: str
     alertas: list[Alerta]
+
+
+class ResumenEstablecimiento(BaseModel):
+    """Fila del listado. Deliberadamente minima: el listado no expone variables."""
+
+    rbd: int | str
+    bienio_premio: str | None = Field(default=None, description="Ciclo SNED")
+    cluster_codigo: int | None = Field(default=None, description="Grupo homogeneo")
+    indicer: float | None = Field(default=None, description="Indice oficial del ciclo")
+
+
+class RespuestaEstablecimientos(BaseModel):
+    """Contrato del listado que abre la sesion del directivo."""
+
+    rol: str
+    rbds: list[str]
+    origen: str = Field(description="Adaptador activo del repositorio: parquet o postgres")
+    detalle: list[ResumenEstablecimiento]
+
+
+class RespuestaRanking(BaseModel):
+    """Posicion dentro del grupo homogeneo: la mecanica real de la seleccion.
+
+    El indice absoluto no decide nada; decide la posicion relativa dentro del
+    cluster del periodo.
+    """
+
+    rbd: str
+    ciclo: str
+    cluster_codigo: int
+    indicer: float
+    posicion_en_grupo: int
+    n_grupo: int
+    percentil: float
+    sel: int | None = Field(
+        default=None,
+        description="1 = tramo 100 %; 2 = tramo 60 %; 3 = no seleccionado",
+    )

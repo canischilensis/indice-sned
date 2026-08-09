@@ -26,14 +26,24 @@ DESTINO = Path(__file__).parent
 
 
 def _token(cliente, rbds: list[int]) -> dict:
-    """Usuario auditor de desarrollo: jurisdiccion sobre toda la muestra.
+    """Usuario con jurisdiccion EXPLICITA sobre la muestra.
 
-    Se usa el rol AUDITOR porque el objeto de esta prueba es la paridad de
-    datos entre adaptadores, no el control de acceso (que tiene su propia
-    prueba). El token se emite por el endpoint real, no se falsifica.
+    No basta el rol AUDITOR: `mis_establecimientos` lista `usuario.rbds`, y
+    auditor.demo lo tiene vacio. Usarlo dejaba el listado en `[]` en ambos
+    adaptadores, y la paridad lo daba por verde sin comparar nada. El usuario
+    se registra en el directorio de desarrollo y el token se emite por el
+    endpoint real, no se falsifica.
     """
+    from q3_servicio.core import seguridad
+
+    seguridad.DIRECTORIO["paridad.demo"] = seguridad.Usuario(
+        usuario="paridad.demo",
+        nombre="Paridad",
+        rol=seguridad.Rol.AUDITOR,
+        rbds=[str(r) for r in rbds],
+    )
     r = cliente.post("/api/v1/auth/token",
-                     data={"username": "auditor.demo", "password": "demo"})
+                     data={"username": "paridad.demo", "password": "demo"})
     r.raise_for_status()
     return {"Authorization": f"Bearer {r.json()['access_token']}"}
 

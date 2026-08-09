@@ -23,43 +23,41 @@ ejecutaron.
 
 ---
 
-## ATENCION — rutas relativas
+## Rutas: ahora salen del propio repositorio
 
-Los notebooks fueron escritos cuando todo colgaba de una sola carpeta, con rutas del tipo
-`SIMCE/simce4b2024_rbd_final.xlsx` o `PROCESADOS/tabla_modelo_final.parquet`.
-Tras la reorganizacion, esos destinos son:
-
-| Ruta antigua | Ruta nueva |
-|--------------|------------|
-| `SIMCE/` , `IDPS/` , `MATRICULA/` ... | `../../data/raw/simce/` , `../../data/raw/idps/` ... |
-| `PROCESADOS/` | `../../data/processed/` |
-| `MODELOS/*.joblib` | `../../models/registry/` |
-| `MODELOS/*.json` | `../../models/metadata/` |
-
-**Los notebooks no correran tal cual hasta actualizar esas rutas.** Se conservaron intactos
-de forma deliberada: son la evidencia validada de los Sprints y el codigo no debia tocarse.
-
-Forma recomendada de arreglarlo (una sola celda al inicio de cada notebook):
+Los cuadernos se escribieron en Google Colab y leian los datos desde Google Drive, con rutas del
+tipo `/content/drive/MyDrive/.../SIMCE/`. **Eso ya no es asi.** Cada cuaderno abre con una celda
+que resuelve la raiz del repositorio y define cuatro constantes:
 
 ```python
-import sys, os
-from pathlib import Path
-RAIZ = Path.cwd().parents[1]              # sube desde notebooks/<fase>/
-sys.path.insert(0, str(RAIZ / "quanta"))
-os.chdir(RAIZ)                            # las rutas relativas pasan a colgar de la raiz
-
-RAW       = RAIZ / "data" / "raw"
-PROCESADO = RAIZ / "data" / "processed"
-REGISTRO  = RAIZ / "models" / "registry"
-METADATOS = RAIZ / "models" / "metadata"
+RAIZ            = _raiz_del_repositorio()          # busca pyproject.toml hacia arriba
+RUTA_RAW        = <RAIZ>/data/raw/
+RUTA_PROCESADOS = <RAIZ>/data/processed/
+RUTA_REGISTRO   = <RAIZ>/models/registry/
+RUTA_METADATOS  = <RAIZ>/models/metadata/
 ```
 
-y luego reemplazar `"SIMCE/..."` por `RAW / "simce" / "..."`.
+Correspondencia aplicada:
 
-Alternativa sin editar rutas: usar el modulo central ya disponible,
-`from q2_modelamiento.rutas import DATA_RAW, DATA_PROCESSED, MODEL_REGISTRY`.
+| Ruta de Drive | Destino en el repositorio |
+|---------------|---------------------------|
+| `SIMCE/`, `IDPS/`, `MATRICULA/`, `SEP/`, `IVE/`, `PAT/`, `PERSONAL/`, `DENUNCIAS/`, `MEDIACIONES/`, `RENDIMIENTO/`, `SNED/` | `data/raw/<carpeta en minusculas>/` |
+| `PROCESADOS/` | `data/processed/` |
+| `MODELOS/*.joblib`, `*.keras` | `models/registry/` |
+| `MODELOS/*.json`, `*.csv` | `models/metadata/` |
 
-## Kernel
+El montaje de Drive (`from google.colab import drive` y `drive.mount(...)`) se elimino de los
+catorce cuadernos. **No queda ninguna dependencia de Colab en el codigo**; el unico `!pip install`
+que sobrevive funciona igual en Jupyter local.
 
-`setup.ps1` y `make init` registran el kernel **indice-sned** ligado al entorno virtual.
-Seleccionalo en Jupyter antes de ejecutar cualquier notebook.
+La raiz se resuelve buscando hacia arriba, no con rutas relativas fijas: el cuaderno corre igual
+si se lanza desde su propia carpeta o desde la raiz del proyecto.
+
+**Requisito para ejecutarlos:** `data/raw/` y `data/processed/` deben estar poblados. No se
+versionan por tamano; vease `docs/FUENTES.md` para la redescarga.
+
+### Sobre las salidas guardadas
+
+Las celdas conservan sus salidas de la ejecucion original, que son la evidencia de los Sprints.
+Algunas de esas salidas imprimen la ruta de Drive antigua. El codigo esta limpio; el texto
+impreso es historico.

@@ -118,6 +118,7 @@ python -m uvicorn q3_servicio.main:app --reload --app-dir quanta --port 8000
 
 # Terminal 2 — cuanto 4
 cd quanta\q4_cliente
+npm install          # solo la primera vez
 npm run dev
 ```
 
@@ -220,8 +221,19 @@ Ambas estan medidas, tienen causa identificada y quedan sin resolver a proposito
 
 ## Documentacion
 
-- `docs/diagramas/` — modelo de clases y diagramas de secuencia, en Mermaid y PNG
-- `docs/ARCHITECTURE.md` — vista completa, atributos de calidad y trazabilidad a la tesis
-- `docs/adr/` — decisiones de arquitectura registradas
-- `docs/FUENTES.md` — origen y re-descarga de los datos publicos
-- `notebooks/README.md` — mapa de notebooks por fase y advertencia de rutas
+Indice maestro con todos los documentos y su correspondencia con el Capitulo IV de la tesis:
+**`docs/README.md`**.
+
+| Area | Documentos |
+|------|-----------|
+| Requisitos | `docs/requisitos/` — catalogo de requisitos, 12 casos de uso y matriz de trazabilidad |
+| Arquitectura | `docs/arquitectura/` — arquitectura ad-hoc, vistas 4+1 y plataforma de operacion |
+| | `docs/ARCHITECTURE.md` — documento vivo; `docs/PATRONES_DE_DISENO.md` — 12 patrones aplicados y 12 descartados |
+| | `docs/adr/` — cinco decisiones de arquitectura registradas |
+| Diseno | `docs/diseno/` — diseno del software, diseno de la base de datos y maquetas de pantalla |
+| | `docs/diagramas/` — modelo de clases y diagramas de secuencia, en Mermaid y PNG |
+| Gestion | `docs/gestion/` — metodologia y los cinco planes: calidad, cambios, comunicaciones, alcance y cronograma |
+| Pruebas | `docs/planes/` — plan maestro mas los planes de integracion, aceptacion y compatibilidad |
+| Manuales | `docs/manuales/` — instalacion, usuario, monitorizacion y nueve procedimientos operativos |
+| Datos | `docs/FUENTES.md` — origen y re-descarga; `db/README.md` — que hace cada .sql |
+| Cuadernos | `notebooks/README.md` — mapa por fase y advertencia de rutas |

@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from q3_servicio.core.seguridad import Usuario, exigir_jurisdiccion, usuario_actual
+from q3_servicio.esquemas.predictivo import RespuestaEstablecimientos, RespuestaRanking
 from q3_servicio.repositorios import (
     ConjuntoNoDisponible,
     EstablecimientoNoEncontrado,
@@ -18,7 +19,7 @@ def repositorio() -> RepositorioEstablecimientos:
     return obtener_repositorio()
 
 
-@router.get("")
+@router.get("", response_model=RespuestaEstablecimientos)
 def mis_establecimientos(
     usuario: Usuario = Depends(usuario_actual),
     repo: RepositorioEstablecimientos = Depends(repositorio),
@@ -46,7 +47,7 @@ def detalle(
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
 
 
-@router.get("/{rbd}/ranking")
+@router.get("/{rbd}/ranking", response_model=RespuestaRanking)
 def ranking(
     rbd: str,
     periodo: str | None = None,

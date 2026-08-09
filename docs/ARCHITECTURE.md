@@ -34,7 +34,7 @@ y la verificacion de deriva (CTRL-03).
 
 ### Q3 — `q3_servicio`
 Encapsula el motor tras HTTP. Aplica RBAC (CTRL-04). **Prohibido importar librerias de ML**:
-la prueba `tests/test_arquitectura.py` lo verifica en cada ejecucion de la suite.
+la prueba `tests/arquitectura/test_fronteras_de_cuantos.py` lo verifica en cada ejecucion de la suite.
 
 ### Q4 — `q4_cliente`
 Tres ventanas funcionales. Consume exclusivamente JSON tipado. Desconoce por completo
@@ -77,12 +77,12 @@ de actualizacion. El esquema responde a seis decisiones, cada una anclada a un h
 
 | # | Decision | Hallazgo que la justifica | Implementacion |
 |---|----------|---------------------------|----------------|
-| 1 | Formato largo para mediciones e indicadores | 68,7 % de nulos estructurales en las columnas de 2do medio | `hechos.medicion_estandarizada`, `hechos.indicador_desarrollo` |
-| 2 | Grupo homogeneo indexado por periodo | 35,1 % de los establecimientos cambia de agrupacion entre ciclos | `hechos.resultado_indice.grupo_homogeneo` |
-| 3 | Ponderaciones como dato de catalogo | La formula oficial se verifico con R2 = 1,0000 y MAE = 0,000 | `catalogo.factor` + `contratos/catalogo_factores.json` |
-| 4 | Dimension de cambio lento | Migracion municipal hacia los SLEP altera la dependencia sin cambiar el RBD | `catalogo.establecimiento_periodo` |
-| 5 | Ventanas temporales declaradas | La regla anti-fuga debe ser estructural, no un comentario en un script | `catalogo.ventana_temporal` |
-| 6 | Tabla generica de indicadores anuales | Anadir una fuente debe insertar registros, no alterar el esquema | `hechos.indicador_anual` + `catalogo.tipo_indicador` |
+| 1 | Formato largo para mediciones e indicadores | 68,8 % de nulos estructurales en las columnas de 2do medio | `hechos.simce_medicion`, `hechos.idps_medicion`, `hechos.indicador_anual` |
+| 2 | Grupo homogeneo indexado por periodo | 35,1 % de los establecimientos cambia de agrupacion entre ciclos | `hechos.sned_resultado.cluster_codigo` |
+| 3 | Ponderaciones como dato de catalogo | La formula oficial se verifico con R2 = 1,0000 y MAE = 0,000 | `core.factor_sned` + `contratos/catalogo_factores.json` |
+| 4 | Dimension de cambio lento | Migracion municipal hacia los SLEP altera la dependencia sin cambiar el RBD | `core.establecimiento_periodo` |
+| 5 | Ventanas temporales declaradas | La regla anti-fuga debe ser estructural, no un comentario en un script | `core.ventana_sie` |
+| 6 | Tabla generica de indicadores anuales | Anadir una fuente debe insertar registros, no alterar el esquema | `hechos.indicador_anual` + `core.tipo_indicador` |
 
 El esquema tiene **38 tablas**: `core` 16, `hechos` 6, `ml` 8 y `app` 8. Las 21 de `core` y
 `hechos` derivan del modelo entidad-relación; `core.conjunto_entrenamiento` —la lista maestra
@@ -91,9 +91,9 @@ infraestructura.
 
 ### Vistas de consumo
 
-- `v_reconstruccion_indice` — la formula oficial como consulta auditable
-- `v_ordenamiento_intragrupo` — posicion y percentil dentro del grupo del periodo (mecanica real del beneficio)
-- `mv_matriz_entrenamiento` — materializada por el costo del pivote y la naturaleza estatica del dato
+- `hechos.v_indicer_reconstruido` — la formula oficial como consulta auditable
+- `hechos.v_ranking_intra_cluster` — posicion y percentil dentro del grupo del periodo (mecanica real del beneficio)
+- `ml.mv_matriz_entrenamiento` — materializada por el costo del pivote y la naturaleza estatica del dato
 
 ---
 
@@ -119,9 +119,9 @@ por normativa.
 |----|-----------------|-------|--------------------|
 | CTRL-01 | Orfandad e integridad referencial | Ingesta | `data/interim/cuarentena/*.parquet` + `ReporteCalidad` |
 | CTRL-02 | Fuga de datos | Preprocesamiento y entrenamiento | Excepcion `FugaDeDatos` + R2 del predictor trivial ~ 0 |
-| CTRL-03 | Deriva postpandemia | Verificacion bianual | `models/metadata/linea_base_distribuciones.json` + `modelos.verificacion_bianual` |
-| CTRL-04 | Acceso no autorizado | Servicio y visualizacion | `app.auditoria_acceso` + pruebas de RBAC |
-| CTRL-05 | Perdida de trazabilidad | Registro de modelos | Artefactos versionados + `modelos.inferencia` / `modelos.explicacion` |
+| CTRL-03 | Deriva postpandemia | Verificacion bianual | `models/metadata/` (linea base de distribuciones, pendiente de generar) + `ml.drift_registro` |
+| CTRL-04 | Acceso no autorizado | Servicio y visualizacion | `app.auditoria` + pruebas de RBAC |
+| CTRL-05 | Perdida de trazabilidad | Registro de modelos | Artefactos versionados + `ml.inferencia` / `ml.inferencia_atribucion` |
 
 ---
 
@@ -175,7 +175,7 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
 
 1. **Latencia de la explicabilidad.** SHAP exacto se valido en lote de 500 observaciones.
    Falta definir presupuesto de respuesta interactiva: precomputar y persistir en
-   `modelos.explicacion`, o calcular en linea.
+   `ml.inferencia_atribucion`, o calcular en linea.
 2. **Rutas de los notebooks.** Se movieron sin refactorizar (ver `notebooks/README.md`).
 3. **Umbral de R2 por sistema.** La meta declarada es 0,60; la cumple el motor global (0,637)
    pero no el desagregado (0,583), que es el que alimenta el simulador. Corresponde declarar
@@ -183,7 +183,7 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
 4. **Persistencia de usuarios.** El directorio RBAC vive en memoria; debe migrar a `app.usuario`.
 5. **Desajuste entrenamiento/servicio.** Las 8 variables `dif_simce_*` se calculan en el
    notebook de entrenamiento y no se persisten; el servicio las imputa por mediana (cobertura
-   57/65 = 88 %). Observable vía `GET /api/v1/salud/composicion`. La solución de fondo es
+   35/43 = 81,4 %). Observable vía `GET /api/v1/salud/composicion`. La solución de fondo es
    materializarlas en `hechos.indicador_anual` durante la ingesta.
 6. **Versión de librería no registrada.** Los artefactos `.joblib` están acoplados a la versión
    de scikit-learn con que se entrenaron (1.5.2; fallan con 1.8). Los metadatos del registro
@@ -207,13 +207,15 @@ Mermaid más exportación PNG.
 
 ## Normas de los planes de prueba
 
-Los tres planes —integración, aceptación y compatibilidad de navegadores— se redactan
-siguiendo **IEEE 829** e **ISO/IEC/IEEE 29119**, en conjunto y no como alternativas:
+Los cuatro planes —maestro, integracion, aceptacion y compatibilidad de navegadores— se redactan
+siguiendo **ISO/IEC/IEEE 29119**, que es la norma vigente.
 
-| Norma | Qué aporta |
-|-------|-----------|
-| IEEE 829 | La estructura documental: identificador, alcance, elementos a probar, criterios de aprobación y suspensión, entregables y responsabilidades |
-| ISO/IEC/IEEE 29119 | El marco de proceso: política y estrategia de pruebas, gestión, diseño de casos por técnica y documentación dinámica |
+Conviene ser preciso con la relacion entre ambas normas, porque es una pregunta previsible en una
+defensa: **ISO/IEC/IEEE 29119-3 reemplazo formalmente a IEEE 829 en 2013**. No estan vigentes en
+paralelo. Se cita 829 como antecedente por dos razones: su estructura documental —identificador,
+alcance, elementos a probar, criterios de aprobacion y suspension, entregables y riesgos— se
+conserva casi integra en 29119-3, y sigue siendo la referencia que se ensena.
 
-IEEE 829 fija la forma del documento; ISO 29119 fija el proceso que lo produce. Declararlas
-juntas evita la pregunta obvia en una defensa: por qué se eligió una y se descartó la otra.
+De 29119 viene ademas lo que 829 no tenia: el proceso que produce el documento y las tecnicas de
+diseno de casos —particion de equivalencia, valores limite, prueba de contrato— que aparecen en
+los planes.

@@ -124,12 +124,19 @@ FROM ciclo c
 LEFT JOIN simce ON TRUE LEFT JOIN idps ON TRUE LEFT JOIN ind ON TRUE LEFT JOIN sie ON TRUE
 """
 
+# DISTINCT ON entrega UN registro por establecimiento, el del ciclo mas
+# reciente. Sin el, un RBD con cinco ciclos consumiria cinco cupos del limite y
+# el listado no coincidiria con el del adaptador de parquet.
 CONSULTA_LISTADO = """
-    SELECT sr.rbd, p.etiqueta AS bienio_premio, sr.cluster_codigo, sr.indicer
-    FROM hechos.sned_resultado sr
-    JOIN core.periodo p ON p.periodo_id = sr.periodo_id AND p.tipo='CICLO_SNED'
-    WHERE sr.rbd = ANY(:rbds)
-    ORDER BY sr.rbd, p.anio_inicio DESC
+    SELECT * FROM (
+        SELECT DISTINCT ON (sr.rbd)
+               sr.rbd, p.etiqueta AS bienio_premio, sr.cluster_codigo, sr.indicer
+        FROM hechos.sned_resultado sr
+        JOIN core.periodo p ON p.periodo_id = sr.periodo_id AND p.tipo='CICLO_SNED'
+        WHERE sr.rbd = ANY(:rbds)
+        ORDER BY sr.rbd, p.anio_inicio DESC
+    ) t
+    ORDER BY rbd
     LIMIT :limite
 """
 
@@ -194,7 +201,15 @@ class RepositorioPostgres(RepositorioEstablecimientos):
             filas = cx.execute(text(CONSULTA_LISTADO),
                                {"rbds": [self._como_entero(r) for r in rbds],
                                 "limite": limite}).mappings().all()
-        return [{k: (float(v) if hasattr(v, "as_tuple") else v) for k, v in dict(f).items()} for f in filas]
+        return [
+            {
+                "rbd": str(f["rbd"]),
+                "bienio_premio": f["bienio_premio"],
+                "cluster_codigo": f["cluster_codigo"],
+                "indicer": float(f["indicer"]) if f["indicer"] is not None else None,
+            }
+            for f in filas
+        ]
 
     def ranking(self, rbd: str, periodo: str | None = None) -> dict:
         from sqlalchemy import text

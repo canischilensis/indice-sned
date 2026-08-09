@@ -431,7 +431,7 @@ scikit-learn 1.5.2 y el conjunto `tabla_modelo_largo.parquet` (23.111 observacio
 | Métrica | Antes | Después | Medición |
 |---------|-------|---------|----------|
 | Módulos de la capa de servicio que conocen el formato de almacenamiento | 1 | 0 | `scripts/verificar_arquitectura.py` |
-| Reglas de negocio con prueba unitaria aislada | 0 | 9 | 26 pruebas en `tests/test_patrones.py` |
+| Reglas de negocio con prueba unitaria aislada | 0 | 9 | 26 pruebas en `tests/unitarias/q2/test_patrones_del_motor.py` |
 | Líneas para incorporar una fuente nueva | ~120 (notebook completo) | ~15 (una subclase) | Revisión de código |
 | Estrategias que deben implementar la auditoría | cada una | 0 (la aporta el decorador) | `test_decorador_de_auditoria_registra_sin_tocar_la_estrategia` |
 | Artefactos materializados al arrancar la API | potencialmente 9 (220 MB) | **0** | `GET /api/v1/salud/registro` → `n_materializados: 0` |

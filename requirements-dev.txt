@@ -14,3 +14,6 @@ httpx==0.27.2
 jupyterlab==4.3.1
 ipykernel==6.29.5
 nbstripout==0.8.1
+
+# Prueba de contrato INT-04: valida las respuestas contra el esquema OpenAPI
+jsonschema==4.23.0
