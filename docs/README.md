@@ -17,6 +17,7 @@ al índice del Capítulo IV de la tesis.
 | Usar el sistema | `manuales/MANUAL_USUARIO.md` |
 | Saber qué se probó y cómo | `planes/PLAN_PRUEBAS.md` |
 | Ver de dónde sale cada requisito | `requisitos/MATRIZ_TRAZABILIDAD.md` |
+| Leer el informe del Hito 2 | `Informe_Hito2.docx`, con `INFORME_HITO_2.md` como versión en texto |
 
 ---
 
@@ -47,7 +48,7 @@ al índice del Capítulo IV de la tesis.
 | `diseno/DISENO_DEL_SOFTWARE.md` | DS-SNED-01 | Modelo de clases por cuanto, responsabilidades y deuda de diseño |
 | `diseno/DISENO_BASE_DATOS.md` | DB-SNED-01 | 38 tablas, seis decisiones de normalización, precisión numérica y verificación del cálculo |
 | `diseno/MOCKUPS_Y_PANTALLAS.md` | UI-SNED-01 | Maquetas de las cuatro pantallas y procedimiento de captura |
-| `diagramas/` | — | 8 imágenes y 6 fuentes Mermaid, derivadas del código. Incluye la vista de despliegue |
+| `diagramas/` | — | 11 imágenes y 9 fuentes Mermaid, derivadas del código. Incluye la vista de despliegue y el diagrama de contexto con los flujos controlados |
 | `Anexo_mapeo_conceptual_fisico.docx` | — | Reglas de transformación de modelo conceptual a físico |
 
 ## 4. Gestión del proyecto
@@ -60,6 +61,7 @@ al índice del Capítulo IV de la tesis.
 | `gestion/PLAN_COMUNICACIONES.md` | PCO-SNED-01 | Interesados, canales y **la interfaz como canal formal** |
 | `gestion/PLAN_GESTION_ALCANCE.md` | PGA-SNED-01 | Descomposición del trabajo, exclusiones justificadas y trabajo futuro |
 | `gestion/PLAN_GESTION_CRONOGRAMA.md` | PGCR-SNED-01 | Red de dependencias, hitos con criterio verificable y los tres retrocesos |
+| `Informe_Hito2.docx` | — | Informe del Hito 2: tópicos del plan, alcance, propuesta de solución y plan de proyecto, con las diez figuras |
 
 ## 5. Pruebas
 

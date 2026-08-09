@@ -1,0 +1,64 @@
+---
+title: "Indice SNED · Diagrama de contexto: cuatro etapas y los flujos con control operacional"
+---
+flowchart TB
+    subgraph E1["ETAPA 1 · SISTEMAS DE ORIGEN · 11 fuentes publicas"]
+        direction LR
+        MIN["<b>MINEDUC</b> · 5"]
+        AGC["<b>Agencia de Calidad</b> · 2"]
+        SIE["<b>Superintendencia</b> · 3"]
+        JUN["<b>JUNAEB</b> · 1"]
+    end
+
+    subgraph E2["ETAPA 2 · CAPA ANALITICA · Q1"]
+        direction LR
+        ING["Ingesta y normalizacion<br/>llave RBD + anio"]
+        CUAR[/"Cuarentena"/]
+        LAGO[("Conjunto analitico<br/>23.111 obs. · 7.754 estab.")]
+        BD[("PostgreSQL 16<br/>38 tablas · 4 esquemas")]
+    end
+
+    subgraph E3["ETAPA 3 · MOTOR PREDICTIVO · Q2"]
+        direction LR
+        FEAT["Caracteristicas<br/>65 variables"]
+        ENT["Entrenamiento<br/>validacion agrupada"]
+        REG[("Registro de artefactos<br/>Shapley · curvas ICE")]
+    end
+
+    subgraph E4["ETAPA 4 · SERVICIO B2B · Q3 + Q4"]
+        direction LR
+        API["Interfaz de programacion"]
+        UI["Prototipo B2B<br/>3 ventanas"]
+    end
+
+    MIN --> ING
+    AGC --> ING
+    SIE --> ING
+    JUN --> ING
+    ING -.->|"no conformes"| CUAR
+    ING ==>|"<b>CTRL-01</b>"| LAGO
+    LAGO -->|"carga idempotente"| BD
+    LAGO ==>|"<b>CTRL-02</b>"| FEAT
+    BD ==>|"<b>CTRL-01</b>"| FEAT
+    FEAT ==>|"<b>CTRL-02</b>"| ENT
+    ENT ==>|"<b>CTRL-05</b>"| REG
+    BD --> API
+    REG -.->|"<b>CTRL-05</b>"| API
+    API ==>|"<b>CTRL-04</b>"| UI
+
+    DRIFT{{"<b>CTRL-03</b><br/>deriva bianual"}}
+    BD -.->|"<b>CTRL-03</b>"| DRIFT
+    DRIFT -.->|"<b>CTRL-03</b>"| ENT
+
+    classDef etapa fill:#f7f9fb,stroke:#0C1B33,stroke-width:2px,color:#111C2E
+    classDef proceso fill:#ffffff,stroke:#0C1B33,stroke-width:1.5px,color:#111C2E
+    classDef almacen fill:#eef2f7,stroke:#5a6b82,stroke-width:1px,color:#111C2E
+    classDef control fill:#FDECEE,stroke:#E01E28,stroke-width:2px,color:#8C1017
+    classDef fuente fill:#FDF4E4,stroke:#B4740F,stroke-width:1px,color:#6B4E14
+
+    class MIN,AGC,SIE,JUN fuente
+    class ING,FEAT,ENT,API,UI proceso
+    class LAGO,BD,REG,CUAR almacen
+    class DRIFT control
+    class E1,E2,E3,E4 etapa
+    linkStyle 5,7,8,9,10,13 stroke:#E01E28,stroke-width:2.5px,color:#8C1017
