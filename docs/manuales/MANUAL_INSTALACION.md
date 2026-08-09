@@ -85,7 +85,7 @@ psql -U postgres
 Introduzca la contraseña del superusuario. Ya dentro de `psql`:
 
 ```sql
-CREATE USER sned WITH PASSWORD 'sned_local';
+CREATE USER sned WITH PASSWORD 'ELIJA-UNA-CLAVE';
 CREATE DATABASE indice_sned OWNER sned;
 \q
 ```
@@ -109,9 +109,13 @@ Copy-Item .env.example .env
 Edite `.env` y confirme estas dos líneas:
 
 ```
-DATABASE_URL=postgresql+psycopg://sned:sned_local@localhost:5432/indice_sned
+DATABASE_URL=postgresql+psycopg://sned:ELIJA-UNA-CLAVE@localhost:5432/indice_sned
 REPOSITORIO_DATOS=postgres
 ```
+
+> **La clave la elige usted.** Reemplace `ELIJA-UNA-CLAVE` por un valor propio, el mismo en los
+> dos lugares. Este repositorio es publico: no escriba credenciales reales en la documentacion ni
+> en ningun archivo versionado. La unica copia de la clave vive en su `.env`, que esta ignorado.
 
 El controlador es `psycopg` sin sufijo de versión: corresponde a la tercera generación del
 adaptador, que es la que instala el archivo de requisitos.
