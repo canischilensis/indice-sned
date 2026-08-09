@@ -17,7 +17,13 @@ de identificadores personales (MRUN). El inventario canonico y ejecutable vive e
 | `pat` | Procesos administrativos | Superintendencia de Educacion | anual | `data/raw/pat/` |
 | `denuncias` | Denuncias ciudadanas | Superintendencia de Educacion | anual | `data/raw/denuncias/` |
 | `mediaciones` | Mediaciones escolares | Superintendencia de Educacion | anual | `data/raw/mediaciones/` |
-| `desvinculacion` | Tasa de incidencia de desvinculacion | MINEDUC | anual | `data/raw/desvinculacion/` |
+| `desvinculacion` | Tasa de incidencia de desvinculacion | MINEDUC | anual | `data/raw/desvinculacion/` — **declarada, no integrada** |
+
+> **Doce declaradas, once integradas.** El catalogo de `quanta/q1_ingesta/fuentes.py` declara doce
+> fuentes, pero `desvinculacion` no se incorporo al conjunto analitico: no permite atribucion por
+> RBD y no tiene cuaderno de ingesta asociado. Se conserva en el catalogo como fuente evaluada y
+> descartada, no como omision. Las cifras de este repositorio se leen con ese criterio: **doce**
+> cuando se habla del catalogo declarado, **once** cuando se habla de fuentes consolidadas.
 
 ## Excepciones normativas aplicadas
 

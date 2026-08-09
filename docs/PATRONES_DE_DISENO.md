@@ -27,7 +27,7 @@ el paper describe tienen correspondencia directa en este proyecto:
 | Antipatrón (Sculley et al., 2015) | Riesgo concreto en el ecosistema SNED | Patrón que lo neutraliza |
 |---|---|---|
 | *Glue code* | El simulador queda soldado a la API de scikit-learn | **Strategy** (ya aplicado) |
-| *Pipeline jungles* — "una jungla de raspados, uniones y muestreos" | 12 fuentes MINEDUC ingeridas con lógica duplicada | **Template Method** + **Pipes and Filters** |
+| *Pipeline jungles* — "una jungla de raspados, uniones y muestreos" | 12 fuentes MINEDUC declaradas con lógica duplicada | **Template Method** + **Pipes and Filters** |
 | *Configuration debt* — "cada línea de configuración es una oportunidad de error" | Ponderaciones y reglas incrustadas en código | **Registry** + **Specification** |
 | CACE — *"Changing Anything Changes Everything"* | Un cambio normativo corrompe silenciosamente las proyecciones | **Specification** + **Registry** |
 
@@ -52,6 +52,31 @@ el paper describe tienen correspondencia directa en este proyecto:
 
 ---
 
+## 1.bis Principios de diseño que gobiernan los cuatro cuantos
+
+Los patrones no son la unidad de decisión más pequeña: debajo de cada uno hay un principio que
+lo justifica. Freeman et al. (2020) los presentan como criterios de separación de
+responsabilidades, no como reglas. La tabla los mapea contra los cuatro cuantos del sistema, de
+modo que la frontera entre cuantos deje de ser una convención y pase a tener fundamento citable.
+
+| Principio | Cita | Dónde se observa en esta arquitectura |
+|-----------|------|----------------------------------------|
+| Identificar los aspectos que varían y separarlos de lo que permanece igual | Cap. 1, p. 9 | Es el fundamento de la arquitectura hexagonal completa. Cada puerto aísla exactamente una dimensión de cambio: el algoritmo, el medio de persistencia, el formato de la fuente y la regla de negocio |
+| Programar a una interfaz, no a una implementación | Cap. 1, p. 11 | Q2 expone el motor únicamente a través de `EstrategiaPredictiva`. El resto del sistema es agnóstico respecto de si detrás hay un bosque aleatorio o una red neuronal |
+| Favorecer la composición sobre la herencia | Cap. 1, p. 23 | El comportamiento de auditoría y de caché se obtiene componiendo decoradores en tiempo de ejecución, no extendiendo la jerarquía de estrategias |
+| Principio Abierto-Cerrado: abierto a la extensión, cerrado a la modificación | Cap. 3, p. 86 | Una regla de alerta nueva en Q3 se registra sin tocar el flujo de evaluación, porque cada regla es una especificación componible |
+| Inversión de dependencias: depender de abstracciones, no de clases concretas | Cap. 4, p. 139 | En Q3 no es solo un principio: es una **restricción verificada**. El cuanto tiene prohibido importar librerías de aprendizaje automático y una prueba automatizada lo comprueba en cada ejecución |
+| Principio de Hollywood: no nos llames, nosotros te llamaremos | Cap. 8, p. 296 | El esqueleto de ingesta de Q1 decide cuándo invocar la lectura concreta de cada fuente. La subclase no controla el orden: solo responde cuando se la llama |
+| Principio del menor conocimiento (Ley de Demeter) | Cap. 7, p. 265 | Q4 consume exclusivamente JSON tipado. Tiene prohibido conocer las librerías internas de Q2 o la complejidad algorítmica del motor |
+| Principio de responsabilidad única: una clase, una sola razón para cambiar | Cap. 9, p. 339 | Fundamenta la existencia misma de los cuantos: la calidad del dato (Q1) y la inferencia predictiva (Q2) cambian por razones distintas y en momentos distintos |
+
+Dos de estas correspondencias merecen subrayarse porque no son declarativas sino comprobables:
+la inversión de dependencias en Q3 y el menor conocimiento en Q4 están respaldadas por
+`scripts/verificar_arquitectura.py`, que recorre las importaciones reales y falla si alguna sale
+del grafo permitido. Un principio que una máquina puede refutar deja de ser una aspiración.
+
+---
+
 ## 2. Patrones aplicados: justificación detallada
 
 ### P1 · Strategy — *ya presente, se documenta por completitud*
@@ -62,8 +87,13 @@ inductivos distintos y sobrevivir a migraciones futuras.
 
 **Fuente.** Gamma et al. (1994): *"define una familia de algoritmos, encapsula cada uno y los
 hace intercambiables; Strategy permite que el algoritmo varíe independientemente de los
-clientes que lo usan"*. Freeman et al. (2004) lo asocian al principio de favorecer la
+clientes que lo usan"*. Freeman et al. (2020) lo asocian al principio de favorecer la
 composición sobre la herencia, citado explícitamente en el Capítulo 3 de la tesis.
+
+**Definicion canonica.** Freeman et al. (2020, cap. 1, p. 24) definen Strategy como el patron
+que *"define una familia de algoritmos, encapsula cada uno y los hace intercambiables, dejando
+que el algoritmo varie independientemente de los clientes que lo usan"*. La obra lo presenta
+como la materializacion directa del principio de programar a una interfaz.
 
 **Dónde.** `quanta/q2_modelamiento/contrato.py` → `EstrategiaPredictiva`.
 
@@ -121,6 +151,14 @@ delegando algunos pasos a las subclases; Template Method permite que las subclas
 ciertos pasos sin cambiar la estructura del algoritmo"*. Es el patrón canónico para el
 principio de Hollywood ("no nos llames, nosotros te llamamos") que Freeman et al. (2004)
 desarrollan en su capítulo homónimo.
+
+**Definicion canonica.** Freeman et al. (2020, cap. 8, p. 289) definen Template Method como el
+patron que *"define el esqueleto de un algoritmo en un metodo, delegando algunos pasos a las
+subclases"*, de modo que estas redefinen pasos sin alterar la estructura del algoritmo.
+
+**Costo declarado por la fuente.** La obra advierte que puede derivar en una estructura de
+herencia rigida si los pasos del algoritmo base cambian de forma drastica entre
+implementaciones.
 
 **Aplicación.** `IngestorDeFuente` (ABC) fija el método plantilla `ejecutar()` con los seis
 pasos invariantes; las subclases solo implementan `_leer_archivo()` y, opcionalmente,
@@ -180,6 +218,14 @@ dinámica; los decoradores ofrecen una alternativa flexible a la herencia para e
 funcionalidad"*. Freeman et al. (2004) lo presentan como la aplicación canónica del principio
 abierto/cerrado.
 
+**Definicion canonica.** Freeman et al. (2020, cap. 3, p. 91) definen Decorator como el patron
+que *"adjunta responsabilidades adicionales a un objeto de forma dinamica, ofreciendo una
+alternativa flexible a la herencia para extender funcionalidad"*.
+
+**Costo declarado por la fuente.** La obra advierte sobre la proliferacion de clases pequenas
+(p. 101), riesgo que en Q2 debe vigilarse porque el motor ya combina dos decoradores sobre la
+misma estrategia.
+
 **Aplicación.** Dos decoradores que envuelven cualquier `EstrategiaPredictiva`:
 
 - `EstrategiaAuditada` — registra cada inferencia (CTRL-05)
@@ -208,6 +254,13 @@ las subclases decidan qué clase instanciar"*. En su forma de registro es lo que
 llama Registry: *"un objeto bien conocido que otros objetos pueden usar para encontrar objetos
 y servicios comunes"*.
 
+**Definicion canonica.** Freeman et al. (2020, cap. 4, p. 134) definen Factory Method como el
+patron que *"define una interfaz para crear un objeto, pero deja que las subclases decidan que
+clase instanciar"*, difiriendo la instanciacion a las subclases.
+
+**Costo declarado por la fuente.** La obra senala que puede obligar a crear una subclase por
+cada tipo de objeto, con el consiguiente crecimiento de la jerarquia.
+
 **Aplicación.** `FabricaDeEstrategias` con registro dinámico y armado de la cadena de
 decoradores según `.env`. Se conserva `obtener_estrategia()` como función de conveniencia
 para no romper el código existente.
@@ -227,6 +280,10 @@ dependencias por constructor, y por tanto no es sustituible en pruebas.
 interfaces de un subsistema; Facade define una interfaz de más alto nivel que hace al
 subsistema más fácil de usar"*.
 
+**Definicion canonica.** Freeman et al. (2020, cap. 7, p. 264) definen Facade como el patron
+que *"proporciona una interfaz unificada a un conjunto de interfaces de un subsistema,
+definiendo una interfaz de nivel superior que lo hace mas facil de usar"*.
+
 **Aplicación.** `ServicioDePrediccion(estrategia, repositorio, reglas_de_alerta)`. Los routers
 la reciben por inyección de dependencias de FastAPI.
 
@@ -245,6 +302,12 @@ declarada es ≥ 4 factores simulables), y la construcción manual no escala ni 
 **Fuente.** Gamma et al. (1994): *"separa la construcción de un objeto complejo de su
 representación, de modo que el mismo proceso de construcción pueda crear representaciones
 distintas"*.
+
+**Definicion canonica.** Freeman et al. (2020, apendice, p. 614) definen Builder como el patron
+que encapsula la construccion de un producto complejo y permite construirlo paso a paso.
+
+**Costo declarado por la fuente.** La obra reconoce que anade ceremonia al codigo y exige una
+logica de construccion dedicada, lo que incrementa la complejidad de la interfaz de creacion.
 
 **Aplicación.** `ConstructorDeEscenario` con interfaz fluida:
 
@@ -271,6 +334,16 @@ implícita** mediante `lru_cache` y comprobaciones `if self._modelo is None`.
 **Fuente.** Gamma et al. (1994) describen el *virtual proxy* como aquel que *"crea objetos
 costosos bajo demanda"*. Fowler (2002) lo formaliza como Lazy Load: *"un objeto que no
 contiene todos los datos que necesitas, pero sabe cómo obtenerlos"*.
+
+**Definicion canonica.** Freeman et al. (2020, cap. 11, p. 460) definen Proxy como el patron
+que *"proporciona un sustituto o marcador de posicion de otro objeto para controlar el acceso a
+el"*.
+
+**Por que la variante Virtual y no otra.** La obra cataloga un conjunto amplio de variantes
+—remoto, de proteccion, entre otras (p. 488)—. Se selecciono deliberadamente la variante
+virtual porque la fuerza del sistema no es el control de acceso ni la comunicacion remota, sino
+el costo de creacion: diferir la carga permite que el servicio responda a las comprobaciones de
+salud antes de materializar ningun artefacto.
 
 **Aplicación.** `ArtefactoDiferido`, que expone la misma superficie que el modelo real y
 materializa la deserialización en el primer `predict()`. Registra además el tiempo de carga,
@@ -307,6 +380,13 @@ intercambiables. Sin ellos el puerto es decorativo.
 los clientes esperan"*. Cockburn (2005) lo sitúa como la pieza externa de la arquitectura
 hexagonal.
 
+**Definicion canonica.** Freeman et al. (2020, cap. 7, p. 243) definen Adapter como el patron
+que *"convierte la interfaz de una clase en otra interfaz que los clientes esperan, permitiendo
+que colaboren clases que de otro modo no podrian por incompatibilidad de interfaces"*.
+
+**Costo declarado por la fuente.** La obra reconoce que introduce una capa adicional de
+indireccion en la comunicacion entre objetos.
+
 **Aplicación.**
 
 | Puerto | Adaptadores |
@@ -337,20 +417,27 @@ materializadas que permiten auditar el flujo por etapa.
 La disciplina de un catálogo de patrones se demuestra tanto por lo que se rechaza como por lo
 que se adopta.
 
-| Patrón | Por qué se consideró | Por qué se descarta |
-|--------|----------------------|---------------------|
-| **Singleton** | El registro de modelos y el catálogo son globales de facto | Gamma et al. lo incluyen, pero la crítica posterior es sólida: introduce estado global y dificulta las pruebas. Se logra el mismo efecto con `lru_cache` **e** inyección opcional, que sí es testeable |
-| **Composite** | El motor desagregado compone seis modelos en un índice | La composición no es recursiva ni uniforme: nunca se anida un índice dentro de otro. Aplicarlo daría estructura sin ganancia. La suma ponderada es una fórmula legal, no un árbol |
-| **Observer** | Las alertas parecen notificaciones | No hay publicador ni suscriptores con ciclo de vida propio: las alertas se calculan bajo demanda dentro de una petición HTTP. Especificación es el ajuste correcto |
-| **Chain of Responsibility** | Las reglas de alerta se evalúan en secuencia | La cadena detiene el recorrido en el primer manejador que atiende; aquí **todas** las reglas deben evaluarse. Sería usar el patrón contra su intención |
-| **Abstract Factory** | Podría producir familias de estrategia + explicador + preprocesador | Solo existe una familia coherente. Se reevaluará si aparece un segundo conjunto (por ejemplo, un motor para educación de adultos con normativa distinta) |
-| **Command** | Cada simulación se registra en `app.simulacion` | Registrar no es lo mismo que reificar. No hay deshacer, ni cola, ni reintento. El registro se resuelve con el decorador de auditoría |
-| **Memento** | Comparar escenarios simulados | El escenario ya es un objeto de valor inmutable producido por el Builder; conservarlo no requiere un patrón adicional |
-| **Flyweight** | Miles de establecimientos en memoria | El volumen (7.754 establecimientos) no justifica compartir estado intrínseco. Optimización prematura |
-| **Unit of Work** | Coordinar escrituras transaccionales | **Aplazado, no descartado.** Adquiere sentido cuando `modelos.inferencia` y `app.simulacion` se escriban en la misma transacción. Hoy no hay escrituras concurrentes |
-| **Active Record** | Simplificaría el acceso a datos | Acopla el dominio al esquema relacional. Con la persistencia en formato largo y las clases de dominio en representación ancha, el desajuste objeto-relacional es real: Data Mapper vía Repository es la elección correcta |
-| **MVC / MVVM** | Organizar el frontend | React con estado local resuelve las tres ventanas. Introducir un gestor de estado global sería ceremonia para un prototipo de tres pantallas |
-| **Circuit Breaker** | Resiliencia ante fallos externos | No hay llamadas a servicios externos en tiempo de ejecución. La ingesta es estática y bianual |
+| Patrón | Por qué se consideró | Fuerza que exige la fuente | Por qué se descarta |
+|--------|----------------------|----------------------------|---------------------|
+| **Singleton** | El registro de modelos y el catálogo son globales de facto | Una sola instancia con punto de acceso global (cap. 5, p. 177) | Gamma et al. lo incluyen, pero la crítica posterior es sólida: introduce estado global y dificulta las pruebas. Se logra el mismo efecto con `lru_cache` **e** inyección opcional, que sí es testeable |
+| **Composite** | El motor desagregado compone seis modelos en un índice | Componer objetos en estructuras de árbol y tratar de forma uniforme objetos individuales y composiciones (cap. 9, p. 356) | La composición no es recursiva ni uniforme: nunca se anida un índice dentro de otro. Aplicarlo daría estructura sin ganancia. La suma ponderada es una fórmula legal, no un árbol |
+| **Observer** | Las alertas parecen notificaciones | Dependencia uno-a-muchos con notificación automática a los suscriptores (cap. 2, p. 51) | No hay publicador ni suscriptores con ciclo de vida propio: las alertas se calculan bajo demanda dentro de una petición HTTP. Especificación es el ajuste correcto |
+| **Chain of Responsibility** | Las reglas de alerta se evalúan en secuencia | Pasar la petición por una cadena hasta que un manejador la atienda (p. 616) | La cadena detiene el recorrido en el primer manejador que atiende; aquí **todas** las reglas deben evaluarse. Sería usar el patrón contra su intención |
+| **Abstract Factory** | Podría producir familias de estrategia + explicador + preprocesador | Crear familias de productos relacionados sin especificar sus clases concretas (p. 156) | Solo existe una familia coherente. Se reevaluará si aparece un segundo conjunto (por ejemplo, un motor para educación de adultos con normativa distinta) |
+| **Command** | Cada simulación se registra en `app.simulacion` | Reificar la petición como objeto, habilitando colas, registro y deshacer (p. 206) | Registrar no es lo mismo que reificar. No hay deshacer, ni cola, ni reintento. El registro se resuelve con el decorador de auditoría |
+| **Memento** | Comparar escenarios simulados | Capturar y externalizar el estado interno de un objeto para restaurarlo después (p. 624) | El escenario ya es un objeto de valor inmutable producido por el Builder; conservarlo no requiere un patrón adicional |
+| **Flyweight** | Miles de establecimientos en memoria | Compartir estado intrínseco para sostener un gran volumen de objetos finos (p. 618) | El volumen (7.754 establecimientos) no justifica compartir estado intrínseco. Optimización prematura |
+| **Unit of Work** | Coordinar escrituras transaccionales | — No pertenece a Head First Design Patterns; procede de Fowler (2002) | **Aplazado, no descartado.** Adquiere sentido cuando `modelos.inferencia` y `app.simulacion` se escriban en la misma transacción. Hoy no hay escrituras concurrentes |
+| **Active Record** | Simplificaría el acceso a datos | — No pertenece a Head First Design Patterns; procede de Fowler (2002) | Acopla el dominio al esquema relacional. Con la persistencia en formato largo y las clases de dominio en representación ancha, el desajuste objeto-relacional es real: Data Mapper vía Repository es la elección correcta |
+| **MVC / MVVM** | Organizar el frontend | Organizar interfaces complejas separando modelo, vista y control (p. 526) | React con estado local resuelve las tres ventanas. Introducir un gestor de estado global sería ceremonia para un prototipo de tres pantallas |
+| **Circuit Breaker** | Resiliencia ante fallos externos | — No pertenece a Head First Design Patterns; procede de la literatura de resiliencia | No hay llamadas a servicios externos en tiempo de ejecución. La ingesta es estática y bianual |
+
+---
+
+La columna central es el contraste que hace verificable cada descarte: enfrenta la fuerza que la
+fuente declara necesaria contra lo que ocurre en el sistema. Tres de los doce no figuran en
+Head First Design Patterns y se marcan como tales, para no atribuir a esa obra una autoridad que
+no tiene sobre ellos.
 
 ---
 
@@ -408,6 +495,36 @@ estructurales se concentran en Q2**, donde vive la complejidad algorítmica y lo
 costosos; **los de comportamiento en Q1 y Q3**, donde viven las reglas de negocio que cambian
 por normativa. El cuanto 4 no tiene patrones de dominio porque no debe tener dominio: es un
 adaptador de presentación.
+
+---
+
+
+### Combinación de patrones y riesgo de saturación
+
+Freeman et al. (2020, cap. 12) advierten sobre la *fiebre de patrones*: la tendencia a introducir
+estructura por afinidad técnica y no por necesidad, con el resultado de que la sinergia entre
+patrones aumenta la complejidad en lugar de contenerla. La interacción que se observa en Q2 entre
+Strategy, Decorator, Factory Method y Registry —una fábrica que produce estrategias decoradas y
+las resuelve desde un registro— corresponde a una combinación análoga a las que la propia obra
+documenta.
+
+**La fuente no proporciona ningún criterio numérico para determinar cuándo un sistema tiene
+demasiados patrones.** No existe un umbral publicado contra el cual contrastar los doce que este
+catálogo declara, y conviene no inventar uno.
+
+Lo que sí puede argumentarse es de naturaleza estructural, no cuantitativa: los doce patrones no
+conviven en un mismo espacio de nombres sino distribuidos entre cuatro unidades de despliegue
+independiente con alta cohesión interna. Esa partición actúa como aislamiento de complejidad. La
+fiebre de patrones degrada un sistema cuando la estructura de un módulo obliga a entender la de
+los demás para modificar cualquiera; aquí el grafo de dependencias entre cuantos está restringido
+y verificado por máquina, de modo que la complejidad introducida en Q2 no se propaga a Q1, Q3 ni
+Q4. La concentración es además deliberada y asimétrica: seis de los doce patrones viven en Q2,
+que es donde reside la complejidad algorítmica y los artefactos costosos, mientras que Q4 no
+aplica ninguno de dominio.
+
+En consecuencia, la cifra por sí sola no permite concluir sobre saturación. Lo que la haría
+observable es otra cosa: que una modificación en un cuanto obligue a tocar otro. Ese es el
+indicador que corresponde vigilar, y hoy la verificación de fronteras lo mantiene acotado.
 
 ---
 
@@ -473,7 +590,8 @@ registro deben incluir la versión de la librería, no solo los hiperparámetros
   Parts*. O'Reilly.
 - Fowler, M. (2002). *Patterns of Enterprise Application Architecture*. Addison-Wesley.
   Catálogo en línea: https://martinfowler.com/eaaCatalog/
-- Freeman, E., Robson, E., Bates, B. y Sierra, K. (2004). *Head First Design Patterns*. O'Reilly.
+- Freeman, E., Robson, E., Bates, B. y Sierra, K. (2020). *Head First Design Patterns* (2.a ed.).
+  O'Reilly Media.
 - Gamma, E., Helm, R., Johnson, R. y Vlissides, J. (1994). *Design Patterns: Elements of
   Reusable Object-Oriented Software*. Addison-Wesley.
 - Richards, M. y Ford, N. (2020). *Fundamentals of Software Architecture*. O'Reilly.

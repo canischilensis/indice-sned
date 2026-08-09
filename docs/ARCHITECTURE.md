@@ -109,6 +109,10 @@ y su fuente citada, en **`docs/PATRONES_DE_DISENO.md`**. Resumen por cuanto:
 | Q3 · Servicio | Repository, Facade, Adapter, Specification |
 | Q4 · Cliente | ninguno de dominio, por diseño |
 
+Respaldo bibliografico: las definiciones canonicas con capitulo y pagina, los costos que la
+fuente atribuye a cada patron y el mapeo de los ocho principios de diseno contra los cuatro
+cuantos estan desarrollados en `docs/PATRONES_DE_DISENO.md` (Freeman et al., 2020).
+
 Los creacionales y estructurales se concentran en Q2, donde vive la complejidad algorítmica y
 los artefactos costosos; los de comportamiento en Q1 y Q3, donde viven las reglas que cambian
 por normativa.
