@@ -1,0 +1,49 @@
+# Finales de linea: una propiedad del repositorio, no de cada maquina.
+#
+# Sin este archivo, el tratamiento del fin de linea lo decidia el core.autocrlf
+# global de quien clonara. La consecuencia se observo el 2026-08-10: sobre el
+# mismo commit, un Windows informaba el arbol limpio y un Linux setenta archivos
+# modificados. Ninguno de los dos se equivocaba, y esa es justamente la falla:
+# el estado del repositorio no puede depender de quien pregunta.
+#
+# Es el mismo criterio que gobierna tests/unitarias/q5/conftest.py. Alli el
+# veredicto de la suite dependia de la shell y se fijo en el repositorio; aqui
+# dependia de la instalacion de git y se fija igual.
+#
+# `text=auto` normaliza a LF dentro del repositorio y entrega en el formato
+# nativo al trabajar. El historial deja de registrar cambios que solo son de
+# formato, que era lo que obligaba a excluir archivos de cada commit.
+
+* text=auto
+
+# --- Binarios -------------------------------------------------------------
+# Se declaran en vez de confiar en la heuristica de deteccion. Un binario
+# tratado como texto se corrompe en la conversion, y las figuras del informe y
+# los artefactos de modelo no admiten esa perdida.
+
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.docx  binary
+*.xlsx  binary
+*.pptx  binary
+*.joblib binary
+*.keras binary
+*.parquet binary
+*.pkl   binary
+*.db    binary
+
+# --- Texto con fin de linea obligatorio ------------------------------------
+# PowerShell es de Windows y se espera con CRLF. Los guiones de shell y el
+# Makefile no se ejecutan si llegan con CRLF: ahi el formato no es preferencia,
+# es condicion de funcionamiento.
+
+*.ps1   text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+*.sh    text eol=lf
+Makefile text eol=lf

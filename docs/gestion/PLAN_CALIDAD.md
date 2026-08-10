@@ -157,6 +157,7 @@ aprendió equivocándose, no en la apariencia de no haberse equivocado.
 | La interfaz mostraba al rol de auditoría un mensaje que decía lo contrario de su alcance real | Media | 2026-08-10. Cerrado por decisión registrada en ADR-007: el rol se sirve por API. La pantalla distingue ahora el caso y el manual lo declara. Construir la búsqueda por identificador queda como trabajo futuro |
 | El cliente nunca leyó su configuración: Vite buscaba un `.env` que nunca existió y las direcciones venían de constantes de reserva en `api.ts` | Alta | 2026-08-10. `envDir` apunta a la raíz: un solo archivo de configuración. Se agrega `tests/arquitectura/test_variables_del_cliente.py`, porque exponer la raíz al empaquetador depende de que ninguna credencial lleve prefijo `VITE_` |
 | Los orígenes CORS del asesor estaban escritos a mano en el código | Media | 2026-08-10. `AGENTE_CORS_ORIGENES` pasa a configuración. Una dirección de red no es una constante del programa |
+| El estado del repositorio dependía de la instalación de git de quien preguntara: sobre el mismo commit, un Windows informaba el árbol limpio y un Linux setenta archivos modificados | Media | 2026-08-10. No existía `.gitattributes`: el fin de línea lo decidía el `core.autocrlf` de cada máquina. Se declara la normalización en el repositorio, con los binarios explícitos y los guiones de shell forzados a LF |
 
 ### 9.1 Reglas que salen de defectos reales
 
@@ -168,6 +169,7 @@ proyecto y se escribió el día que costó tiempo.
 | Una duplicación aceptada por ADR exige una prueba **por copia**, no una por el par | Los códigos de factor vivían en tres lugares y la prueba comparaba dos. La tercera se desincronizó y la suite siguió en verde |
 | Un doble de prueba refleja el **sistema**, nunca la implementación | El doble replicaba la constante equivocada y bendecía el error que debía detectar |
 | El veredicto de la suite no puede depender del entorno de quien la ejecuta | La precedencia «variable del proceso sobre archivo» es correcta en operación y contaminante en pruebas: mismo commit, dos resultados |
+| Tampoco el estado del repositorio | Sin `.gitattributes`, el mismo commit se veía limpio en Windows y con setenta archivos modificados en Linux. Toda condición que decida un veredicto se fija en el repositorio, no en la máquina |
 | Una prueba que aprueba por un camino de error no verifica: coincide | CP-11 exigía la cadena `superac` y la obtenía del mensaje «Factor desconocido: SUPERACR» |
 | Primero el comportamiento, después el criterio | Ante una prueba que no medía su intención declarada, se corrigió el agente y recién entonces se endureció el caso. Al revés sería ajustar la prueba a lo que el sistema hace |
 | Lo que se le pide a un modelo se verifica aparte | Se le pidió responder en prosa plana y con coma decimal. La garantía la da una normalización en el bucle, no la instrucción. Vale para el formato igual que G-02 vale para las cifras |
