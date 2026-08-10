@@ -5,7 +5,7 @@ import Simulador from './paginas/Simulador'
 import ReporteXAI from './paginas/ReporteXAI'
 import Asesor from './paginas/Asesor'
 import { cerrarSesion } from './api'
-import type { Sesion } from './tipos'
+import type { Sesion, Turno } from './tipos'
 
 type Ventana = 'tablero' | 'simulador' | 'xai' | 'asesor'
 
@@ -53,9 +53,20 @@ export default function App() {
   const [sesion, setSesion] = useState<Sesion | null>(null)
   const [ventana, setVentana] = useState<Ventana>('tablero')
   const [rbd, setRbd] = useState<string>('')
+  /* La conversacion del asesor vive aqui y no dentro de su ventana.
+   *
+   * Pertenece a la sesion y al establecimiento, no a la pestana: cambiar de
+   * ventana y volver debe encontrarla intacta. Se limpia en los dos momentos en
+   * que deja de tener sentido —cambio de establecimiento y cierre de sesion— y
+   * en ningun otro.
+   *
+   * No se persiste. Nada en localStorage ni en disco: son datos de
+   * establecimientos identificados por RBD, y dejarlos en el navegador abre una
+   * discusion de proteccion de datos que este alcance no necesita tener. */
+  const [turnos, setTurnos] = useState<Turno[]>([])
 
   if (!sesion) {
-    return <Login alEntrar={(s) => { setSesion(s); setRbd(s.rbds[0] ?? '') }} />
+    return <Login alEntrar={(s) => { setSesion(s); setRbd(s.rbds[0] ?? ''); setTurnos([]) }} />
   }
 
   const iniciales = sesion.rol.slice(0, 2).toUpperCase()
@@ -92,14 +103,23 @@ export default function App() {
       <main className="principal">
         <header className="barra-sup">
           {sesion.rbds.length > 0 && (
-            <select className="selector-rbd" value={rbd} onChange={(e) => setRbd(e.target.value)}>
+            <select
+              className="selector-rbd"
+              value={rbd}
+              onChange={(e) => { setRbd(e.target.value); setTurnos([]) }}
+            >
               {sesion.rbds.map((r) => <option key={r} value={r}>Establecimiento RBD {r}</option>)}
             </select>
           )}
           <div className="acciones-sup">
             <span className="rol">{sesion.rol}</span>
             <div className="avatar">{iniciales}</div>
-            <button className="secundario" onClick={() => { cerrarSesion(); setSesion(null) }}>Salir</button>
+            <button
+              className="secundario"
+              onClick={() => { cerrarSesion(); setSesion(null); setTurnos([]) }}
+            >
+              Salir
+            </button>
           </div>
         </header>
 
@@ -115,7 +135,13 @@ export default function App() {
           {rbd && ventana === 'tablero' && <Dashboard rbds={sesion.rbds} />}
           {rbd && ventana === 'simulador' && <Simulador rbd={rbd} />}
           {rbd && ventana === 'xai' && <ReporteXAI rbd={rbd} />}
-          {rbd && ventana === 'asesor' && <Asesor key={rbd} rbd={rbd} />}
+          {/* Sin `key={rbd}`: antes forzaba un componente nuevo por
+              establecimiento, que era la unica forma de limpiar un estado que
+              vivia dentro. Ahora la conversacion vive en App y se limpia de
+              forma explicita al cambiar el selector. */}
+          {rbd && ventana === 'asesor' && (
+            <Asesor rbd={rbd} turnos={turnos} fijarTurnos={setTurnos} />
+          )}
         </div>
       </main>
     </div>

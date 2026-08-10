@@ -135,7 +135,78 @@ primeras son las que más explican**.
 declara en lugar de tratarlo como un cero, porque no es lo mismo tener un resultado bajo que no
 tener resultado.
 
-## 7. Cómo interpretar bien lo que muestra el sistema
+## 7. Ventana 4 · Asesor de gestión
+
+Responde a: *¿qué significa todo esto para mi establecimiento, en lenguaje corriente?*
+
+Es la única ventana donde usted escribe una pregunta en vez de mover un control. El asesor
+**traduce y prioriza lo que las otras tres ventanas ya calculan**. No calcula el índice ni aplica
+ponderaciones: consulta las mismas rutas que usan el tablero, el simulador y el reporte de
+explicabilidad, con **su propia credencial**, de modo que no alcanza ningún establecimiento que
+usted no pueda ver.
+
+### Cómo usarlo
+
+Escriba la pregunta y pulse **Preguntar**. Hay cuatro preguntas de arranque bajo *Para empezar*;
+la cuarta —*«me garantiza que ganamos la subvención»*— está puesta a propósito para que usted vea
+cómo el asesor rechaza una promesa de resultado en lugar de complacerla.
+
+Una consulta que consulta datos reales puede tardar varios segundos. El cálculo de atribución que
+sostiene la respuesta es el mismo de la ventana de explicabilidad, y es lento a propósito.
+
+### Qué consultó para responder
+
+Bajo cada respuesta aparece la traza: **qué herramienta usó, si tuvo éxito, qué devolvió y cuántos
+milisegundos tardó**. No es un detalle técnico de adorno. Es lo que le permite comprobar que la
+respuesta se apoya en una consulta al sistema y no en una redacción plausible.
+
+Si dice **«sin consulta de datos»**, el asesor respondió sin pedir nada al sistema. Cuando eso
+ocurre no hay cifras que citar, y ninguna afirmación numérica sobreviviría a la verificación. Es el
+caso normal cuando la pregunta pide algo que la política no permite responder.
+
+Si una herramienta aparece **fallida**, la respuesta se lo dirá y le dirá qué no pudo entregarle.
+El asesor cierra la respuesta con lo que sí tiene, en lugar de completar el hueco.
+
+### Regla que no se rompe
+
+**Ninguna cifra que aparezca en una respuesta puede venir de otra parte que no sea una consulta al
+sistema.** Si el asesor no puede fundamentar un número, no lo escribe. Es preferible una respuesta
+que declare lo que no sabe a una que suene completa.
+
+### La conversación no se guarda
+
+Conviene tener claro qué se conserva y qué no, porque afecta a cómo trabajar con la ventana:
+
+| Acción | Qué pasa con la conversación |
+|--------|------------------------------|
+| Cambiar de pestaña y volver | **Se conserva.** Puede ir al tablero a comprobar un dato y volver a la conversación |
+| Cambiar de establecimiento en el selector | **Se limpia.** Una respuesta sobre un RBD junto al selector marcando otro es peor que perderla |
+| Cerrar sesión | **Se limpia** |
+| Cerrar o recargar la pestaña | **Se pierde** |
+
+**Nada se almacena en el navegador ni en disco.** No hay historial recuperable, ni en esta sesión
+ni en la siguiente. Son datos de establecimientos identificados por RBD, y conservarlos en el
+equipo del usuario abriría una discusión de protección de datos que este sistema no necesita
+tener.
+
+La consecuencia práctica: **si una respuesta orienta una decisión, regístrela donde corresponda**
+—acta, informe, correo—. Esta ventana no es el lugar donde queda la constancia.
+
+### Lo que el asesor no hace
+
+- No decide ni recomienda medidas pedagógicas. No es su alcance y lo dirá si se lo pide.
+- No promete la obtención del beneficio. El tramo se asigna por posición relativa dentro del grupo
+  homogéneo, de modo que ninguna mejora asegura el cambio de tramo.
+- No modifica ponderaciones ni fórmulas, aunque se le pida. Son dato normativo, no ajustes.
+- No consulta establecimientos fuera de su jurisdicción, aunque usted escriba el identificador.
+
+### Si la ventana avisa que no puede conectar
+
+El asesor es **un proceso aparte** del resto del sistema. Si no está disponible, esta ventana lo
+dice y las otras tres siguen funcionando con normalidad. No es una caída del sistema: es la única
+pieza retirable del conjunto, y está construida así a propósito.
+
+## 8. Cómo interpretar bien lo que muestra el sistema
 
 Cinco reglas de lectura. Son la parte de este manual que conviene no saltarse.
 
@@ -149,7 +220,7 @@ Cinco reglas de lectura. Son la parte de este manual que conviene no saltarse.
    manteniendo el resto fijo. En la realidad, mover una cosa mueve otras.
 5. **Si el sistema dice que no hay datos, no los hay.** No se rellena para completar la pantalla.
 
-## 8. Preguntas frecuentes
+## 9. Preguntas frecuentes
 
 **¿Por qué el simulador tarda tanto?**
 Cada punto de la curva es una estimación completa: el sistema calcula los seis factores en cada
@@ -172,3 +243,28 @@ decisiones administrativas del organismo.
 **¿Qué hago si un número me parece equivocado?**
 Consulte la ventana de explicabilidad: muestra exactamente qué variables sostienen la estimación.
 Si la variable de entrada es incorrecta, el problema está en la fuente pública, no en el modelo.
+
+**¿Puedo recuperar una conversación del asesor de ayer?**
+No. La conversación no se guarda en ninguna parte. Si una respuesta orientó una decisión, la
+constancia debe quedar en el acta o el informe correspondiente, no en la ventana.
+
+**¿Por qué el asesor a veces no me da un número?**
+Porque no pudo consultarlo. El asesor solo escribe cifras que provienen de una consulta al
+sistema; si la herramienta falló o la pregunta no admite respuesta numérica, lo declara en lugar
+de estimar por su cuenta.
+
+**El asesor no responde y las otras ventanas sí. ¿Está caído el sistema?**
+No. El asesor corre en un proceso separado y es la única pieza retirable del conjunto. Avise a
+quien administra el sistema; entretanto el tablero, el simulador y la explicabilidad funcionan.
+
+## 10. Historial de modificaciones
+
+Nada se elimina de este documento. Lo que deja de ser cierto se marca como superado y conserva su
+texto.
+
+| Fecha | Sección | Cambio | Motivo |
+|-------|---------|--------|--------|
+| 2026-08-10 | 7 | Sección nueva: Ventana 4 · Asesor de gestión | El manual documentaba tres ventanas y el sistema tiene cuatro desde la incorporación del cuanto 5 |
+| 2026-08-10 | 7 | Se documenta qué conserva y qué limpia la conversación, y que no se almacena | La ventana declaraba en pantalla que el historial se pierde al cambiar de establecimiento, pero el código lo perdía también al cambiar de pestaña. Se corrigió el comportamiento y se documentó la regla completa |
+| 2026-08-10 | 9 | Cuatro preguntas frecuentes nuevas sobre el asesor | Cubren las dudas que la ventana genera: historial, ausencia de cifras y proceso separado |
+| 2026-08-10 | 10 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |

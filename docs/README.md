@@ -75,7 +75,7 @@ al índice del Capítulo IV de la tesis.
 | Documento | ID | Contenido |
 |-----------|-----|-----------|
 | `manuales/MANUAL_INSTALACION.md` | MI-SNED-01 | Instalación completa desde cero, con verificación por paso |
-| `manuales/MANUAL_USUARIO.md` | MU-SNED-01 | Uso de las tres ventanas y **cómo interpretar lo que muestran** |
+| `manuales/MANUAL_USUARIO.md` | MU-SNED-01 | Uso de las cuatro ventanas y **cómo interpretar lo que muestran** |
 | `manuales/MANUAL_MONITORIZACION.md` | MM-SNED-01 | Tres capas: disponibilidad, integridad del dato y validez del modelo |
 | `manuales/PROCEDIMIENTOS_OPERATIVOS.md` | PR-SNED-01 | Nueve procedimientos, de PR-01 a PR-09 |
 | `FUENTES.md` | — | Origen y redescarga de los datos públicos |

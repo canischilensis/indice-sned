@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import { consultarAsesor } from '../api'
 import type { LlamadaDeHerramienta, RespuestaAsesor, Turno } from '../tipos'
 
@@ -128,12 +129,29 @@ function Respuesta({ turno }: { turno: Turno }) {
   )
 }
 
-export default function Asesor({ rbd }: { rbd: string }) {
-  const [turnos, setTurnos] = useState<Turno[]>([])
+/* La conversacion NO vive aqui: vive en App y llega por propiedad.
+ *
+ * Cuando el estado era local, cambiar de pestana desmontaba este componente y
+ * borraba el dialogo. La pantalla declara que el historial se pierde al cambiar
+ * de establecimiento o cerrar sesion; el codigo era mas estricto que lo
+ * declarado y lo perdia tambien al mirar el tablero un segundo.
+ *
+ * La conversacion pertenece a la sesion y al establecimiento, no a la pestana.
+ * Subirla a App hace que el texto de la pantalla sea verdad, y de paso una
+ * respuesta que llegue mientras el usuario esta en otra ventana no se pierde:
+ * el actualizador pertenece a App y sigue vivo aunque esta vista no lo este. */
+export default function Asesor({
+  rbd,
+  turnos,
+  fijarTurnos,
+}: {
+  rbd: string
+  turnos: Turno[]
+  fijarTurnos: Dispatch<SetStateAction<Turno[]>>
+}) {
   const [texto, setTexto] = useState('')
   const [ocupado, setOcupado] = useState(false)
   const fondo = useRef<HTMLDivElement | null>(null)
-  const siguiente = useRef(1)
 
   useEffect(() => {
     fondo.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -143,17 +161,22 @@ export default function Asesor({ rbd }: { rbd: string }) {
     const limpia = pregunta.trim()
     if (!limpia || ocupado) return
 
-    const id = siguiente.current++
-    setTurnos((previos) => [...previos, { id, pregunta: limpia, rbd, respuesta: null, error: null }])
+    // El identificador se deriva de la conversacion y no de un contador local.
+    // Un contador en `useRef` volvia a 1 cada vez que la vista se remontaba, de
+    // modo que los turnos viejos y los nuevos colisionaban en la clave de React.
+    // `ocupado` impide dos preguntas a la vez, que es lo que hace segura esta
+    // lectura del maximo.
+    const id = turnos.reduce((mayor, t) => Math.max(mayor, t.id), 0) + 1
+    fijarTurnos((previos) => [...previos, { id, pregunta: limpia, rbd, respuesta: null, error: null }])
     setTexto('')
     setOcupado(true)
 
     try {
       const r = await consultarAsesor(rbd, limpia)
-      setTurnos((previos) => previos.map((t) => (t.id === id ? { ...t, respuesta: r } : t)))
+      fijarTurnos((previos) => previos.map((t) => (t.id === id ? { ...t, respuesta: r } : t)))
     } catch (e) {
       const mensaje = (e as Error).message
-      setTurnos((previos) => previos.map((t) => (t.id === id ? { ...t, error: mensaje } : t)))
+      fijarTurnos((previos) => previos.map((t) => (t.id === id ? { ...t, error: mensaje } : t)))
     } finally {
       setOcupado(false)
     }
