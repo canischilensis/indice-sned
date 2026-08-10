@@ -109,6 +109,39 @@ export interface Composicion {
 /** Observacion ancha de un establecimiento: nombres de variable como claves. */
 export type Observacion = Record<string, number | string | null>
 
+/* -------------------------------------------------------------------------
+ * Asesor de gestion (cuanto 5). Vive en otro proceso y en otro puerto: si el
+ * agente esta caido, las otras tres ventanas siguen funcionando.
+ * ---------------------------------------------------------------------- */
+
+/** Una invocacion de herramienta. Es la unidad de trazabilidad del agente. */
+export interface LlamadaDeHerramienta {
+  herramienta: string
+  exito: boolean
+  resumen: string
+  milisegundos: number
+}
+
+export interface RespuestaAsesor {
+  texto: string
+  rechazada: boolean
+  motivo_rechazo: string | null
+  guardarrailes_aplicados: string[]
+  llamadas: LlamadaDeHerramienta[]
+  tokens_entrada: number
+  tokens_salida: number
+  costo_usd: number
+}
+
+/** Un intercambio de la conversacion, tal como se dibuja en pantalla. */
+export interface Turno {
+  id: number
+  pregunta: string
+  rbd: string
+  respuesta: RespuestaAsesor | null
+  error: string | null
+}
+
 /** Fila consolidada del tablero del sostenedor. */
 export interface FilaTablero {
   rbd: string

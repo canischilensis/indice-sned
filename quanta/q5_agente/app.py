@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -64,14 +64,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-_agente: AsesorDeGestion | None = None
+def _token_del_usuario(autorizacion: str | None) -> str:
+    """Exige la credencial del usuario. No hay modo anonimo, a proposito.
+
+    El agente actua **en nombre de quien pregunta**: reenvia su token al servicio
+    del indice, de modo que CTRL-04 protege al directivo y no a una cuenta de
+    servicio compartida. Sin esta delegacion, cualquier usuario de la interfaz
+    alcanzaria todos los establecimientos de la jurisdiccion del agente.
+    """
+    if not autorizacion or not autorizacion.lower().startswith("bearer "):
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            "Falta la credencial del usuario. Inicie sesion en la interfaz.",
+        )
+    return autorizacion.split(" ", 1)[1].strip()
 
 
-def agente() -> AsesorDeGestion:
-    global _agente  # noqa: PLW0603 - una sola instancia por proceso, deliberado
-    if _agente is None:
-        _agente = crear_agente()
-    return _agente
+def agente_para(token: str) -> AsesorDeGestion:
+    """Un agente por peticion, atado al token de quien pregunta.
+
+    No se memoriza entre peticiones: guardar un agente compartido significaria
+    compartir tambien la identidad, que es exactamente lo que se quiere evitar.
+    """
+    return crear_agente(token=token)
 
 
 @app.get("/salud")
@@ -80,6 +95,7 @@ def salud() -> dict[str, Any]:
         "estado": "operativo",
         "proveedor": _cfg.agente_proveedor,
         "servicio_indice": _cfg.agente_base_url,
+        "identidad": "delegada: el agente reenvia el token del usuario (CTRL-04)",
         "guardarrailes": {
             "G-01": "sanitizacion de parametros",
             "G-02": "cifras fundadas en herramientas" if _cfg.agente_guardarrail_cifras else "off",
@@ -91,9 +107,10 @@ def salud() -> dict[str, Any]:
 @app.post("/asesor/consulta", response_model=RespuestaDeAsesoria)
 def consultar(
     solicitud: SolicitudDeAsesoria,
-    asesor: AsesorDeGestion = Depends(agente),  # noqa: B008 - inyeccion de FastAPI,
-    # mismo patron que los enrutadores del cuanto 3
+    authorization: str | None = Header(default=None),
 ) -> RespuestaDeAsesoria:
+    """Responde en nombre del usuario que envia su credencial en la cabecera."""
+    asesor = agente_para(_token_del_usuario(authorization))
     try:
         respuesta = asesor.asesorar(
             Consulta(

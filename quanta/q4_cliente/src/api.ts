@@ -5,12 +5,18 @@ import type {
   Observacion,
   Prediccion,
   Ranking,
+  RespuestaAsesor,
   RespuestaEstablecimientos,
   Sesion,
   Simulacion,
 } from './tipos'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api/v1'
+
+/** El asesor es otro proceso, en otro puerto. La direccion es deliberadamente
+ *  distinta de BASE: son dos unidades de despliegue, no dos rutas del mismo
+ *  servicio. */
+const BASE_ASESOR = import.meta.env.VITE_AGENTE_URL ?? 'http://127.0.0.1:8010'
 
 let sesion: Sesion | null = null
 
@@ -88,3 +94,46 @@ export const evaluarEscenario = (rbd: string, variables: Record<string, number>)
     method: 'POST',
     body: JSON.stringify({ variables }),
   })
+
+/* -------------------------------------------------------------------------
+ * Asesor de gestion (cuanto 5).
+ *
+ * No usa `pedir`: apunta a otro servicio, en otro puerto. Reenvia el token de
+ * la sesion en la cabecera porque el agente actua EN NOMBRE del usuario; asi
+ * CTRL-04 protege al directivo y no a una cuenta de servicio compartida.
+ * Un fallo aqui no debe parecer un fallo del sistema: el agente es retirable,
+ * y el mensaje de error lo dice con esas palabras.
+ * ---------------------------------------------------------------------- */
+
+export async function consultarAsesor(
+  rbd: string,
+  texto: string,
+  periodo?: string,
+): Promise<RespuestaAsesor> {
+  if (!sesion) throw new Error('Su sesion expiro. Vuelva a iniciar sesion.')
+
+  let respuesta: Response
+  try {
+    respuesta = await fetch(`${BASE_ASESOR}/asesor/consulta`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sesion.token}`,
+      },
+      body: JSON.stringify({ rbd, texto, periodo: periodo ?? null, usuario: sesion.rol }),
+    })
+  } catch {
+    throw new Error(
+      `No fue posible conectar con el asesor en ${BASE_ASESOR}. El servicio del agente ` +
+        'es una unidad de despliegue aparte: el tablero, el simulador y el reporte ' +
+        'de explicabilidad siguen operativos aunque este apagado.',
+    )
+  }
+
+  if (respuesta.status === 401) throw new Error('Su sesion expiro. Vuelva a iniciar sesion.')
+  if (!respuesta.ok) {
+    const cuerpo = await respuesta.json().catch(() => ({ detail: respuesta.statusText }))
+    throw new Error(cuerpo.detail ?? `Error ${respuesta.status}`)
+  }
+  return respuesta.json() as Promise<RespuestaAsesor>
+}

@@ -69,9 +69,12 @@ def main() -> int:
                 rel = archivo.relative_to(RAIZ)
 
                 if raiz_modulo in prohibidas:
-                    violaciones.append(f"{rel}: libreria '{modulo}' prohibida en el cuanto {cuanto}")
+                    violaciones.append(
+                        f"{rel}: libreria '{modulo}' prohibida en el cuanto {cuanto}"
+                    )
 
-                if raiz_modulo in CUANTOS and raiz_modulo != cuanto and raiz_modulo not in permitidas:
+                ajeno = raiz_modulo in CUANTOS and raiz_modulo != cuanto
+                if ajeno and raiz_modulo not in permitidas:
                     violaciones.append(
                         f"{rel}: el cuanto {cuanto} no puede depender de {raiz_modulo}"
                     )

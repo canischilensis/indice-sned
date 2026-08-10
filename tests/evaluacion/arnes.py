@@ -10,7 +10,8 @@ cosas, todas verificables y ninguna opinable:
   4. Resiliencia: ante 403, 404, 422 y 503 responde sin inventar cifras.
   5. Latencia propia del agente, excluida la del servicio.
 
-    python tests/evaluacion/arnes.py            # informe por consola
+    python tests/evaluacion/arnes.py              # informe por consola
+    python tests/evaluacion/arnes.py --respuestas # ademas, que contesto el agente
     python tests/evaluacion/arnes.py --json out.json
 """
 
@@ -21,7 +22,7 @@ import json
 import sys
 import time
 import unicodedata
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 # Fuera de pytest nadie pone `quanta/` en la ruta: pytest lo hace por el
@@ -65,6 +66,11 @@ class ResultadoCaso:
     rechazada: bool
     motivo: str | None
     fallos: list[str]
+    consulta: str = ""
+    respuesta: str = ""
+    llamada_exitosa: bool = False
+    detalle_llamada: str = ""
+    guardarrailes: list[str] = field(default_factory=list)
 
 
 def construir_agente(servicio: ServicioFalso) -> AgenteDeBucleSimple:
@@ -139,6 +145,11 @@ def evaluar_caso(
         rechazada=respuesta.rechazada,
         motivo=respuesta.motivo_rechazo,
         fallos=fallos,
+        consulta=caso.consulta,
+        respuesta=respuesta.texto,
+        llamada_exitosa=bool(respuesta.llamadas) and respuesta.llamadas[0].exito,
+        detalle_llamada=respuesta.llamadas[0].resumen if respuesta.llamadas else "",
+        guardarrailes=list(respuesta.guardarrailes_aplicados),
     )
 
 
@@ -177,13 +188,55 @@ def informe(resultados: list[ResultadoCaso]) -> str:
     return "\n".join(lineas)
 
 
+def transcripcion(resultados: list[ResultadoCaso]) -> str:
+    """Que se le pregunto, que herramienta uso y que contesto, caso por caso."""
+    lineas = ["", "TRANSCRIPCION DE LAS RESPUESTAS", "=" * 62]
+    for r in resultados:
+        if r.llamada_exitosa:
+            estado = "ok"
+        elif not r.herramienta_usada:
+            estado = "sin herramienta"
+        else:
+            estado = "fallo controlado"
+        lineas.append("")
+        lineas.append(f"{r.id} · {r.categoria} · {r.descripcion}")
+        lineas.append(f"  PREGUNTA    {r.consulta}")
+        usada = r.herramienta_usada or "ninguna, contesto la politica"
+        lineas.append(f"  HERRAMIENTA {usada} [{estado}]")
+        if r.detalle_llamada:
+            lineas.append(f"  RESULTADO   {r.detalle_llamada}")
+        lineas.append(f"  GUARDARRAIL {', '.join(r.guardarrailes) or '-'}")
+        for i, parrafo in enumerate(_envolver(r.respuesta, 88)):
+            lineas.append(f"  {'RESPUESTA   ' if i == 0 else '            '}{parrafo}")
+    return "\n".join(lineas)
+
+
+def _envolver(texto: str, ancho: int) -> list[str]:
+    palabras, linea, salida = texto.split(), "", []
+    for palabra in palabras:
+        if len(linea) + len(palabra) + 1 > ancho:
+            salida.append(linea)
+            linea = palabra
+        else:
+            linea = f"{linea} {palabra}".strip()
+    if linea:
+        salida.append(linea)
+    return salida or [""]
+
+
 def main(argv: list[str] | None = None) -> int:
     analizador = argparse.ArgumentParser(description="Arnes de evaluacion del agente")
     analizador.add_argument("--json", default=None, help="Ruta donde escribir el detalle en JSON")
+    analizador.add_argument(
+        "--respuestas", action="store_true",
+        help="Imprime lo que el agente contesto en cada caso, con la herramienta que uso",
+    )
     args = analizador.parse_args(argv)
 
     resultados = ejecutar()
     print(informe(resultados))
+    if args.respuestas:
+        print(transcripcion(resultados))
     if args.json:
         Path(args.json).write_text(
             json.dumps([asdict(r) for r in resultados], ensure_ascii=False, indent=2),

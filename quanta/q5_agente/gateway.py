@@ -42,28 +42,52 @@ class PuertaDeServicio(Protocol):
 
 
 class ServicioSnedGateway:
-    """Adaptador HTTP del servicio del Indice SNED."""
+    """Adaptador HTTP del servicio del Indice SNED.
+
+    Dos modos de identidad, y la diferencia es de seguridad, no de comodidad:
+
+    - **Credenciales propias** (`usuario` y `clave`): el agente se autentica como
+      una cuenta de servicio. Sirve para la consola y para los trabajos por
+      lotes, donde no hay un usuario detras.
+    - **Token delegado** (`token`): el agente actua *en nombre del usuario* que
+      inicio sesion en la interfaz, reenviando su credencial. Es el unico modo
+      admisible cuando el agente se expone a un navegador: sin el, CTRL-04
+      protegeria a la cuenta de servicio y no al directivo, y un usuario podria
+      alcanzar establecimientos fuera de su jurisdiccion.
+    """
 
     def __init__(
         self,
         base_url: str,
-        usuario: str,
-        clave: str,
+        usuario: str = "",
+        clave: str = "",
         *,
+        token: str | None = None,
         prefijo: str = "/api/v1",
         segundos_espera: float = 10.0,
         cliente: httpx.Client | None = None,
     ) -> None:
+        if not token and not (usuario and clave):
+            raise ValueError(
+                "El gateway necesita un token delegado o un par usuario/clave propio."
+            )
         self._base = base_url.rstrip("/")
         self._prefijo = prefijo
         self._usuario = usuario
         self._clave = clave
-        self._token: str | None = None
+        self._token: str | None = token
+        self._delegado = token is not None
         self._cliente = cliente or httpx.Client(timeout=segundos_espera)
 
     # --- sesion -----------------------------------------------------------
 
     def autenticar(self) -> str:
+        if self._delegado:
+            # Con identidad delegada no hay nada que negociar: el token es del
+            # usuario y el agente no puede renovarlo por su cuenta.
+            raise SesionExpirada(
+                "La sesion del usuario expiro. Vuelva a iniciar sesion en la interfaz."
+            )
         respuesta = self._intentar(
             lambda: self._cliente.post(
                 f"{self._base}{self._prefijo}/auth/token",
