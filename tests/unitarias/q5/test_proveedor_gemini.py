@@ -244,3 +244,77 @@ def test_el_rol_del_asistente_se_traduce_a_model(monkeypatch):
     )
     roles = [c.role for c in adaptador._cliente.vistas[0]["contents"]]  # noqa: SLF001
     assert roles == ["user", "model", "user"]
+
+
+# --- la familia de modelos rota --------------------------------------------
+
+
+def test_un_modelo_retirado_es_configuracion_y_no_una_caida(monkeypatch):
+    """Nace de un fallo real: gemini-2.5-flash quedo cerrado a claves nuevas.
+
+    Se traduce a ProveedorNoConfigurado y no a ErrorDelProveedor porque el
+    cortacircuitos (G-04) protege de un proveedor caido, y reintentar contra un
+    modelo que no existe nunca va a funcionar. Tratarlo como caida haria que
+    tres consultas mal configuradas abrieran el circuito y taparan la causa.
+    """
+    from q5_agente.errores import ProveedorNoConfigurado
+
+    class ClienteQueNiega:
+        def __init__(self):
+            self.models = SimpleNamespace(generate_content=self._negar)
+
+        def _negar(self, **_):
+            raise RuntimeError(
+                "404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model "
+                "models/gemini-2.5-flash is no longer available to new users.'}}"
+            )
+
+    pytest.importorskip("google.genai")
+    monkeypatch.setenv("GEMINI_API_KEY", CLAVE_FALSA)
+    adaptador = AdaptadorGemini("gemini-2.5-flash")
+    adaptador._cliente = ClienteQueNiega()  # noqa: SLF001
+
+    from q5_agente.proveedores.contrato import Mensaje
+
+    with pytest.raises(ProveedorNoConfigurado) as excepcion:
+        adaptador.completar([Mensaje("usuario", "hola")], _herramientas())
+    assert "AGENTE_MODELO" in str(excepcion.value)
+    assert "gemini-2.5-flash" in str(excepcion.value)
+
+
+def test_si_el_modelo_rechaza_temperature_se_reintenta_sin_ella(monkeypatch):
+    """La linea 3.x deprecia los parametros de muestreo. Se cede el parametro,
+    no la consulta, y el adaptador lo recuerda para no gastar dos llamadas cada
+    vez."""
+    from q5_agente.proveedores.contrato import Mensaje
+
+    class ClienteQuisquilloso:
+        def __init__(self):
+            self.configuraciones = []
+            self.models = SimpleNamespace(generate_content=self._generar)
+
+        def _generar(self, *, model, contents, config):
+            self.configuraciones.append(config)
+            if getattr(config, "temperature", None) is not None:
+                raise RuntimeError("400 INVALID_ARGUMENT: temperature is not supported")
+            return SimpleNamespace(
+                candidates=[
+                    SimpleNamespace(
+                        content=SimpleNamespace(
+                            parts=[SimpleNamespace(function_call=None, text="listo")]
+                        )
+                    )
+                ],
+                usage_metadata=SimpleNamespace(),
+            )
+
+    pytest.importorskip("google.genai")
+    monkeypatch.setenv("GEMINI_API_KEY", CLAVE_FALSA)
+    adaptador = AdaptadorGemini()
+    adaptador._cliente = ClienteQuisquilloso()  # noqa: SLF001
+
+    assert adaptador.completar([Mensaje("usuario", "a")], _herramientas()).texto == "listo"
+    assert len(adaptador._cliente.configuraciones) == 2, "una con muestreo y el reintento"  # noqa: SLF001
+
+    adaptador.completar([Mensaje("usuario", "b")], _herramientas())
+    assert len(adaptador._cliente.configuraciones) == 3, "ya no reintenta: lo recordo"  # noqa: SLF001

@@ -150,11 +150,11 @@ AGENTE_PROVEEDOR=gemini
 GEMINI_API_KEY=...        # se emite en Google AI Studio
 ```
 
-### 8.1 Tres asimetrias que el adaptador de Gemini absorbe
+### 8.1 Cuatro asimetrias que el adaptador de Gemini absorbe
 
 El puerto solo sirve si el adaptador se hace cargo de lo que su proveedor tiene
-de particular, en vez de filtrarlo hacia el bucle. Gemini tiene tres cosas
-particulares, y las tres quedan dentro de `AdaptadorGemini`:
+de particular, en vez de filtrarlo hacia el bucle. Gemini tiene cuatro cosas
+particulares, y las cuatro quedan dentro de `AdaptadorGemini`:
 
 1. **El mensaje de sistema no es un turno.** Viaja en `system_instruction`.
    Mandarlo como turno de la conversacion degrada el seguimiento de la
@@ -171,6 +171,21 @@ particulares, y las tres quedan dentro de `AdaptadorGemini`:
    Omitirlos haria que la instrumentacion de costo declare menos de lo que el
    proyecto gasta, que es exactamente la clase de cifra que este trabajo no
    puede permitirse.
+
+4. **La familia de modelos rota, y con ella los parametros admitidos.** Un
+   modelo retirado responde 404: se traduce a `ProveedorNoConfigurado`, no a
+   `ErrorDelProveedor`, porque el cortacircuitos G-04 existe para proteger de un
+   proveedor caido y reintentar contra un modelo que no existe nunca va a
+   funcionar. Tratarlo como caida haria que tres consultas mal configuradas
+   abrieran el circuito y taparan la causa real. Los parametros de muestreo
+   —`temperature`— estan en deprecacion en la linea 3.x: si el modelo los
+   rechaza, el adaptador reintenta una vez sin ellos y lo recuerda.
+
+**Elegir el modelo.** `AdaptadorGemini.modelos_disponibles()` pregunta a la
+clave cuales puede usar. La familia rota mas rapido que la documentacion: un
+modelo con precio publicado puede estar cerrado a claves nuevas, que es
+exactamente lo que ocurrio con el defecto inicial de este adaptador,
+`gemini-2.5-flash`. El defecto actual es `gemini-3.6-flash`.
 
 **El precio depende del modelo, no del proveedor.** Los otros dos adaptadores
 fijan la tarifa como constante de clase; el de Gemini la resuelve por modelo

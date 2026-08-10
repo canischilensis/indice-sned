@@ -105,6 +105,28 @@ def _a_declaracion_gemini(herramienta: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _es_modelo_inexistente(error: Exception) -> bool:
+    """404 sobre el nombre del modelo: es configuracion, no una caida.
+
+    La distincion importa porque el cortacircuitos (G-04) existe para proteger
+    al sistema de un proveedor que se cayo, y reintentar contra un modelo que no
+    existe nunca va a funcionar. Tratarlo como fallo del proveedor haria que
+    tres consultas mal configuradas abrieran el circuito y ocultaran la causa
+    real tras un mensaje de indisponibilidad.
+    """
+    texto = str(error).lower()
+    return "404" in texto and ("not_found" in texto or "not found" in texto)
+
+
+def _es_rechazo_de_muestreo(error: Exception) -> bool:
+    """El modelo rechaza temperature/top_p/top_k, en deprecacion en la linea 3.x."""
+    texto = str(error).lower()
+    parametro = any(p in texto for p in ("temperature", "top_p", "top_k"))
+    return parametro and any(
+        s in texto for s in ("invalid", "unsupported", "not supported", "400", "deprecat")
+    )
+
+
 class AdaptadorAnthropic(ProveedorDeModelo):
     """Adaptador para la API de mensajes de Anthropic."""
 
@@ -232,8 +254,8 @@ class AdaptadorOpenAI(ProveedorDeModelo):
 class AdaptadorGemini(ProveedorDeModelo):
     """Adaptador para la API de Gemini (SDK `google-genai`).
 
-    Tres diferencias con los otros dos adaptadores, todas resueltas aqui dentro
-    para que el bucle no se entere:
+    Cuatro diferencias con los otros dos adaptadores, todas resueltas aqui
+    dentro para que el bucle no se entere:
 
     1. El mensaje de sistema no viaja en la conversacion sino en
        `system_instruction`.
@@ -241,6 +263,10 @@ class AdaptadorGemini(ProveedorDeModelo):
     3. Los **tokens de razonamiento** se facturan como salida y llegan en un
        contador aparte. Sumarlos no es opcional: omitirlos haria que la
        instrumentacion de costo declare menos de lo que el proyecto gasta.
+    4. La familia de modelos **rota**, y con ella los parametros admitidos. Un
+       modelo retirado responde 404 y los parametros de muestreo estan en
+       deprecacion en la linea 3.x. Las dos condiciones se distinguen de una
+       caida real del proveedor, porque reintentar no las arregla.
     """
 
     nombre = "gemini"
@@ -249,6 +275,10 @@ class AdaptadorGemini(ProveedorDeModelo):
     #: agosto de 2026). El precio depende del modelo, de modo que fijarlo como
     #: constante de clase haria mentir a la instrumentacion en cuanto alguien
     #: cambiara AGENTE_MODELO.
+    #:
+    #: Los 2.5 se conservan porque siguen facturandose a quien ya los usaba,
+    #: pero Google los cerro a claves nuevas: si su clave es reciente,
+    #: respondera 404 aunque el precio figure aqui.
     PRECIOS: dict[str, tuple[float, float]] = {
         "gemini-2.5-flash-lite": (0.10, 0.40),
         "gemini-2.5-flash": (0.30, 2.50),
@@ -259,7 +289,11 @@ class AdaptadorGemini(ProveedorDeModelo):
         "gemini-3.6-flash": (1.50, 7.50),
         "gemini-3.1-pro-preview": (2.00, 12.00),
     }
-    MODELO_PREDETERMINADO = "gemini-2.5-flash"
+
+    #: Recomendado por Google para claves nuevas. El defecto anterior
+    #: —gemini-2.5-flash— fue un error: sigue documentado y con precio
+    #: publicado, pero cerrado a usuarios nuevos.
+    MODELO_PREDETERMINADO = "gemini-3.6-flash"
 
     def __init__(self, modelo: str = MODELO_PREDETERMINADO, clave: str | None = None) -> None:
         try:
@@ -288,6 +322,25 @@ class AdaptadorGemini(ProveedorDeModelo):
         self.precio_declarado = precio is not None
         self.usd_por_millon_entrada, self.usd_por_millon_salida = precio or (0.0, 0.0)
 
+        #: Se apaga solo, y para siempre, si el modelo rechaza el muestreo.
+        self._con_muestreo = True
+
+    def modelos_disponibles(self) -> list[str]:
+        """Modelos que esta clave puede usar. Sirve para elegir AGENTE_MODELO.
+
+        La familia rota mas rapido que la documentacion: un modelo con precio
+        publicado puede estar cerrado a claves nuevas. Preguntarle a la clave es
+        la unica respuesta que no envejece.
+        """
+        try:
+            return sorted(
+                m.name.removeprefix("models/")
+                for m in self._cliente.models.list()
+                if getattr(m, "name", None)
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise ErrorDelProveedor(f"No se pudo listar los modelos: {exc}") from exc
+
     def completar(
         self, mensajes: list[Mensaje], herramientas: list[dict[str, Any]]
     ) -> RespuestaDelModelo:
@@ -301,20 +354,38 @@ class AdaptadorGemini(ProveedorDeModelo):
             for m in mensajes
             if m.rol != "sistema"
         ]
-        configuracion = tipos.GenerateContentConfig(
-            system_instruction=instruccion or None,
-            temperature=0,
-            tools=[
-                tipos.Tool(
-                    function_declarations=[_a_declaracion_gemini(h) for h in herramientas]
-                )
-            ],
+        herramienta_unica = tipos.Tool(
+            function_declarations=[_a_declaracion_gemini(h) for h in herramientas]
         )
+
+        def config(con_muestreo: bool) -> Any:
+            comunes: dict[str, Any] = {
+                "system_instruction": instruccion or None,
+                "tools": [herramienta_unica],
+            }
+            # temperature=0 es lo que hace repetible una evaluacion. Se pide
+            # mientras el modelo lo acepte; la linea 3.x lo esta deprecando.
+            if con_muestreo:
+                comunes["temperature"] = 0
+            return tipos.GenerateContentConfig(**comunes)
+
         try:
             respuesta = self._cliente.models.generate_content(
-                model=self._modelo, contents=contenidos, config=configuracion
+                model=self._modelo, contents=contenidos, config=config(self._con_muestreo)
             )
         except Exception as exc:  # noqa: BLE001 - la SDK expone jerarquias propias
+            if self._con_muestreo and _es_rechazo_de_muestreo(exc):
+                # No es una caida: es un parametro que este modelo ya no admite.
+                # Se reintenta una vez sin el y se recuerda, para no volver a
+                # gastar una llamada en lo mismo.
+                self._con_muestreo = False
+                return self.completar(mensajes, herramientas)
+            if _es_modelo_inexistente(exc):
+                raise ProveedorNoConfigurado(
+                    f"El modelo '{self._modelo}' no esta disponible para esta clave. "
+                    "Liste los modelos de su clave y fije AGENTE_MODELO con uno de "
+                    f"ellos. Detalle del proveedor: {exc}"
+                ) from exc
             raise ErrorDelProveedor(f"Fallo la llamada al proveedor: {exc}") from exc
 
         entrada, salida = self._contar(respuesta)
