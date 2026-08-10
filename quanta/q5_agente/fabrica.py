@@ -62,15 +62,45 @@ PROVEEDORES: dict[str, Callable[[ConfiguracionDelAgente], ProveedorDeModelo]] = 
 }
 
 
+#: Prefijos de nombre de modelo, por proveedor. Solo sirven para reconocer una
+#: confusion frecuente y decirlo: 'gemini-3.6-flash' es un modelo, no un
+#: proveedor. No se usan para adivinar ni para corregir nada por cuenta propia.
+_PREFIJOS_DE_MODELO = {
+    "gemini": ("gemini-", "gemma-"),
+    "anthropic": ("claude-",),
+    "openai": ("gpt-", "o1-", "o3-", "o4-"),
+}
+
+
+def _proveedor_de(nombre_de_modelo: str) -> str | None:
+    for proveedor, prefijos in _PREFIJOS_DE_MODELO.items():
+        if nombre_de_modelo.startswith(prefijos):
+            return proveedor
+    return None
+
+
 def crear_proveedor(cfg: ConfiguracionDelAgente | None = None) -> ProveedorDeModelo:
     cfg = cfg or config_agente()
     constructor = PROVEEDORES.get(cfg.agente_proveedor)
-    if constructor is None:
+    if constructor is not None:
+        return constructor(cfg)
+
+    disponibles = ", ".join(sorted(PROVEEDORES))
+    # Confundir las dos variables cuesta caro: el mensaje "proveedor
+    # desconocido" es cierto pero inutil cuando lo que hay escrito es,
+    # claramente, el nombre de un modelo.
+    probable = _proveedor_de(cfg.agente_proveedor)
+    if probable:
         raise ProveedorNoConfigurado(
-            f"Proveedor '{cfg.agente_proveedor}' desconocido. "
-            f"Disponibles: {', '.join(sorted(PROVEEDORES))}."
+            f"'{cfg.agente_proveedor}' es un MODELO, no un proveedor. Son dos "
+            f"variables distintas:\n"
+            f"    AGENTE_PROVEEDOR={probable}\n"
+            f"    AGENTE_MODELO={cfg.agente_proveedor}\n"
+            f"Proveedores disponibles: {disponibles}."
         )
-    return constructor(cfg)
+    raise ProveedorNoConfigurado(
+        f"Proveedor '{cfg.agente_proveedor}' desconocido. Disponibles: {disponibles}."
+    )
 
 
 def crear_puerta(
