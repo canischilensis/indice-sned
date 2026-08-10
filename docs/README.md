@@ -38,7 +38,7 @@ al índice del Capítulo IV de la tesis.
 | `arquitectura/PLATAFORMA_DE_OPERACION.md` | PO-SNED-01 | Despliegue con servidores separados de datos y aplicación, dimensionamiento y contingencia |
 | `ARCHITECTURE.md` | — | Documento vivo: motores de la arquitectura, decisiones y deuda conocida |
 | `PATRONES_DE_DISENO.md` | — | 12 patrones aplicados y 12 descartados, con fuentes citadas |
-| `adr/` | ADR-001 a 005 | Decisiones de arquitectura registradas |
+| `adr/` | ADR-001 a 007 | Decisiones de arquitectura registradas |
 
 ## 3. Diseño
 

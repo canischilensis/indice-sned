@@ -217,6 +217,29 @@ costo en dolares y latencia **desde la primera llamada**, no despues. El costo
 por consulta viaja en la respuesta de la ruta del agente y en la salida de la
 consola con `--trazas`.
 
+**Los tokens de razonamiento se suman al costo.** No es un detalle contable. En
+la consulta medida el 2026-08-10, la mayoria de los 1.960 tokens de salida fueron
+de razonamiento: omitirlos habria mostrado la mitad del precio. Casi ninguna
+integracion los cuenta, y esa es la razon por la que muchas subestiman el costo
+de un agente.
+
+### 9.1 Por que la tabla de precios conserva modelos cerrados
+
+La familia `gemini-2.5` figura en la tabla aunque **una clave nueva reciba 404**
+al invocarla: Google la cerro a usuarios nuevos y la sigue facturando a quienes
+ya la usaban.
+
+Se evaluo retirarla y se decidio conservarla. Un modelo ausente de la tabla no
+produce un error: produce un **costo reportado como cero**, marcado como no
+declarado. Para quien todavia factura con esos modelos, retirarlos convertiria
+una tarifa correcta en un silencio. El precio de conservarlos es una linea de
+documentacion; el de retirarlos, una medicion que miente por defecto.
+
+La condicion que gobierna esta decision es la disponibilidad, no el precio, y por
+eso el adaptador expone `modelos_disponibles()`: **preguntarle a la clave es la
+unica respuesta que no envejece**. La familia rota mas rapido que su propia
+documentacion.
+
 ## 10. Evaluacion: los veinte casos criticos
 
 `tests/evaluacion/` contiene la matriz completa. Se ejecuta como parte de la
@@ -392,7 +415,7 @@ de fallo la detecte la suite y no el usuario.
 
 ## 14. Defectos encontrados por el uso
 
-Los seis que siguen aparecieron el 2026-08-10, al levantar los tres procesos y
+Los ocho que siguen aparecieron el 2026-08-10, al levantar los tres procesos y
 lanzar las primeras consultas contra el servicio real. **Ninguno lo encontro la
 suite**, que estaba entera en verde. Se registran aqui con su causa, no solo con
 su correccion: la causa es lo que se puede evitar la proxima vez.
@@ -522,17 +545,77 @@ despues de corregir: prosa sin marcas, diecisiete cifras con coma y G-02 en verd
 que era el riesgo real —cambiar el separador podia romper la extraccion de
 magnitudes del guardarrail—.
 
-### Lo que los seis tienen en comun
+### D-07 · Una consulta sin factor reconocible se respondia sobre otro factor
 
-Cinco de los seis son el mismo error de fondo: **una copia de la verdad que nadie
+Al retirar la tercera copia de codigos (D-01) quedo a la vista el
+comportamiento del caso sin coincidencia: si ningun termino del texto permitia
+inferir de que factor se preguntaba, el ruteo devolvia **el primer codigo
+admitido** y la consulta terminaba respondida sobre Efectividad, sin decirlo.
+
+Es peor que el error de escritura que lo precedio. Aquel producia un fallo
+visible —el servicio rechazaba el codigo y la respuesta lo declaraba—; este
+produce una respuesta correcta sobre la pregunta equivocada. **Un error que no
+se ve es peor que uno que se ve.**
+
+**Correccion.** Sin factor inferible, el ruteo pasa a
+`diagnostico_de_establecimiento`, que nombra los seis factores con su aporte y su
+restriccion. Responde la pregunta sin elegir por el usuario.
+
+Se prefirio a las dos alternativas: preguntar de vuelta gasta un turno del
+presupuesto y obliga a repetir la consulta; omitir el parametro y dejar que el
+servicio use su predeterminado reproduce el mismo silencio con otra forma.
+
+**Verificacion.** `test_codigos_de_factor.py` comprueba que tres consultas sin
+factor identificable van al diagnostico, y que **ningun** ruteo pide la
+explicacion sin factor. El esquema declara `factor` opcional; el ruteo no debe
+apoyarse en esa opcionalidad.
+
+### D-08 · La configuracion de red vivia en el codigo
+
+Dos hallazgos del mismo tipo, encontrados al revisar que haria falta para
+contenerizar.
+
+**El cliente nunca leyo su configuracion.** `vite.config.ts` no declaraba
+`envDir`, de modo que Vite buscaba un `.env` dentro de la carpeta del cliente que
+**nunca existio**. Las direcciones del servicio y del asesor venian de las
+constantes de reserva escritas en `src/api.ts`. Coincidian con lo intencionado
+por casualidad, y el `.env.example` de la raiz documentaba desde hacia meses una
+configuracion que el sistema no leia.
+
+**Los origenes CORS del asesor estaban escritos a mano** en `app.py`, fijos en
+`127.0.0.1:5173`.
+
+Ninguno de los dos molesta mientras todo viva en `localhost`. Los dos hacen
+imposible el primer despliegue en contenedores: el navegador pediria desde el
+puerto publicado del contenedor del cliente, ese origen no estaria en la lista, y
+la direccion del servicio no seria la que la constante afirma. **Una direccion de
+red no es una constante del programa: es configuracion de despliegue.**
+
+**Correccion.** `envDir: '../..'` —un solo archivo de configuracion para todo el
+sistema— y `AGENTE_CORS_ORIGENES` como campo de la configuracion del agente.
+
+**El riesgo que introduce el primero, y como se acota.** Apuntar el empaquetador
+a la raiz lo pone a leer un archivo que contiene el secreto de firma, la clave del
+proveedor y la credencial de la base. Vite protege eso con una regla: solo las
+variables con prefijo `VITE_` entran en el paquete. La regla funciona; lo que no
+funciona solo es la convencion humana de no prefijar un secreto.
+`tests/arquitectura/test_variables_del_cliente.py` verifica que ninguna variable
+expuesta lleve nombre de credencial, y que ampliar la lista sea una decision
+explicita y no un descuido.
+
+### Lo que los ocho tienen en comun
+
+Cinco de los ocho son el mismo error de fondo: **una copia de la verdad que nadie
 verificaba, o un banco de pruebas mas pobre que el sistema**. El codigo de factor
 duplicado tres veces, el doble mas pobre que el servicio, el criterio de prueba
 desalineado de su intencion declarada, el entorno del operador filtrandose en el
 veredicto, y toda la evaluacion hecha contra un proveedor que no se comporta como
 el proveedor real.
 
-El sexto agrega una leccion propia: **lo que se le pide a un modelo hay que
-verificarlo aparte**. Vale para las cifras y vale para el formato.
+Los otros dos agregan una leccion cada uno. **Lo que se le pide a un modelo hay
+que verificarlo aparte**: vale para las cifras y vale para el formato. Y **un
+error silencioso es peor que uno visible**: adivinar un factor y responder bien
+sobre la pregunta equivocada no deja rastro que nadie pueda seguir.
 
 La leccion quedo escrita como regla exigible en `PLAN_CALIDAD.md`, seccion 9.1.
 
@@ -553,3 +636,6 @@ que borrarla.
 | 2026-08-10 | 11 | Se declara que la latencia percibida por el usuario no esta medida, con la medicion puntual 31 ms / 5.906 ms | CP-17 se llamaba «latencia propia del agente» y el arnes decia «excluida la del servicio». Ninguna de las dos etiquetas era exacta: el cronometro envuelve la llamada completa |
 | 2026-08-10 | 11 | Se corrige la atribucion de los 5.906 ms: fue arranque en frio, no calculo. La afirmacion anterior se conserva marcada | Una consulta posterior contra el mismo servicio ya tibio resolvio la misma herramienta en 0 ms. Se habia elevado una observacion aislada a propiedad del sistema |
 | 2026-08-10 | 14 | Se agrega D-06: Markdown y punto decimal en el proveedor externo | La primera consulta real contra Gemini devolvio marcado que la ventana pinta literal. La verificacion previa, hecha contra el determinista, no podia verlo |
+| 2026-08-10 | 14 | Se agrega D-07: una consulta sin factor reconocible se respondia sobre Efectividad sin avisar | Quedo a la vista al retirar la tercera copia de codigos. Sin factor inferible se rutea ahora al diagnostico general |
+| 2026-08-10 | 9.1 | Seccion nueva: por que la tabla de precios conserva modelos cerrados a claves nuevas | Estaba resuelto en un comentario del codigo pero no era una decision registrada. Retirarlos convertiria una tarifa correcta en un costo cero |
+| 2026-08-10 | 14 | Se agrega D-08: la configuracion de red vivia en el codigo, en el cliente y en los origenes CORS del asesor | No molesta en localhost y hace imposible el primer despliegue en contenedores |

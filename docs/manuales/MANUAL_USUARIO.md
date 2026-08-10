@@ -30,6 +30,14 @@ qué establecimientos puede ver: no hay que escribir identificadores.
 Si su perfil no tiene establecimientos asignados, la pantalla lo indica. Contacte a quien
 administra el sistema.
 
+**Si su rol es de auditoría**, la pantalla le dirá algo distinto y conviene no confundirlo con una
+negativa de autorización. El auditor alcanza **cualquier** establecimiento, sin la restricción de
+jurisdicción que se aplica a sostenedores y directivos. Lo que esta interfaz no ofrece es la
+búsqueda que ese alcance requeriría: el selector de la barra enumera identificadores autorizados, y
+el conjunto de un auditor no se enumera. La consulta se hace contra la API del servicio, cuyas
+rutas y esquemas están publicados en `/docs`, con el mismo token de la sesión. La decisión está
+registrada en `docs/adr/ADR-007`.
+
 ## 3. La barra superior
 
 Contiene tres elementos:
@@ -268,3 +276,4 @@ texto.
 | 2026-08-10 | 7 | Se documenta qué conserva y qué limpia la conversación, y que no se almacena | La ventana declaraba en pantalla que el historial se pierde al cambiar de establecimiento, pero el código lo perdía también al cambiar de pestaña. Se corrigió el comportamiento y se documentó la regla completa |
 | 2026-08-10 | 9 | Cuatro preguntas frecuentes nuevas sobre el asesor | Cubren las dudas que la ventana genera: historial, ausencia de cifras y proceso separado |
 | 2026-08-10 | 10 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |
+| 2026-08-10 | 2 | Se documenta qué ve un auditor al entrar y por qué no es una negativa de autorización | La pantalla le mostraba el mensaje de «sin establecimientos asignados», que decía lo contrario de la verdad: su alcance es mayor, no menor. Ver ADR-007 |

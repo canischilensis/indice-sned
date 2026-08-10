@@ -60,6 +60,12 @@ _TERMINOS_DE_FACTOR = (
     "superac", "igualdad", "iniciativ", "integrac", "mejoram", "efectiv",
 )
 
+#: Nombres de herramienta que el ruteo necesita nombrar. El catalogo los declara
+#: y aqui se escriben una vez: eran literales repetidos, que es exactamente la
+#: forma en que los codigos de factor se desincronizaron.
+_DIAGNOSTICO = "diagnostico_de_establecimiento"
+_EXPLICACION = "explicacion_por_factor"
+
 _LEYENDA = (
     "El beneficio se asigna por posicion relativa dentro del Grupo Homogeneo, de modo que "
     "ninguna mejora asegura el cambio de tramo. La inteligencia artificial asiste; la decision "
@@ -166,9 +172,9 @@ class AdaptadorDeterminista(ProveedorDeModelo):
             puntaje = sum(1 for palabra in disparadores if _plano(palabra) in texto)
             if puntaje > puntaje_mejor:
                 mejor, puntaje_mejor = herramienta["nombre"], puntaje
-        nombre = mejor or "diagnostico_de_establecimiento"
+        nombre = mejor or _DIAGNOSTICO
         if puntaje_mejor <= 0:
-            nombre = "diagnostico_de_establecimiento"
+            nombre = _DIAGNOSTICO
 
         parametros: dict[str, Any] = {}
         rbd = _RBD_EN_TEXTO.search(consulta)
@@ -177,10 +183,22 @@ class AdaptadorDeterminista(ProveedorDeModelo):
         periodo = _PERIODO_EN_TEXTO.search(consulta)
         if periodo:
             parametros["periodo"] = periodo.group(1)
-        if nombre == "explicacion_por_factor":
+        if nombre == _EXPLICACION:
             factor = self._factor(texto, _codigos_admitidos(herramientas, nombre, "factor"))
             if factor is not None:
                 parametros["factor"] = factor
+            elif any(h.get("nombre") == _DIAGNOSTICO for h in herramientas):
+                # No se pudo inferir sobre que factor se pregunta. Antes se
+                # devolvia el primero admitido y la consulta terminaba respondida
+                # sobre Efectividad sin aviso: un error que no se ve es peor que
+                # uno que se ve.
+                #
+                # El diagnostico general nombra los seis factores con su aporte y
+                # su restriccion, de modo que responde la pregunta sin elegir por
+                # el usuario. Se prefiere a preguntar de vuelta porque no gasta un
+                # turno ni obliga a repetir la consulta, y a omitir el parametro
+                # porque omitirlo produce el mismo silencio de antes.
+                nombre = _DIAGNOSTICO
         if nombre == "simulacion_de_escenario":
             parametros["variables"] = self._variables(consulta)
         return PeticionDeHerramienta(nombre=nombre, parametros=parametros)
@@ -194,10 +212,10 @@ class AdaptadorDeterminista(ProveedorDeModelo):
         herramienta comparando la raiz del propio codigo: EFECTIVR sin la R
         final es la raiz de "efectividad", SUPERAR la de "superacion".
 
-        Sin coincidencia devuelve el primer codigo admitido, que es el
-        comportamiento historico. Que esa eleccion silenciosa sea aceptable esta
-        pendiente de decision: hoy una consulta sobre un factor no reconocido
-        termina respondida sobre otro sin aviso. Declarado, no corregido.
+        Devuelve None cuando ningun termino coincide, y quien llama decide. Antes
+        devolvia el primer codigo admitido: una consulta sobre algo que no es un
+        factor terminaba respondida sobre Efectividad sin que nadie lo notara.
+        Adivinar en silencio es peor que no saber, porque no deja rastro.
         """
         for termino in _TERMINOS_DE_FACTOR:
             if termino not in texto:
@@ -205,7 +223,7 @@ class AdaptadorDeterminista(ProveedorDeModelo):
             for codigo in codigos:
                 if termino.startswith(codigo.removesuffix("R").lower()):
                     return codigo
-        return codigos[0] if codigos else None
+        return None
 
     @staticmethod
     def _variables(consulta: str) -> dict[str, float]:

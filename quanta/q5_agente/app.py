@@ -59,9 +59,13 @@ app = FastAPI(
 )
 
 _cfg = config_agente()
+# Los origenes vienen de configuracion, no del codigo. Escritos a mano aqui, el
+# servicio quedaba atado a que el cliente viviera en 127.0.0.1:5173: cierto en
+# esta maquina y falso en cuanto el cliente se publique en otro puerto o en otro
+# contenedor. Una direccion de red es configuracion de despliegue.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_cfg.cors_origenes,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

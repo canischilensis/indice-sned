@@ -153,6 +153,10 @@ aprendió equivocándose, no en la apariencia de no haberse equivocado.
 | La redacción omitía la ausencia de dato por ser la quinta contribución en magnitud | Alta | 2026-08-10. Toda variable con `valor: null` se nombra siempre, entre o no entre las tres mayores |
 | El veredicto de la suite dependía del entorno de la shell: `pytest` pasaba en una terminal y fallaba en otra | Alta | 2026-08-10. `tests/unitarias/q5/conftest.py` aísla las variables del cuanto 5, derivadas de los campos de la configuración |
 | El proveedor externo respondía en Markdown, que la ventana pinta literal, y con punto decimal en lugar de coma | Media | 2026-08-10. Corregido en dos capas: se pide en el mensaje de sistema y se normaliza en el bucle, porque una instrucción a un modelo es una petición y no una garantía |
+| Una consulta sin factor reconocible se respondía sobre Efectividad sin avisar | Alta | 2026-08-10. Sin factor inferible se rutea al diagnóstico general, que nombra los seis. Un error silencioso es peor que uno visible: el anterior producía una respuesta correcta sobre la pregunta equivocada |
+| La interfaz mostraba al rol de auditoría un mensaje que decía lo contrario de su alcance real | Media | 2026-08-10. Cerrado por decisión registrada en ADR-007: el rol se sirve por API. La pantalla distingue ahora el caso y el manual lo declara. Construir la búsqueda por identificador queda como trabajo futuro |
+| El cliente nunca leyó su configuración: Vite buscaba un `.env` que nunca existió y las direcciones venían de constantes de reserva en `api.ts` | Alta | 2026-08-10. `envDir` apunta a la raíz: un solo archivo de configuración. Se agrega `tests/arquitectura/test_variables_del_cliente.py`, porque exponer la raíz al empaquetador depende de que ninguna credencial lleve prefijo `VITE_` |
+| Los orígenes CORS del asesor estaban escritos a mano en el código | Media | 2026-08-10. `AGENTE_CORS_ORIGENES` pasa a configuración. Una dirección de red no es una constante del programa |
 
 ### 9.1 Reglas que salen de defectos reales
 
@@ -167,6 +171,8 @@ proyecto y se escribió el día que costó tiempo.
 | Una prueba que aprueba por un camino de error no verifica: coincide | CP-11 exigía la cadena `superac` y la obtenía del mensaje «Factor desconocido: SUPERACR» |
 | Primero el comportamiento, después el criterio | Ante una prueba que no medía su intención declarada, se corrigió el agente y recién entonces se endureció el caso. Al revés sería ajustar la prueba a lo que el sistema hace |
 | Lo que se le pide a un modelo se verifica aparte | Se le pidió responder en prosa plana y con coma decimal. La garantía la da una normalización en el bucle, no la instrucción. Vale para el formato igual que G-02 vale para las cifras |
+| Un error silencioso es peor que uno visible | El ruteo adivinaba un factor y respondía bien sobre la pregunta equivocada. El defecto anterior —un código mal escrito— producía un fallo que se veía y por eso se corrigió; este no dejaba rastro |
+| Una capacidad sin interfaz se declara, no se disimula | El rol de auditoría existe y está verificado en el servicio. Se decidió no construirle ventana y dejarlo escrito en un ADR, en lugar de recortar el rol para que calzara con la pantalla |
 | Verificar contra una línea base no sustituye verificar contra el sistema real | Los veinte casos corren contra el adaptador determinista, que cumple el contrato de formato por construcción. El defecto solo apareció en la primera consulta a un proveedor externo |
 
 ## 10. Lo que este plan no cubre
@@ -191,3 +197,4 @@ creía antes de tomarla.
 | 2026-08-10 | 9 | Se registran dos defectos abiertos que no estaban en ningún documento: el `access violation` de Windows y la latencia percibida sin medir | Vivían en notas de trabajo. Un defecto conocido que no está en el plan no está declarado: está olvidado a medias |
 | 2026-08-10 | 9 | Se cierra el defecto de formato del proveedor externo y se corrige la atribución de la latencia: fue arranque en frío, no cómputo | Una medición aislada se había declarado como propiedad del sistema |
 | 2026-08-10 | 9.1 | Dos reglas nuevas: lo que se le pide a un modelo se verifica aparte, y la línea base no sustituye al sistema real | Ambas salen del mismo defecto: la evaluación completa corría contra un proveedor que cumple el contrato por construcción |
+| 2026-08-10 | 9 y 9.1 | Se cierran dos defectos más —el factor adivinado en silencio y el mensaje al rol de auditoría— y se agregan sus dos reglas | El primero salió a la luz al retirar la copia de códigos; el segundo al preparar la captura del perfil sin establecimientos |

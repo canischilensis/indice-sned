@@ -120,3 +120,38 @@ def test_el_determinista_no_emite_ningun_codigo_ajeno_al_catalogo():
 def test_las_consultas_de_prueba_cubren_los_seis_factores():
     """Si el catalogo suma o retira un factor, esta prueba lo exige aqui tambien."""
     assert set(_CONSULTA_POR_FACTOR) == set(FACTORES)
+
+
+@pytest.mark.parametrize(
+    "consulta",
+    [
+        "explica por que nos fue asi este ano",
+        "por que la contribucion cambio tanto",
+        "explica la causa de lo que esta pasando",
+    ],
+)
+def test_sin_factor_reconocible_responde_el_diagnostico_general(consulta: str):
+    """No se adivina un factor: se responde sobre los seis.
+
+    Antes, una consulta sin factor identificable devolvia el primer codigo
+    admitido y terminaba explicando Efectividad sin decirlo. El diagnostico
+    general nombra los seis con su aporte y su restriccion, de modo que responde
+    la pregunta sin elegir por el usuario.
+    """
+    peticion = _rutear(consulta)
+    assert peticion is not None
+    assert peticion.nombre == "diagnostico_de_establecimiento"
+    assert "factor" not in peticion.parametros
+
+
+def test_ningun_ruteo_pide_explicacion_sin_factor():
+    """La herramienta admite `factor` opcional; el ruteo no debe apoyarse en eso.
+
+    Pedir la explicacion sin factor devolveria el predeterminado del servicio, y
+    seria el mismo silencio con otra forma.
+    """
+    consultas = [*_CONSULTA_POR_FACTOR.values(), "explica por que nos fue asi este ano"]
+    for consulta in consultas:
+        peticion = _rutear(consulta)
+        if peticion.nombre == "explicacion_por_factor":
+            assert peticion.parametros.get("factor"), f"'{consulta}' pide explicacion sin factor"

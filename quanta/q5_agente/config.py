@@ -74,6 +74,20 @@ class ConfiguracionDelAgente:
     agente_guardarrail_cifras: bool = True
     agente_guardarrail_promesas: bool = True
 
+    #: Origenes admitidos por CORS, separados por coma.
+    #:
+    #: Estaban escritos a mano dentro de `app.py`. Funcionaba mientras el cliente
+    #: viviera en 127.0.0.1:5173 y dejaba de funcionar en cuanto dejara de
+    #: hacerlo, que es exactamente lo que ocurre al contenerizar: el navegador
+    #: pide desde el puerto publicado del contenedor del cliente y ese origen no
+    #: estaba en la lista. Una direccion de red no es una constante del programa.
+    agente_cors_origenes: str = "http://localhost:5173,http://127.0.0.1:5173"
+
+    @property
+    def cors_origenes(self) -> list[str]:
+        """La lista, ya separada y sin entradas vacias."""
+        return [o.strip() for o in self.agente_cors_origenes.split(",") if o.strip()]
+
     def con(self, **cambios: object) -> ConfiguracionDelAgente:
         """Copia con campos sustituidos. Sustituye a model_copy de Pydantic."""
         return replace(self, **cambios)  # type: ignore[arg-type]

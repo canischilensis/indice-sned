@@ -124,7 +124,25 @@ export default function App() {
         </header>
 
         <div className="contenido">
-          {sesion.rbds.length === 0 && (
+          {/* Una lista vacia significa dos cosas opuestas y hay que distinguirlas.
+              En un sostenedor o un directivo significa que no se le asigno ningun
+              establecimiento. En un auditor significa lo contrario: su alcance no
+              es una lista porque los alcanza todos, y el selector de la barra no
+              sabe enumerar eso. Mostrarle el mismo mensaje le decia que tenia
+              menos acceso que los demas cuando tiene mas. Ver ADR-007. */}
+          {sesion.rbds.length === 0 && sesion.rol === 'auditor' && (
+            <div className="panel">
+              <div className="panel-cuerpo">
+                El rol de auditoria consulta por la API del servicio, no por esta interfaz. Su
+                credencial alcanza cualquier establecimiento, sin la restriccion de jurisdiccion
+                que se aplica a sostenedores y directivos; lo que esta interfaz no ofrece es la
+                busqueda que ese alcance requeriria. Las rutas y sus esquemas estan publicados en
+                <code> /docs </code> del servicio del indice, y se consultan con el mismo token de
+                esta sesion.
+              </div>
+            </div>
+          )}
+          {sesion.rbds.length === 0 && sesion.rol !== 'auditor' && (
             <div className="panel">
               <div className="panel-cuerpo">
                 Su perfil no tiene establecimientos asignados. El control de acceso limita la
