@@ -45,6 +45,15 @@ COMO RESPONDES
 """
 
 
+#: Turno de cierre. Se envia con el catalogo vacio cuando se agoto el
+#: presupuesto de pasos: lo que se concede es redactar, no seguir consultando.
+CIERRE = (
+    "No quedan consultas disponibles. Responde AHORA con lo que ya obtuviste en "
+    "los resultados anteriores. Usa solo cifras que aparezcan en ellos. Si algo "
+    "quedo sin averiguar, dilo en una linea en vez de suponerlo."
+)
+
+
 def formatear_consulta(consulta: Consulta) -> str:
     """Estructura la consulta para que el contexto de sesion sea inequivoco."""
     lineas = [f"RBD: {consulta.rbd}"]

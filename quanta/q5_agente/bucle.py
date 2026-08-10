@@ -34,7 +34,7 @@ from q5_agente.errores import (
 )
 from q5_agente.guardarrailes import PoliticaDeSalida
 from q5_agente.herramientas.contrato import Herramienta, ResultadoHerramienta
-from q5_agente.prompts import SISTEMA, formatear_consulta
+from q5_agente.prompts import CIERRE, SISTEMA, formatear_consulta
 from q5_agente.proveedores.contrato import Mensaje, ProveedorDeModelo
 
 _DISCULPA_PROVEEDOR = (
@@ -156,6 +156,35 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             mensajes.append(
                 Mensaje("herramienta", json.dumps(self._observacion(resultado), ensure_ascii=False))
             )
+
+        # Agotado el presupuesto de herramientas, queda un turno de redaccion
+        # SIN catalogo. Nace de un fallo real con un proveedor externo: una
+        # llamada rechazada por parametro consumio un paso, el reintento otro, y
+        # el bucle se quedo sin turno para escribir pese a tener ya los datos en
+        # la mano. Devolver "no consegui cerrar la consulta" con la respuesta
+        # practicamente servida es desperdiciar el trabajo y el gasto.
+        #
+        # El turno de cierre no puede pedir herramientas —se le entrega catalogo
+        # vacio—, de modo que el limite de llamadas al servicio se respeta: lo
+        # que se concede es redactar, no seguir consultando.
+        if llamadas:
+            try:
+                final = self._proveedor.completar([*mensajes, Mensaje("usuario", CIERRE)], [])
+            except (CircuitoAbierto, ErrorDelProveedor):
+                final = None
+            if final is not None:
+                uso = uso.mas(
+                    Uso(
+                        tokens_entrada=final.tokens_entrada,
+                        tokens_salida=final.tokens_salida,
+                        costo_usd=self._proveedor.costo(
+                            final.tokens_entrada, final.tokens_salida
+                        ),
+                        llamadas_al_modelo=1,
+                    )
+                )
+                if not final.quiere_herramienta and (final.texto or "").strip():
+                    return self._cerrar(final.texto or "", llamadas, cifras, uso, diagnostico)
 
         return self._cerrar(
             "No consegui cerrar la consulta dentro del limite de pasos previsto.",

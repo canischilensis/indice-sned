@@ -101,16 +101,16 @@ def test_un_artefacto_ausente_devuelve_fallo_controlado(catalogo):
 
 
 def test_la_explicacion_devuelve_contribuciones_y_aditividad(catalogo):
-    resultado = catalogo["explicacion_por_factor"].ejecutar(rbd=TRAMO_100, factor="SUPERACR")
+    resultado = catalogo["explicacion_por_factor"].ejecutar(rbd=TRAMO_100, factor="SUPERAR")
     assert resultado.exito
     assert resultado.datos["aditividad_verificada"] is True
-    assert resultado.datos["factor"] == "SUPERACR"
+    assert resultado.datos["factor"] == "SUPERAR"
     assert len(resultado.datos["contribuciones"]) >= 3
 
 
 def test_el_factor_llega_normalizado_a_mayusculas(catalogo):
-    resultado = catalogo["explicacion_por_factor"].ejecutar(rbd=TRAMO_100, factor="superacr")
-    assert resultado.datos["factor"] == "SUPERACR"
+    resultado = catalogo["explicacion_por_factor"].ejecutar(rbd=TRAMO_100, factor="superar")
+    assert resultado.datos["factor"] == "SUPERAR"
 
 
 # --- escenario --------------------------------------------------------------

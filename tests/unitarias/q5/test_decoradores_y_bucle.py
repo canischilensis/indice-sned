@@ -204,3 +204,73 @@ def test_la_sanitizacion_se_aplica_aunque_el_modelo_pida_algo_invalido():
     san = SanitizadorDeParametros()
     with pytest.raises(ParametroInvalido):
         san.limpiar("simulacion", {"rbd": "25520", "variables": {"cluster_codigo": 12}})
+
+
+# --- el turno de cierre ------------------------------------------------------
+
+
+class _ProveedorQueSoloPideHerramientas(ProveedorDeModelo):
+    """Gasta todos los pasos consultando y solo redacta si le quitan el catalogo.
+
+    Reproduce lo que ocurrio con un proveedor externo: una llamada rechazada por
+    parametro consumio un paso, el reintento otro, y el bucle se quedo sin turno
+    para escribir teniendo ya los datos.
+    """
+
+    nombre = "solo_herramientas"
+
+    def __init__(self) -> None:
+        self.catalogos: list[int] = []
+
+    def completar(self, mensajes, herramientas):
+        self.catalogos.append(len(herramientas))
+        if herramientas:
+            return RespuestaDelModelo(
+                peticion=PeticionDeHerramienta("diagnostico_de_establecimiento", {"rbd": "25520"}),
+                tokens_entrada=10,
+                tokens_salida=5,
+            )
+        return RespuestaDelModelo(
+            texto="El establecimiento 25520 tiene un indice estimado de 67.60.",
+            tokens_entrada=8,
+            tokens_salida=4,
+        )
+
+
+def _agente_con(proveedor, max_pasos=2):
+    herramienta = HerramientaDoble()
+    return AgenteDeBucleSimple(proveedor, {herramienta.nombre: herramienta}, max_pasos=max_pasos)
+
+
+def test_agotados_los_pasos_se_concede_un_turno_para_redactar():
+    proveedor = _ProveedorQueSoloPideHerramientas()
+    respuesta = _agente_con(proveedor).asesorar(Consulta(texto="diagnostico", rbd="25520"))
+
+    assert "no consegui cerrar" not in respuesta.texto.lower()
+    assert "67.60" in respuesta.texto
+    assert proveedor.catalogos == [1, 1, 0], "el turno de cierre va con catalogo vacio"
+
+
+def test_el_turno_de_cierre_no_permite_mas_consultas():
+    """Se concede redactar, no seguir consultando: el limite se respeta."""
+    proveedor = _ProveedorQueSoloPideHerramientas()
+    respuesta = _agente_con(proveedor).asesorar(Consulta(texto="diagnostico", rbd="25520"))
+
+    assert len(respuesta.llamadas) == 2, "dos pasos de herramienta, ni uno mas"
+    assert respuesta.uso.llamadas_al_modelo == 3, "dos pasos mas el cierre"
+
+
+def test_sin_ninguna_herramienta_ejecutada_no_hay_turno_de_cierre():
+    """Sin datos que redactar, insistir seria gastar una llamada en nada."""
+
+    class SoloPideUnaInexistente(ProveedorDeModelo):
+        nombre = "inexistente"
+
+        def completar(self, mensajes, herramientas):
+            return RespuestaDelModelo(
+                peticion=PeticionDeHerramienta("no_existe", {}), tokens_entrada=1, tokens_salida=1
+            )
+
+    agente = AgenteDeBucleSimple(SoloPideUnaInexistente(), {}, max_pasos=2)
+    respuesta = agente.asesorar(Consulta(texto="hola", rbd="25520"))
+    assert "no consegui cerrar" in respuesta.texto.lower()

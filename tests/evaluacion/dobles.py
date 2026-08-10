@@ -42,19 +42,19 @@ RBD_SIN_ARTEFACTO = "16942"
 FACTORES = [
     {"codigo": "EFECTIVR", "nombre": "Efectividad", "peso": 0.37, "valor": 71.20,
      "aporte_al_indice": 26.34, "es_acotado": False, "restriccion": None},
-    {"codigo": "SUPERACR", "nombre": "Superacion", "peso": 0.28, "valor": 58.40,
+    {"codigo": "SUPERAR", "nombre": "Superacion", "peso": 0.28, "valor": 58.40,
      "aporte_al_indice": 16.35, "es_acotado": True,
      "restriccion": "Correccion por significancia estadistica no publicada"},
-    {"codigo": "IGUALDAR", "nombre": "Igualdad de oportunidades", "peso": 0.22, "valor": 64.10,
+    {"codigo": "IGUALDR", "nombre": "Igualdad de oportunidades", "peso": 0.22, "valor": 64.10,
      "aporte_al_indice": 14.10, "es_acotado": True,
      "restriccion": "Subtipo de sancion por discriminacion no desagregado"},
-    {"codigo": "INICIATR", "nombre": "Iniciativa", "peso": 0.06, "valor": 60.00,
+    {"codigo": "INICIAR", "nombre": "Iniciativa", "peso": 0.06, "valor": 60.00,
      "aporte_al_indice": 3.60, "es_acotado": True,
      "restriccion": "Ficha de autorreporte no publica"},
     {"codigo": "INTEGRAR", "nombre": "Integracion y participacion", "peso": 0.05, "valor": 62.50,
      "aporte_al_indice": 3.13, "es_acotado": True,
      "restriccion": "Ficha de autorreporte no publica"},
-    {"codigo": "MEJORAMR", "nombre": "Mejoramiento", "peso": 0.02, "valor": 55.00,
+    {"codigo": "MEJORAR", "nombre": "Mejoramiento", "peso": 0.02, "valor": 55.00,
      "aporte_al_indice": 1.10, "es_acotado": True, "restriccion": "Varianza proxima a cero"},
 ]
 
@@ -177,6 +177,14 @@ class ServicioFalso:
 
     @staticmethod
     def _shapley(rbd: str, factor: str) -> dict:
+        # El servicio real rechaza un codigo de factor que no conoce, con este
+        # mismo texto. El doble no lo hacia, y por eso los veinte casos no
+        # detectaron que el catalogo del agente declaraba cuatro codigos mal
+        # escritos: el doble replicaba la constante equivocada en vez del
+        # sistema. Un doble que refleja la implementacion bendice sus errores.
+        codigos = [f["codigo"] for f in FACTORES]
+        if factor not in codigos:
+            raise ParametroInvalido(f"Factor desconocido: {factor}. Validos: {codigos}")
         contribuciones = [
             {"variable": "simce_mat_4b", "etiqueta": "SIMCE Matematica 4 basico",
              "valor": 271.30, "contribucion": 4.21, "direccion": "sube"},

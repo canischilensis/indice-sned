@@ -20,7 +20,19 @@ from q5_agente.gateway import PuertaDeServicio
 from q5_agente.guardarrailes import SanitizadorDeParametros
 from q5_agente.herramientas.contrato import Herramienta, ResultadoHerramienta
 
-FACTORES = ("EFECTIVR", "SUPERACR", "INICIATR", "MEJORAMR", "IGUALDAR", "INTEGRAR")
+#: Los seis codigos de factor, tal como los nombra el motor predictivo.
+#:
+#: Estan duplicados aqui a proposito: la frontera de cuantos prohibe que el
+#: cuanto 5 importe q2_modelamiento, y esa prohibicion es lo que permite
+#: retirarlo sin tocar el resto. El precio de la duplicacion es que puede
+#: desincronizarse, y se desincronizo: cuatro de los seis codigos estaban mal
+#: escritos —SUPERACR, INICIATR, MEJORAMR, IGUALDAR— y el modelo, obediente,
+#: pedia con ellos hasta que el servicio los rechazaba.
+#:
+#: `tests/integracion/q5/test_codigos_de_factor.py` compara esta tupla contra
+#: COLUMNAS_OBJETIVO del cuanto 2 en cada ejecucion de la suite. La prueba puede
+#: cruzar la frontera porque no forma parte del cuanto: es su verificacion.
+FACTORES = ("EFECTIVR", "SUPERAR", "INICIAR", "MEJORAR", "INTEGRAR", "IGUALDR")
 
 
 class _HerramientaConGateway(Herramienta):
