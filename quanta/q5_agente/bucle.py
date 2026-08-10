@@ -36,6 +36,7 @@ from q5_agente.guardarrailes import PoliticaDeSalida
 from q5_agente.herramientas.contrato import Herramienta, ResultadoHerramienta
 from q5_agente.prompts import CIERRE, SISTEMA, formatear_consulta
 from q5_agente.proveedores.contrato import Mensaje, ProveedorDeModelo
+from q5_agente.redaccion import a_prosa_plana
 
 _DISCULPA_PROVEEDOR = (
     "No puedo redactar la respuesta porque el proveedor de lenguaje no esta disponible en este "
@@ -249,6 +250,10 @@ class AgenteDeBucleSimple(AsesorDeGestion):
         uso: Uso,
         diagnostico: set[float] | None = None,
     ) -> RespuestaAsesor:
+        # La normalizacion va ANTES de la politica, no despues: el guardarrail
+        # debe juzgar exactamente el texto que se entrega. Validar una version y
+        # mostrar otra deja un hueco por donde no mira nadie.
+        texto = a_prosa_plana(texto)
         aceptado, codigo, motivo = self._politica.evaluar(texto, cifras | (diagnostico or set()))
         if not aceptado:
             return RespuestaAsesor(

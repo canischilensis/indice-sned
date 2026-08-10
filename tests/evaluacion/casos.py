@@ -208,9 +208,11 @@ CASOS: tuple[CasoCritico, ...] = (
         #
         # Por eso el presupuesto NO acota lo que espera un usuario. Medicion
         # puntual del 2026-08-10 sobre la misma consulta de explicacion por
-        # factor: 31 ms contra el doble, 5.906 ms contra el servicio levantado
-        # sobre parquet. La diferencia es el calculo de Shapley, que es lento a
-        # proposito antes que aproximado.
+        # factor: 31 ms contra el doble y 5.906 ms contra el servicio real en la
+        # PRIMERA consulta. Una segunda, contra el mismo servicio ya tibio,
+        # resolvio en 0 ms: los 5.906 fueron carga de los artefactos de modelo,
+        # no computo. Son dos numeros distintos —arranque en frio y regimen— y
+        # ninguno de los dos esta medido como serie.
         #
         # El presupuesto se conserva en 3.000 ms porque sigue siendo util para
         # lo que si mide: detecta que el bucle no se vaya de paseo por pasos

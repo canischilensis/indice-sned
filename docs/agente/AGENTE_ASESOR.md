@@ -281,6 +281,21 @@ cumple se declare:
   explicacion por factor: **31 ms contra el doble, 5.906 ms contra el servicio
   levantado sobre parquet**. La diferencia es el calculo de Shapley. Una serie
   medida contra el servicio real, con percentiles, no existe.
+
+  > **Corregido el mismo 2026-08-10.** Atribuir los 5.906 ms al calculo de
+  > Shapley es incorrecto. Una consulta posterior contra el mismo servicio, ya
+  > tibio, resolvio la misma herramienta en **0 ms**. Los 5.906 fueron **carga en
+  > frio de los artefactos de modelo**, no computo. El manual de usuario ya lo
+  > declaraba —«los modelos se cargan en el primer uso»— y no se cruzo el dato.
+  >
+  > El texto anterior se conserva porque la equivocacion ilustra el riesgo que
+  > esta misma seccion existe para evitar: **una observacion aislada no
+  > distingue un costo permanente de un costo de arranque**. Se declaro una
+  > medicion como si fuera una propiedad del sistema.
+  >
+  > Lo que sigue sin medirse: la latencia en regimen, con percentiles, contra el
+  > servicio real. Y el arranque en frio, que es un numero distinto y tambien
+  > importa, porque es el que espera el primer usuario del dia.
 - **La cuarta ventana no tiene pruebas automatizadas.** El cuanto 4 no tiene
   arnes de pruebas de interfaz: lo unico que la compuerta verifica es que
   `tsc --noEmit` pase. La verificacion de la ventana es manual y esta descrita
@@ -377,8 +392,8 @@ de fallo la detecte la suite y no el usuario.
 
 ## 14. Defectos encontrados por el uso
 
-Los cinco que siguen aparecieron el 2026-08-10, al levantar los tres procesos y
-lanzar la primera consulta contra el servicio real. **Ninguno lo encontro la
+Los seis que siguen aparecieron el 2026-08-10, al levantar los tres procesos y
+lanzar las primeras consultas contra el servicio real. **Ninguno lo encontro la
 suite**, que estaba entera en verde. Se registran aqui con su causa, no solo con
 su correccion: la causa es lo que se puede evitar la proxima vez.
 
@@ -463,12 +478,61 @@ variable del cuanto 5. La lista **no se escribe a mano**: se deriva de los campo
 de `ConfiguracionDelAgente`, de modo que un campo nuevo queda protegido sin que
 nadie tenga que acordarse.
 
-### Lo que los cinco tienen en comun
+### D-06 · El proveedor externo respondia en Markdown, y con punto decimal
 
-Cuatro de los cinco son el mismo error de fondo: **una copia de la verdad que
-nadie verificaba**. El codigo de factor duplicado tres veces, el doble mas pobre
-que el sistema, el criterio de prueba desalineado de su intencion declarada, y el
-entorno del operador filtrandose en el veredicto.
+La primera consulta real contra Gemini devolvio Markdown completo: negritas,
+encabezados `###`, reglas horizontales, listas anidadas y cursivas. La ventana
+pinta el texto sin interpretar marcado, de modo que el directivo habria leido los
+asteriscos. El adaptador determinista no lo hacia, y por eso toda la verificacion
+previa —hecha contra el determinista— no podia verlo.
+
+En la misma respuesta aparecio un segundo defecto: los decimales con punto
+—`59.2`, `16.58`—, mientras el determinista escribia `59,20` y `16,58`. **El mismo
+sistema mostraba el numero de dos formas segun el proveedor**, y una de las dos no
+es la convencion chilena.
+
+**Correccion en dos capas, y las dos hacen falta.**
+
+La primera es pedirlo: el mensaje de sistema declara ahora que la respuesta es
+prosa plana y que los decimales van con coma. La segunda es no depender de eso.
+`q5_agente/redaccion.py` normaliza el texto final en el bucle, para cualquier
+proveedor presente o futuro. **Una instruccion a un modelo es una peticion, no una
+garantia**, y es el mismo criterio de G-02: no se le pide al modelo que cite bien,
+se verifica que lo haya hecho.
+
+La normalizacion se aplica **antes** de evaluar la politica de salida. Validar una
+version del texto y entregar otra dejaria un hueco por donde no mira nadie.
+
+**Lo que no se hizo, a proposito.** No se renderiza Markdown en el cliente.
+Convertir la salida de un modelo de lenguaje en marcado que el navegador ejecuta
+es una puerta que este sistema no necesita abrir por un problema de negritas.
+
+**Frontera del criterio.** Hacia el usuario, coma; internamente, punto. Los datos
+viajan y se comparan en punto —es lo que devuelve el servicio y lo que lee el
+guardarrail— y solo el texto que se muestra usa la convencion local.
+
+**Limitacion declarada.** Solo se convierten decimales de una o dos cifras. Tres
+digitos tras un punto son indistinguibles de un grupo de millar en castellano
+—`4.435` son cuatro mil— y equivocarse en ese sentido corrompe una cantidad. Un
+numero con tres o mas decimales conserva el punto.
+
+**Verificacion.** `tests/unitarias/q5/test_redaccion.py`, sobre una captura
+literal de la respuesta de Gemini. La consulta se repitio contra el proveedor real
+despues de corregir: prosa sin marcas, diecisiete cifras con coma y G-02 en verde,
+que era el riesgo real —cambiar el separador podia romper la extraccion de
+magnitudes del guardarrail—.
+
+### Lo que los seis tienen en comun
+
+Cinco de los seis son el mismo error de fondo: **una copia de la verdad que nadie
+verificaba, o un banco de pruebas mas pobre que el sistema**. El codigo de factor
+duplicado tres veces, el doble mas pobre que el servicio, el criterio de prueba
+desalineado de su intencion declarada, el entorno del operador filtrandose en el
+veredicto, y toda la evaluacion hecha contra un proveedor que no se comporta como
+el proveedor real.
+
+El sexto agrega una leccion propia: **lo que se le pide a un modelo hay que
+verificarlo aparte**. Vale para las cifras y vale para el formato.
 
 La leccion quedo escrita como regla exigible en `PLAN_CALIDAD.md`, seccion 9.1.
 
@@ -487,3 +551,5 @@ que borrarla.
 | 2026-08-10 | 14 | Seccion nueva: cinco defectos encontrados por el uso, con causa y correccion | Ninguno lo detecto la suite; el registro de la causa es lo que evita la repeticion |
 | 2026-08-10 | 15 | Seccion nueva: este historial | Se adopta la convencion de conservar el registro de modificaciones en todos los documentos |
 | 2026-08-10 | 11 | Se declara que la latencia percibida por el usuario no esta medida, con la medicion puntual 31 ms / 5.906 ms | CP-17 se llamaba «latencia propia del agente» y el arnes decia «excluida la del servicio». Ninguna de las dos etiquetas era exacta: el cronometro envuelve la llamada completa |
+| 2026-08-10 | 11 | Se corrige la atribucion de los 5.906 ms: fue arranque en frio, no calculo. La afirmacion anterior se conserva marcada | Una consulta posterior contra el mismo servicio ya tibio resolvio la misma herramienta en 0 ms. Se habia elevado una observacion aislada a propiedad del sistema |
+| 2026-08-10 | 14 | Se agrega D-06: Markdown y punto decimal en el proveedor externo | La primera consulta real contra Gemini devolvio marcado que la ventana pinta literal. La verificacion previa, hecha contra el determinista, no podia verlo |

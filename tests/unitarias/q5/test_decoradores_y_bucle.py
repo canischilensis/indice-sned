@@ -247,7 +247,12 @@ def test_agotados_los_pasos_se_concede_un_turno_para_redactar():
     respuesta = _agente_con(proveedor).asesorar(Consulta(texto="diagnostico", rbd="25520"))
 
     assert "no consegui cerrar" not in respuesta.texto.lower()
-    assert "67.60" in respuesta.texto
+    # El doble redacta "67.60" y aqui se espera "67,60": el bucle normaliza el
+    # texto final a prosa castellana antes de entregarlo. Lo que esta prueba
+    # verifica es que se concedio el turno de redaccion y que la cifra llego; el
+    # separador era incidental y paso a ser parte del contrato de salida.
+    assert "67,60" in respuesta.texto
+    assert "67.60" not in respuesta.texto, "el punto decimal no debe llegar al usuario"
     assert proveedor.catalogos == [1, 1, 0], "el turno de cierre va con catalogo vacio"
 
 

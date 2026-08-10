@@ -14,8 +14,10 @@ cosas, todas verificables y ninguna opinable:
      guardarrailes y la redaccion. No acota lo que espera un usuario. El doble
      responde en unidades de milisegundos porque devuelve cargas fijas; el
      servicio real calcula. Medicion puntual del 2026-08-10, misma consulta de
-     explicacion por factor: 31 ms contra el doble, 5.906 ms contra el servicio
-     levantado sobre parquet.
+     explicacion por factor: 31 ms contra el doble; 5.906 ms contra el servicio
+     real en la primera consulta y 0 ms en la segunda, ya tibio. La diferencia
+     es la carga de los artefactos de modelo, no el computo. Arranque en frio y
+     regimen son dos magnitudes distintas y ninguna esta medida como serie.
 
      Presentar el primero como latencia del sistema seria informar de menos por
      construccion del banco de pruebas.

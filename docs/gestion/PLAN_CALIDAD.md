@@ -139,7 +139,7 @@ estático pasa y las fronteras de cuantos se respetan.
 | Directorio de usuarios en memoria | Media | Abierto: migración a `app.usuario` pendiente |
 | Versión de librería no registrada en los metadatos | Media | Abierto |
 | `access violation` en un hilo secundario durante la suite en Windows, con marcos de pila corruptos. Código de salida cero y todas las pruebas pasan | Media | Abierto, sin diagnóstico. Se descartó la hipótesis del cliente `httpx`: cerrarlo no lo eliminó, solo lo movió de lugar. El 2026-08-10 se ejecutó `pytest -q -p no:faulthandler` y no apareció, **pero tampoco apareció en cinco corridas de control sin la bandera ese mismo día**: el experimento no distingue nada y se declara no concluyente. El fallo no se reprodujo en toda la sesión |
-| La latencia que espera un usuario no está medida | Media | Abierto. CP-17 acota el bucle contra un doble de respuesta fija. Medición puntual del 2026-08-10: 31 ms contra el doble, 5.906 ms contra el servicio real. Falta una serie con percentiles |
+| La latencia que espera un usuario no está medida | Media | Abierto. CP-17 acota el bucle contra un doble de respuesta fija. El 2026-08-10 se midió 31 ms contra el doble, 5.906 ms en la primera consulta al servicio real y 0 ms en la segunda: la diferencia es la carga en frío de los artefactos, no el cómputo. Faltan dos series distintas, arranque y régimen |
 
 **Defectos cerrados.** Se conservan en el registro. Un defecto que se corrige y
 se borra deja de enseñar, y el valor de este plan está en lo que el proyecto
@@ -152,6 +152,7 @@ aprendió equivocándose, no en la apariencia de no haberse equivocado.
 | CP-11 aprobaba por el mensaje de error: la frase exigida aparecía dentro del código mal escrito | Alta | 2026-08-10. Se corrigió el ruteo y el caso pasó a rojo honesto antes de volver a verde |
 | La redacción omitía la ausencia de dato por ser la quinta contribución en magnitud | Alta | 2026-08-10. Toda variable con `valor: null` se nombra siempre, entre o no entre las tres mayores |
 | El veredicto de la suite dependía del entorno de la shell: `pytest` pasaba en una terminal y fallaba en otra | Alta | 2026-08-10. `tests/unitarias/q5/conftest.py` aísla las variables del cuanto 5, derivadas de los campos de la configuración |
+| El proveedor externo respondía en Markdown, que la ventana pinta literal, y con punto decimal en lugar de coma | Media | 2026-08-10. Corregido en dos capas: se pide en el mensaje de sistema y se normaliza en el bucle, porque una instrucción a un modelo es una petición y no una garantía |
 
 ### 9.1 Reglas que salen de defectos reales
 
@@ -165,6 +166,8 @@ proyecto y se escribió el día que costó tiempo.
 | El veredicto de la suite no puede depender del entorno de quien la ejecuta | La precedencia «variable del proceso sobre archivo» es correcta en operación y contaminante en pruebas: mismo commit, dos resultados |
 | Una prueba que aprueba por un camino de error no verifica: coincide | CP-11 exigía la cadena `superac` y la obtenía del mensaje «Factor desconocido: SUPERACR» |
 | Primero el comportamiento, después el criterio | Ante una prueba que no medía su intención declarada, se corrigió el agente y recién entonces se endureció el caso. Al revés sería ajustar la prueba a lo que el sistema hace |
+| Lo que se le pide a un modelo se verifica aparte | Se le pidió responder en prosa plana y con coma decimal. La garantía la da una normalización en el bucle, no la instrucción. Vale para el formato igual que G-02 vale para las cifras |
+| Verificar contra una línea base no sustituye verificar contra el sistema real | Los veinte casos corren contra el adaptador determinista, que cumple el contrato de formato por construcción. El defecto solo apareció en la primera consulta a un proveedor externo |
 
 ## 10. Lo que este plan no cubre
 
@@ -186,3 +189,5 @@ creía antes de tomarla.
 | 2026-08-10 | 9.1 | Sección nueva: cinco reglas derivadas de defectos reales | Las reglas existían en la cabeza del autor y en comentarios de código; faltaba registrarlas donde el plan las pueda exigir |
 | 2026-08-10 | 11 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |
 | 2026-08-10 | 9 | Se registran dos defectos abiertos que no estaban en ningún documento: el `access violation` de Windows y la latencia percibida sin medir | Vivían en notas de trabajo. Un defecto conocido que no está en el plan no está declarado: está olvidado a medias |
+| 2026-08-10 | 9 | Se cierra el defecto de formato del proveedor externo y se corrige la atribución de la latencia: fue arranque en frío, no cómputo | Una medición aislada se había declarado como propiedad del sistema |
+| 2026-08-10 | 9.1 | Dos reglas nuevas: lo que se le pide a un modelo se verifica aparte, y la línea base no sustituye al sistema real | Ambas salen del mismo defecto: la evaluación completa corría contra un proveedor que cumple el contrato por construcción |
