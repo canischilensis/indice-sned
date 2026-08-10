@@ -68,6 +68,13 @@ class RespuestaAsesor:
     #: son evidencia de dato. Viajan aparte para que la auditoria vea con que
     #: conjunto exacto se evaluo G-02.
     cifras_de_diagnostico: list[float] = field(default_factory=list)
+    #: Tercer conjunto: magnitudes leidas de un documento del proyecto, no
+    #: calculadas por el motor durante esta consulta. Viajan aparte para que la
+    #: auditoria distinga «esto lo calculo el motor hoy» de «esto lo dice un
+    #: documento», y para que la traza pueda mostrarlo con marca distinta.
+    cifras_documentales: list[float] = field(default_factory=list)
+    #: Documentos consultados, en el orden en que se leyeron.
+    documentos_consultados: list[str] = field(default_factory=list)
     guardarrailes_aplicados: list[str] = field(default_factory=list)
     rechazada: bool = False
     motivo_rechazo: str | None = None

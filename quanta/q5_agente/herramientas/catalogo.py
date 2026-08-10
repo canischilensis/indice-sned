@@ -170,14 +170,87 @@ class SimulacionDeEscenario(_HerramientaConGateway):
         )
 
 
+class ConsultaDeDoctrina(Herramienta):
+    """Responde sobre las decisiones del proyecto, no sobre el establecimiento.
+
+    Es la unica herramienta que no habla con el servicio. Lee la documentacion
+    versionada y devuelve el fragmento pertinente con su procedencia.
+
+    **Sus cifras salen por un conjunto aparte.** Una magnitud leida de un
+    documento no es una medicion: fue cierta cuando se escribio y pudo dejar de
+    serlo. G-02 la acepta solo si el texto nombra el documento del que sale.
+    """
+
+    nombre = "consulta_de_doctrina"
+    descripcion = (
+        "Consulta la documentacion versionada del proyecto —decisiones de arquitectura, "
+        "manuales, planes— para responder por que el sistema es como es. No devuelve datos "
+        "del establecimiento: para eso estan las otras herramientas. Toda cifra que entregue "
+        "debe citarse nombrando el documento del que proviene."
+    )
+    disparadores = (
+        "por que el sistema", "que decidieron", "decision", "adr", "doctrina",
+        "documentacion", "esta documentado", "por que se descarto", "criterio",
+        "por que es acotado", "que dice el manual", "metodologia",
+    )
+
+    def __init__(self, recuperador: Any, maximo: int = 3) -> None:
+        self._recuperador = recuperador
+        self._maximo = maximo
+
+    def esquema(self) -> dict[str, Any]:
+        return {
+            "type": "object",
+            "properties": {"consulta": {"type": "string"}},
+            "required": ["consulta"],
+        }
+
+    def ejecutar(self, **parametros: Any) -> ResultadoHerramienta:
+        consulta = str(parametros.get("consulta") or "").strip()
+        if not consulta:
+            return ResultadoHerramienta.fallida(self.nombre, "Falta el texto de la consulta.")
+
+        fragmentos = self._recuperador.recuperar(consulta, self._maximo)
+        if not fragmentos:
+            return ResultadoHerramienta.fallida(
+                self.nombre, "La documentacion del proyecto no cubre esa consulta."
+            )
+
+        procedencias = [p for f in fragmentos for p in f.procedencias()]
+        datos = {
+            "consulta": consulta,
+            "fragmentos": [
+                {
+                    "documento": f.documento,
+                    "ancla": f.ancla,
+                    "texto": f.texto,
+                    "huella": f.huella,
+                }
+                for f in fragmentos
+            ],
+        }
+        return ResultadoHerramienta.desde_documentos(self.nombre, datos, procedencias)
+
+
 def construir_catalogo(
-    puerta: PuertaDeServicio, sanitizador: SanitizadorDeParametros | None = None
+    puerta: PuertaDeServicio,
+    sanitizador: SanitizadorDeParametros | None = None,
+    recuperador: Any | None = None,
 ) -> dict[str, Herramienta]:
-    """Registro explicito de herramientas. No hay descubrimiento automatico."""
+    """Registro explicito de herramientas. No hay descubrimiento automatico.
+
+    La herramienta de doctrina entra **solo si se le entrega un recuperador**.
+    Agregar una herramienta cambia el ruteo, y los veinte casos criticos y la
+    comparacion entre orquestadores quedarian medidos contra otro catalogo sin
+    que nadie lo hubiera decidido. Se enciende por configuracion, cuando se vaya
+    a medir el efecto a proposito.
+    """
     san = sanitizador or SanitizadorDeParametros()
     herramientas: list[Herramienta] = [
         DiagnosticoDeEstablecimiento(puerta, san),
         ExplicacionPorFactor(puerta, san),
         SimulacionDeEscenario(puerta, san),
     ]
+    if recuperador is not None:
+        herramientas.append(ConsultaDeDoctrina(recuperador))
     return {h.nombre: h for h in herramientas}

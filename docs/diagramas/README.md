@@ -25,6 +25,7 @@ figuras) y `db/esquema_sned_canonico.sql` (el DDL de referencia del que se parti
 | 5 | `05_secuencia_shap` | De la petición a la atribución por variable, y de dónde sale el vector | Mermaid |
 | 6 | `06_contexto` | Las cuatro etapas del sistema y los cinco controles de arquitectura | Mermaid |
 | 6 | `06_despliegue` | Las tres unidades de despliegue y los cuatro cuantos lógicos | Mermaid |
+| 7 | `07_puertos_del_agente` | Los cuatro puertos del cuanto 5, con los **dos adaptadores** del asesor y los decoradores sobre el proveedor | Mermaid |
 
 **Sobre el `02_patrones` partido en dos.** El original tiene razón de aspecto 3,47:1: al
 ancho de una página quedaba en ~2,7 pt de cuerpo, es decir ilegible. `02a` y `02b` son
@@ -35,6 +36,17 @@ muestra los doce patrones juntos, y es el que cita el informe del Hito 2 como Fi
 las dos figuras que el informe del Hito 2 ya entregado referencia con esos nombres exactos.
 Renumerar una rompería los enlaces de un documento entregado. El prefijo aquí ordena, no
 identifica.
+
+**Sobre el 7.** El número quedó libre al retirar `_to_delete`, que conservaba una versión
+superada de `07_contexto`. Antes de reutilizarlo se verificó que ningún documento del
+repositorio referenciara ese nombre.
+
+**Por qué `01_hexagonal` no incluye los puertos del agente.** Muestra los cuatro puertos que
+existían cuando el sistema tenía cuatro cuantos. El cuanto 5 trajo cuatro más
+—`AsesorDeGestion`, `ProveedorDeModelo`, `Herramienta` y `PuertaDeServicio`— y se
+representan aparte en `07_puertos_del_agente` en lugar de engordar el original: el primero
+es la arquitectura del sistema que calcula, el segundo la del que traduce, y son dos
+lecturas distintas.
 
 ## Regenerar los PNG
 

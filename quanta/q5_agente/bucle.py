@@ -34,7 +34,7 @@ from q5_agente.errores import (
     RespuestaRechazada,
 )
 from q5_agente.guardarrailes import PoliticaDeSalida
-from q5_agente.herramientas.contrato import Herramienta, ResultadoHerramienta
+from q5_agente.herramientas.contrato import Herramienta, Procedencia, ResultadoHerramienta
 from q5_agente.prompts import CIERRE, SISTEMA, formatear_consulta
 from q5_agente.proveedores.contrato import Mensaje, ProveedorDeModelo
 from q5_agente.redaccion import a_prosa_plana
@@ -118,6 +118,8 @@ class AgenteDeBucleSimple(AsesorDeGestion):
         # Conjunto aparte: magnitudes que aparecen en mensajes del sistema. Se
         # admiten al validar, pero no se presentan como evidencia de dato.
         diagnostico: set[float] = set()
+        documentales: set[float] = set()
+        procedencias: list[Procedencia] = []
         uso = Uso()
 
         for _ in range(self._max_pasos):
@@ -143,7 +145,10 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             )
 
             if not paso.quiere_herramienta:
-                return self._cerrar(paso.texto or "", llamadas, cifras, uso, diagnostico)
+                return self._cerrar(
+                    paso.texto or "", llamadas, cifras, uso, diagnostico,
+                    documentales, procedencias,
+                )
 
             resultado, registro = self._ejecutar(
                 paso.peticion.nombre, paso.peticion.parametros, consulta
@@ -152,6 +157,11 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             cifras |= resultado.cifras
             cifras |= _cifras_de_parametros(registro.parametros)
             diagnostico |= resultado.cifras_diagnostico
+            # Tercer conjunto: no se mezcla con el primero a proposito. Una cifra
+            # leida de un documento no es una medicion, y G-02 exige que el texto
+            # nombre el documento antes de aceptarla.
+            documentales |= resultado.cifras_documentales
+            procedencias.extend(resultado.procedencias)
             mensajes.append(
                 Mensaje("herramienta", json.dumps(self._observacion(resultado), ensure_ascii=False))
             )
@@ -183,7 +193,10 @@ class AgenteDeBucleSimple(AsesorDeGestion):
                     )
                 )
                 if not final.quiere_herramienta and (final.texto or "").strip():
-                    return self._cerrar(final.texto or "", llamadas, cifras, uso, diagnostico)
+                    return self._cerrar(
+                        final.texto or "", llamadas, cifras, uso, diagnostico,
+                        documentales, procedencias,
+                    )
 
         return self._cerrar(
             "No consegui cerrar la consulta dentro del limite de pasos previsto.",
@@ -247,12 +260,17 @@ class AgenteDeBucleSimple(AsesorDeGestion):
         cifras: set[float],
         uso: Uso,
         diagnostico: set[float] | None = None,
+        documentales: set[float] | None = None,
+        procedencias: list[Procedencia] | None = None,
     ) -> RespuestaAsesor:
         # La normalizacion va ANTES de la politica, no despues: el guardarrail
         # debe juzgar exactamente el texto que se entrega. Validar una version y
         # mostrar otra deja un hueco por donde no mira nadie.
         texto = a_prosa_plana(texto)
-        aceptado, codigo, motivo = self._politica.evaluar(texto, cifras | (diagnostico or set()))
+        documentos = tuple(dict.fromkeys(p.documento for p in (procedencias or [])))
+        aceptado, codigo, motivo = self._politica.evaluar(
+            texto, cifras | (diagnostico or set()), documentales or set(), documentos
+        )
         if not aceptado:
             return RespuestaAsesor(
                 texto=(
@@ -271,6 +289,8 @@ class AgenteDeBucleSimple(AsesorDeGestion):
             uso=uso,
             cifras_citadas=sorted(cifras),
             cifras_de_diagnostico=sorted(diagnostico or set()),
+            cifras_documentales=sorted(documentales or set()),
+            documentos_consultados=list(documentos),
             guardarrailes_aplicados=["G-01", "G-02", "G-03"],
         )
 

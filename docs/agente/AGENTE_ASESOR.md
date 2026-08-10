@@ -91,6 +91,21 @@ directa es deterministica.
 | Latencia | Una llamada | Vectorizacion mas busqueda mas llamada |
 | Verificabilidad | La cifra tiene origen | El origen es un fragmento de texto |
 
+> **Completado el 2026-08-10, no revertido.** El argumento de arriba sigue en pie
+> **para datos estructurados** y por eso se conserva entero. Lo que cambio es que
+> aparecio una pregunta que no es sobre el dato: «por que la Superacion es un
+> factor acotado» no la responde el motor, la responde el ADR que lo explica.
+>
+> Existe desde hoy recuperacion sobre `docs/` —decisiones, manuales, planes—, y
+> **nunca sobre las tablas ni los archivos columnares**. La frase que fija la
+> frontera:
+>
+> **Las herramientas responden sobre el dato; la recuperacion responde sobre la
+> doctrina.**
+>
+> Con esa frontera, el capitulo no se contradice: se completa. Ver la seccion 6.2
+> y `q5_agente/doctrina.py`.
+
 ## 6. Los guardarrailes
 
 Cuatro barreras. Las tres primeras son objetos `Especificacion`, el mismo puerto
@@ -124,6 +139,46 @@ Dos precisiones sobre G-02, porque su alcance importa mas que su existencia:
 G-01 incorpora ademas la regla que CTRL-02 impone al modelamiento: el indice, los
 seis factores y la agrupacion de comparacion **no pueden entrar como parametro**.
 El objetivo no es una palanca.
+
+### 6.2 El tercer conjunto: lo que dice un documento no es una medicion
+
+G-02 era binario: una cifra estaba respaldada por una herramienta o era una
+invencion. Con una herramienta que lee la documentacion del proyecto ese binario
+deja de alcanzar, porque los documentos **contienen cifras** —el R2 de 0,583, las
+treinta y ocho tablas, el 63 % de ponderacion acotada— y son verdaderas cuando se
+escribieron, no necesariamente hoy.
+
+Si esas cifras entraran por el mismo conjunto que las del motor, la auditoria
+diria «fundada» sobre un archivo de marzo con la misma autoridad que sobre una
+consulta hecha hace un segundo. **Una cifra citada de un documento es evidencia
+mas debil que una consulta en vivo**, y una auditoria que no lo distingue no
+audita: aprueba.
+
+Por eso hay un tercer conjunto, `cifras_documentales`, y cada cifra viaja con su
+`Procedencia`: documento, ancla, fecha del ultimo cambio **registrado en el
+historial** —no la del archivo en disco, que un clon reciente falsea— y huella
+del fragmento, que detecta que el texto cambio aunque la cifra siga igual.
+
+**G-02 pasa a tener tres veredictos:**
+
+| Veredicto | Condicion | Que ocurre |
+|---|---|---|
+| **Fundada** | la devolvio una herramienta en esta consulta | se acepta |
+| **Atribuida** | solo esta en un documento **y el texto lo nombra en la misma oracion** | se acepta con marca |
+| **Infundada** | no esta en ninguna parte, o esta solo en un documento y se presenta como medicion | se retira la respuesta |
+
+La atribucion se exige **en la misma oracion** a proposito: si el documento se
+nombra tres frases antes, quien lee el numero no lo ve.
+
+Y el motivo del rechazo distingue los dos casos. Inventar una cifra y no
+atribuirla se corrigen distinto, de modo que decir cual de los dos ocurrio es
+parte de lo que el guardarrail debe entregar.
+
+**Lo que no esta implementado, y por que.** Detectar que una cifra documental
+**contradice** una de diagnostico exige saber que ambas hablan del mismo
+concepto, y ninguno de los dos conjuntos transporta el concepto: transportan el
+valor. Comparar por valor no distingue una contradiccion de una coincidencia.
+Queda declarado como limitacion y no resuelto a medias.
 
 ## 7. Orquestacion
 
@@ -664,3 +719,5 @@ que borrarla.
 | 2026-08-10 | 9.1 | Seccion nueva: por que la tabla de precios conserva modelos cerrados a claves nuevas | Estaba resuelto en un comentario del codigo pero no era una decision registrada. Retirarlos convertiria una tarifa correcta en un costo cero |
 | 2026-08-10 | 14 | Se agrega D-08: la configuracion de red vivia en el codigo, en el cliente y en los origenes CORS del asesor | No molesta en localhost y hace imposible el primer despliegue en contenedores |
 | 2026-08-10 | 7.1 | Seccion nueva: el puerto pasa a tener dos adaptadores, con `AGENTE_ORQUESTADOR` para elegirlos | Un puerto con un solo adaptador es una promesa sin cobrar. Los veinte casos evaluan a los dos sin modificarse |
+| 2026-08-10 | 6.2 | Seccion nueva: el tercer conjunto de cifras y los tres veredictos de G-02 | Una herramienta que lee documentacion trae cifras que no son mediciones. Sin separarlas, la auditoria diria «fundada» sobre un archivo |
+| 2026-08-10 | 5 | Se marca como completada —no revertida— la seccion que declaraba que no hay recuperacion aumentada | El argumento sigue en pie para datos estructurados. Lo que aparecio es recuperacion sobre `docs/`, que es otra cosa |

@@ -1,0 +1,121 @@
+---
+title: "Indice SNED - Cuanto 5: los cuatro puertos del agente y sus adaptadores"
+---
+classDiagram
+    direction TB
+
+    class AsesorDeGestion {
+        <<puerto - ABC>>
+        +nombre: str
+        +asesorar(consulta) RespuestaAsesor*
+        +describir() dict
+    }
+    class AgenteDeBucleSimple {
+        +nombre = "bucle_simple"
+        bucle escrito a mano
+        dependencias: httpx
+    }
+    class AgenteLangGraph {
+        +nombre = "langgraph_react"
+        create_react_agent
+        dependencias: 15 paquetes
+    }
+    AsesorDeGestion <|-- AgenteDeBucleSimple
+    AsesorDeGestion <|-- AgenteLangGraph
+
+    class ProveedorDeModelo {
+        <<puerto - ABC>>
+        +nombre: str
+        +completar(mensajes, herramientas) RespuestaDelModelo*
+        +costo(entrada, salida) float
+        +describir() dict
+    }
+    class AdaptadorDeterminista {
+        +nombre = "determinista"
+        ruteo por pertinencia
+        sin red ni credencial
+    }
+    class AdaptadorGemini {
+        +nombre = "gemini"
+        llamada viva verificada
+        tokens de razonamiento en el costo
+    }
+    class AdaptadorAnthropic {
+        +nombre = "anthropic"
+    }
+    class AdaptadorOpenAI {
+        +nombre = "openai"
+    }
+    ProveedorDeModelo <|-- AdaptadorDeterminista
+    ProveedorDeModelo <|-- AdaptadorGemini
+    ProveedorDeModelo <|-- AdaptadorAnthropic
+    ProveedorDeModelo <|-- AdaptadorOpenAI
+
+    class ProveedorInstrumentado {
+        <<decorador>>
+        mide tokens, costo y latencia
+    }
+    class ProveedorConCortacircuitos {
+        <<decorador>>
+        ADR-006
+        abre tras N fallos
+    }
+    ProveedorDeModelo <|-- ProveedorInstrumentado
+    ProveedorDeModelo <|-- ProveedorConCortacircuitos
+    ProveedorConCortacircuitos o-- ProveedorInstrumentado : envuelve
+    ProveedorInstrumentado o-- ProveedorDeModelo : envuelve
+
+    class Herramienta {
+        <<puerto - ABC>>
+        +nombre: str
+        +descripcion: str
+        +disparadores: tuple
+        +esquema() dict*
+        +ejecutar(**parametros) ResultadoHerramienta*
+    }
+    class DiagnosticoDeEstablecimiento {
+        GET /prediccion/rbd
+        GET /prediccion/rbd/alertas
+        GET /establecimientos/rbd/ranking
+    }
+    class ExplicacionPorFactor {
+        GET /xai/rbd/shapley
+    }
+    class SimulacionDeEscenario {
+        POST /prediccion/rbd/escenario
+    }
+    Herramienta <|-- DiagnosticoDeEstablecimiento
+    Herramienta <|-- ExplicacionPorFactor
+    Herramienta <|-- SimulacionDeEscenario
+
+    class PuertaDeServicio {
+        <<protocolo>>
+        +obtener(ruta, parametros) dict*
+        +enviar(ruta, cuerpo) dict*
+    }
+    class ServicioSnedGateway {
+        unico componente que habla HTTP
+        identidad delegada: token del usuario
+    }
+    PuertaDeServicio <|-- ServicioSnedGateway
+
+    class PoliticaDeSalida {
+        <<compuesta de Especificacion>>
+        G-01 sanitizacion de parametros
+        G-02 cifras fundadas
+        G-03 sin promesas de retorno
+    }
+
+    AgenteDeBucleSimple o-- ProveedorDeModelo : inyeccion
+    AgenteDeBucleSimple o-- Herramienta : catalogo
+    AgenteDeBucleSimple o-- PoliticaDeSalida : compartida
+    AgenteLangGraph o-- ProveedorDeModelo : inyeccion
+    AgenteLangGraph o-- Herramienta : catalogo
+    AgenteLangGraph o-- PoliticaDeSalida : compartida
+    DiagnosticoDeEstablecimiento o-- PuertaDeServicio
+    ExplicacionPorFactor o-- PuertaDeServicio
+    SimulacionDeEscenario o-- PuertaDeServicio
+
+    note for AsesorDeGestion "Dos adaptadores evaluados con los MISMOS veinte casos criticos, sin modificar ninguno. Identicos en ruteo, guardarrailes y tokens. Difieren en latencia p95 (0 vs 16 ms) y dependencias transitivas (1 vs 15). Ver COMPARACION_ORQUESTADORES.md"
+
+    note for PoliticaDeSalida "Compartida por los dos orquestadores, no reimplementada. Si cada uno cerrara con su criterio, la comparacion mediria dos politicas en vez de dos formas de orquestar."

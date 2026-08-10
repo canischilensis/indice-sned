@@ -76,7 +76,7 @@ from q5_agente.contrato import (
 )
 from q5_agente.errores import CircuitoAbierto, ErrorDelProveedor, ParametroInvalido
 from q5_agente.guardarrailes import PoliticaDeSalida
-from q5_agente.herramientas.contrato import Herramienta, ResultadoHerramienta
+from q5_agente.herramientas.contrato import Herramienta, Procedencia, ResultadoHerramienta
 from q5_agente.prompts import SISTEMA, formatear_consulta
 from q5_agente.proveedores.contrato import Mensaje, ProveedorDeModelo
 from q5_agente.redaccion import a_prosa_plana
@@ -205,9 +205,13 @@ class AgenteLangGraph(AsesorDeGestion):
         llamadas: list[LlamadaHerramienta] = []
         cifras: set[float] = cifras_del_contexto(consulta)
         diagnostico: set[float] = set()
+        documentales: set[float] = set()
+        procedencias: list[Procedencia] = []
 
         herramientas = [
-            self._como_herramienta_de_langchain(h, consulta, llamadas, cifras, diagnostico)
+            self._como_herramienta_de_langchain(
+                h, consulta, llamadas, cifras, diagnostico, documentales, procedencias
+            )
             for h in self._herramientas.values()
         ]
         modelo = _ModeloDesdeProveedor(proveedor=self._proveedor)
@@ -239,7 +243,9 @@ class AgenteLangGraph(AsesorDeGestion):
                     texto = mensaje.content
                     break
 
-        return self._cerrar(texto, llamadas, cifras, diagnostico, self._uso(mensajes))
+        return self._cerrar(
+            texto, llamadas, cifras, diagnostico, self._uso(mensajes), documentales, procedencias
+        )
 
     def describir(self) -> dict[str, Any]:
         return {
@@ -258,6 +264,8 @@ class AgenteLangGraph(AsesorDeGestion):
         llamadas: list[LlamadaHerramienta],
         cifras: set[float],
         diagnostico: set[float],
+        documentales: set[float],
+        procedencias: list[Procedencia],
     ) -> StructuredTool:
         """Envuelve una herramienta del catalogo sin duplicar su logica.
 
@@ -285,6 +293,8 @@ class AgenteLangGraph(AsesorDeGestion):
 
             cifras.update(resultado.cifras)
             diagnostico.update(resultado.cifras_diagnostico)
+            documentales.update(resultado.cifras_documentales)
+            procedencias.extend(resultado.procedencias)
             llamadas.append(
                 LlamadaHerramienta(
                     herramienta=herramienta.nombre,
@@ -337,6 +347,8 @@ class AgenteLangGraph(AsesorDeGestion):
         cifras: set[float],
         diagnostico: set[float],
         uso: Uso,
+        documentales: set[float] | None = None,
+        procedencias: list[Procedencia] | None = None,
     ) -> RespuestaAsesor:
         """Identico al cierre del bucle propio, y esa identidad es deliberada.
 
@@ -349,7 +361,10 @@ class AgenteLangGraph(AsesorDeGestion):
             texto = "No consegui cerrar la consulta dentro del limite de pasos previsto."
 
         texto = a_prosa_plana(texto)
-        aceptado, codigo, motivo = self._politica.evaluar(texto, cifras | diagnostico)
+        documentos = tuple(dict.fromkeys(p.documento for p in (procedencias or [])))
+        aceptado, codigo, motivo = self._politica.evaluar(
+            texto, cifras | diagnostico, documentales or set(), documentos
+        )
         if not aceptado:
             return RespuestaAsesor(
                 texto=(
@@ -368,5 +383,7 @@ class AgenteLangGraph(AsesorDeGestion):
             uso=uso,
             cifras_citadas=sorted(cifras),
             cifras_de_diagnostico=sorted(diagnostico),
+            cifras_documentales=sorted(documentales or set()),
+            documentos_consultados=list(documentos),
             guardarrailes_aplicados=["G-01", "G-02", "G-03"],
         )

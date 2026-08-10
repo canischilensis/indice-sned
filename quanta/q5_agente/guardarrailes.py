@@ -175,10 +175,34 @@ def extraer_magnitudes(texto: str) -> list[float]:
 
 @dataclass
 class Fundamentacion:
-    """Candidato que evalua G-03 y G-02: el texto junto a su evidencia."""
+    """Candidato que evalua G-03 y G-02: el texto junto a su evidencia.
+
+    La evidencia viene separada en dos grados, y esa separacion es el aporte:
+
+    - `cifras_disponibles` las calculo el motor durante esta consulta.
+    - `cifras_documentales` se leyeron de un documento del proyecto. Pueden
+      haber sido ciertas al escribirse y no serlo hoy.
+
+    Una auditoria que no distinga ambas dice "fundada" sobre un archivo.
+    """
 
     texto: str
     cifras_disponibles: set[float] = field(default_factory=set)
+    cifras_documentales: set[float] = field(default_factory=set)
+    #: Documentos de los que salieron las cifras documentales. Se usan para
+    #: comprobar que el texto atribuya lo que cita.
+    documentos: tuple[str, ...] = ()
+
+
+#: Los tres veredictos de G-02. Antes era binario y no alcanzaba: una cifra
+#: sacada de un documento no es una invencion, pero tampoco es una medicion.
+FUNDADA = "fundada"
+ATRIBUIDA = "atribuida"
+INFUNDADA = "infundada"
+
+#: Fin de oracion. La atribucion se exige en la misma oracion que la cifra: si
+#: el documento se nombra tres parrafos antes, quien lee el numero no lo ve.
+_FIN_DE_ORACION = re.compile(r"(?<=[.;:!?])\s+|\n+")
 
 
 class CifrasFundadasEnHerramientas(Especificacion[Fundamentacion]):
@@ -191,11 +215,51 @@ class CifrasFundadasEnHerramientas(Especificacion[Fundamentacion]):
         self._tolerancia = tolerancia
 
     def cifras_sin_respaldo(self, candidato: Fundamentacion) -> list[float]:
-        huerfanas: list[float] = []
-        for citada in extraer_magnitudes(candidato.texto):
-            if not self._respaldada(citada, candidato.cifras_disponibles):
-                huerfanas.append(citada)
-        return huerfanas
+        return [
+            cifra for cifra, veredicto in self.veredictos(candidato) if veredicto == INFUNDADA
+        ]
+
+    def veredictos(self, candidato: Fundamentacion) -> list[tuple[float, str]]:
+        """Clasifica cada magnitud del texto en uno de los tres grados.
+
+        - **Fundada**: la devolvio una herramienta durante esta consulta.
+        - **Atribuida**: solo aparece en un documento del proyecto, y el texto
+          nombra ese documento en la misma oracion. Se acepta con marca.
+        - **Infundada**: no aparece en ninguna parte, o aparece solo en un
+          documento y el texto la presenta como si fuera una medicion.
+
+        El tercer caso es el que justifica separar los conjuntos. Sin la
+        exigencia de atribuir, una cifra de marzo entraria en la respuesta de
+        agosto con la misma autoridad que una recien calculada, y el lector no
+        tendria como notarlo.
+        """
+        resultado: list[tuple[float, str]] = []
+        for oracion in _FIN_DE_ORACION.split(candidato.texto):
+            atribuye = self._atribuye(oracion, candidato.documentos)
+            for citada in extraer_magnitudes(oracion):
+                if self._respaldada(citada, candidato.cifras_disponibles):
+                    resultado.append((citada, FUNDADA))
+                elif self._respaldada(citada, candidato.cifras_documentales):
+                    resultado.append((citada, ATRIBUIDA if atribuye else INFUNDADA))
+                else:
+                    resultado.append((citada, INFUNDADA))
+        return resultado
+
+    @staticmethod
+    def _atribuye(oracion: str, documentos: tuple[str, ...]) -> bool:
+        """Verdadero si la oracion nombra alguno de los documentos citados.
+
+        Se compara contra el nombre del archivo sin extension ni ruta, que es lo
+        que una persona escribiria. Pedirle al modelo la ruta completa seria
+        pedirle algo que ningun redactor humano pondria en una frase.
+        """
+        plano = _sin_tildes(oracion)
+        for documento in documentos:
+            nombre = documento.replace("\\", "/").rsplit("/", 1)[-1]
+            raiz = _sin_tildes(nombre.rsplit(".", 1)[0])
+            if raiz and raiz in plano:
+                return True
+        return False
 
     def _respaldada(self, citada: float, disponibles: set[float]) -> bool:
         for bruto in disponibles:
@@ -273,9 +337,25 @@ class PoliticaDeSalida:
             combinada = combinada.y(regla)
         return combinada
 
-    def evaluar(self, texto: str, cifras: set[float]) -> tuple[bool, str | None, str | None]:
-        """Devuelve (aceptado, codigo del guardarrail, motivo)."""
-        candidato = Fundamentacion(texto=texto, cifras_disponibles=cifras)
+    def evaluar(
+        self,
+        texto: str,
+        cifras: set[float],
+        cifras_documentales: set[float] | None = None,
+        documentos: tuple[str, ...] = (),
+    ) -> tuple[bool, str | None, str | None]:
+        """Devuelve (aceptado, codigo del guardarrail, motivo).
+
+        Los dos ultimos parametros son opcionales a proposito: quien no consulte
+        documentacion no cambia una linea, y el comportamiento historico —dos
+        conjuntos, veredicto binario— se conserva exactamente.
+        """
+        candidato = Fundamentacion(
+            texto=texto,
+            cifras_disponibles=cifras,
+            cifras_documentales=cifras_documentales or set(),
+            documentos=documentos,
+        )
         if self._usar_promesas:
             frases = self.promesas.frases_detectadas(candidato)
             if frases:
@@ -287,7 +367,16 @@ class PoliticaDeSalida:
             huerfanas = self.cifras.cifras_sin_respaldo(candidato)
             if huerfanas:
                 citadas = ", ".join(f"{c:g}" for c in huerfanas[:5])
-                return False, self.cifras.codigo, (
-                    f"La respuesta citaba cifras que ninguna herramienta devolvio: {citadas}"
-                )
+                motivo = f"La respuesta citaba cifras que ninguna herramienta devolvio: {citadas}"
+                # Si la cifra si estaba en un documento, el problema no es que se
+                # la inventara: es que la presento como medicion. Decirlo cambia
+                # que se corrige.
+                if any(
+                    self.cifras._respaldada(c, candidato.cifras_documentales) for c in huerfanas
+                ):
+                    motivo += (
+                        ". Alguna aparece en la documentacion del proyecto pero el texto no "
+                        "nombra el documento: una cifra leida de un archivo debe atribuirse."
+                    )
+                return False, self.cifras.codigo, motivo
         return True, None, None
