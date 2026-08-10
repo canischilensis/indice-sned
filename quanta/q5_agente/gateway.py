@@ -41,6 +41,17 @@ class PuertaDeServicio(Protocol):
     def enviar(self, ruta: str, cuerpo: dict[str, Any]) -> dict: ...
 
 
+def cerrar_puerta(puerta: PuertaDeServicio) -> None:
+    """Cierra la puerta si la implementacion sostiene una conexion.
+
+    Los dobles de prueba no tienen nada que cerrar y no deben verse obligados a
+    declarar un metodo vacio solo para satisfacer al llamador.
+    """
+    cerrar = getattr(puerta, "cerrar", None)
+    if callable(cerrar):
+        cerrar()
+
+
 class ServicioSnedGateway:
     """Adaptador HTTP del servicio del Indice SNED.
 
@@ -170,4 +181,18 @@ class ServicioSnedGateway:
         return respuesta.json()
 
     def cerrar(self) -> None:
+        """Cierra el cliente HTTP y sus conexiones.
+
+        Debe llamarse. Dejarlo al recolector significa cerrar el socket desde un
+        finalizador durante el apagado del interprete, que en Windows aparece
+        como un "access violation" en un hilo secundario dentro de httpx: ruido
+        alarmante para quien ejecuta la suite, y conexiones vivas de mas en el
+        servicio, donde se construye una puerta por peticion.
+        """
         self._cliente.close()
+
+    def __enter__(self) -> ServicioSnedGateway:
+        return self
+
+    def __exit__(self, *_excepcion: object) -> None:
+        self.cerrar()

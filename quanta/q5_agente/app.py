@@ -9,6 +9,8 @@ funcionando, porque ninguno de ellos depende del agente.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
 from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException, status
@@ -16,9 +18,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from q5_agente.config import config_agente
-from q5_agente.contrato import AsesorDeGestion, Consulta
+from q5_agente.contrato import Consulta
 from q5_agente.errores import ErrorDelAgente
-from q5_agente.fabrica import crear_agente
+from q5_agente.fabrica import crear_agente, crear_puerta
+from q5_agente.gateway import PuertaDeServicio, cerrar_puerta
 
 
 class SolicitudDeAsesoria(BaseModel):
@@ -80,13 +83,19 @@ def _token_del_usuario(autorizacion: str | None) -> str:
     return autorizacion.split(" ", 1)[1].strip()
 
 
-def agente_para(token: str) -> AsesorDeGestion:
-    """Un agente por peticion, atado al token de quien pregunta.
+@contextmanager
+def puerta_para(token: str) -> Iterator[PuertaDeServicio]:
+    """Puerta por peticion, cerrada al terminar.
 
-    No se memoriza entre peticiones: guardar un agente compartido significaria
-    compartir tambien la identidad, que es exactamente lo que se quiere evitar.
+    Un agente por peticion implica un cliente HTTP por peticion, y eso obliga a
+    cerrarlo: sin esto, cada consulta dejaba conexiones vivas hasta que el
+    recolector pasara. Es el precio de no compartir identidad, y se paga aqui.
     """
-    return crear_agente(token=token)
+    puerta = crear_puerta(token=token)
+    try:
+        yield puerta
+    finally:
+        cerrar_puerta(puerta)
 
 
 @app.get("/salud")
@@ -110,18 +119,20 @@ def consultar(
     authorization: str | None = Header(default=None),
 ) -> RespuestaDeAsesoria:
     """Responde en nombre del usuario que envia su credencial en la cabecera."""
-    asesor = agente_para(_token_del_usuario(authorization))
-    try:
-        respuesta = asesor.asesorar(
-            Consulta(
-                texto=solicitud.texto,
-                rbd=solicitud.rbd,
-                periodo=solicitud.periodo,
-                usuario=solicitud.usuario,
+    token = _token_del_usuario(authorization)
+    with puerta_para(token) as puerta:
+        asesor = crear_agente(puerta=puerta, token=token)
+        try:
+            respuesta = asesor.asesorar(
+                Consulta(
+                    texto=solicitud.texto,
+                    rbd=solicitud.rbd,
+                    periodo=solicitud.periodo,
+                    usuario=solicitud.usuario,
+                )
             )
-        )
-    except ErrorDelAgente as exc:
-        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
+        except ErrorDelAgente as exc:
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
 
     return RespuestaDeAsesoria(
         texto=respuesta.texto,

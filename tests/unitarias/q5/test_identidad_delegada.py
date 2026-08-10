@@ -90,3 +90,50 @@ def test_la_ruta_del_asesor_rechaza_un_esquema_de_autorizacion_ajeno(cliente):
 
 def test_la_ruta_de_salud_declara_que_la_identidad_es_delegada(cliente):
     assert "delegada" in cliente.get("/salud").json()["identidad"]
+
+
+# --- ciclo de vida de la conexion ------------------------------------------
+
+
+def test_la_puerta_se_cierra_al_terminar_la_peticion():
+    """Un agente por peticion implica un cliente HTTP por peticion.
+
+    Sin cierre, cada consulta dejaba conexiones vivas hasta que pasara el
+    recolector. En Windows eso aparecia ademas como un "access violation" en un
+    hilo secundario dentro de httpx durante el apagado del interprete.
+    """
+    from q5_agente.app import puerta_para
+
+    with puerta_para(TOKEN) as puerta:
+        assert puerta._cliente.is_closed is False  # noqa: SLF001
+    assert puerta._cliente.is_closed is True  # noqa: SLF001
+
+
+def test_la_puerta_se_cierra_aunque_la_consulta_falle():
+    from q5_agente.app import puerta_para
+
+    with pytest.raises(RuntimeError), puerta_para(TOKEN) as puerta:
+        guardada = puerta
+        raise RuntimeError("fallo a mitad de camino")
+    assert guardada._cliente.is_closed is True  # noqa: SLF001
+
+
+def test_cerrar_puerta_tolera_un_doble_sin_metodo_cerrar():
+    """Los dobles de prueba no sostienen conexiones y no deben declarar el metodo."""
+    from q5_agente.gateway import cerrar_puerta
+
+    class DobleSinCerrar:
+        def obtener(self, ruta, parametros=None):
+            return {}
+
+        def enviar(self, ruta, cuerpo):
+            return {}
+
+    cerrar_puerta(DobleSinCerrar())  # no debe lanzar
+
+
+def test_el_gateway_sirve_como_gestor_de_contexto():
+    puerta = ServicioSnedGateway("http://127.0.0.1:8000", token=TOKEN)
+    with puerta as abierta:
+        assert abierta is puerta
+    assert puerta._cliente.is_closed is True  # noqa: SLF001

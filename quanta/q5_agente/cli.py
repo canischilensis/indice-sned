@@ -15,7 +15,8 @@ import sys
 from q5_agente.config import config_agente
 from q5_agente.contrato import Consulta
 from q5_agente.errores import ErrorDelAgente
-from q5_agente.fabrica import crear_agente
+from q5_agente.fabrica import crear_agente, crear_puerta
+from q5_agente.gateway import cerrar_puerta
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -23,7 +24,9 @@ def main(argv: list[str] | None = None) -> int:
     analizador.add_argument("texto", help="La consulta del equipo directivo")
     analizador.add_argument("--rbd", required=True, help="RBD bajo jurisdiccion del usuario")
     analizador.add_argument("--periodo", default=None, help="Bienio, por ejemplo 2024-2025")
-    analizador.add_argument("--proveedor", default=None, help="determinista | anthropic | openai")
+    analizador.add_argument(
+        "--proveedor", default=None, help="determinista | anthropic | openai | gemini"
+    )
     analizador.add_argument(
         "--trazas", action="store_true", help="Muestra las llamadas y el costo"
     )
@@ -33,8 +36,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.proveedor:
         cfg = cfg.con(agente_proveedor=args.proveedor)
 
+    # La puerta se construye aqui, y no dentro de la fabrica, para poder
+    # cerrarla: el cliente HTTP sostiene conexiones y dejarlas al recolector
+    # significa cerrarlas durante el apagado del interprete.
+    puerta = crear_puerta(cfg)
     try:
-        agente = crear_agente(cfg)
+        agente = crear_agente(cfg, puerta=puerta)
         respuesta = agente.asesorar(
             Consulta(
                 texto=args.texto,
@@ -46,6 +53,8 @@ def main(argv: list[str] | None = None) -> int:
     except ErrorDelAgente as exc:
         print(f"El agente no pudo responder: {exc}", file=sys.stderr)
         return 1
+    finally:
+        cerrar_puerta(puerta)
 
     print(respuesta.texto)
     if args.trazas:

@@ -24,9 +24,22 @@ pytestmark = pytest.mark.agente
 
 
 def _entorno_limpio() -> dict[str, str]:
-    """Reproduce una consola recien abierta: sin PYTHONPATH heredado."""
+    """Reproduce una consola recien abierta: sin PYTHONPATH heredado.
+
+    Fija ademas el proveedor determinista, y no es un detalle. Estas pruebas
+    lanzan la consola como subproceso, que lee el `.env` de la raiz; con un
+    proveedor externo configurado ahi, la suite salia a internet y **gastaba la
+    clave de quien la ejecutara**. Ademas la volvia dependiente de la redaccion
+    de un modelo: la prueba se cayo porque Gemini escribio "problema de
+    conexion" donde el determinista escribe "no fue posible conectar".
+
+    Lo que estas pruebas verifican es el punto de entrada y la traduccion de un
+    fallo de transporte. Nada de eso necesita un modelo de lenguaje.
+    """
     entorno = dict(os.environ)
     entorno.pop("PYTHONPATH", None)
+    entorno["AGENTE_PROVEEDOR"] = "determinista"
+    entorno["AGENTE_MODELO"] = ""
     return entorno
 
 
@@ -125,7 +138,13 @@ def test_el_lanzador_explica_la_dependencia_ausente_en_vez_de_mostrar_una_traza(
 
 
 def test_la_consola_avisa_en_vez_de_reventar_si_el_servicio_no_esta():
-    """Un servicio apagado es una condicion esperable, no un error de programa."""
+    """Un servicio apagado es una condicion esperable, no un error de programa.
+
+    Lo que se exige es el comportamiento —avisar de un problema de conexion sin
+    traza y sin cifras— y no una frase textual. La redaccion depende del
+    proveedor, y clavar una frase concreta convierte una prueba de arquitectura
+    en una prueba de estilo.
+    """
     entorno = _entorno_limpio()
     # Puerto sin nadie escuchando: fuerza el fallo de transporte.
     entorno["AGENTE_BASE_URL"] = "http://127.0.0.1:9"
@@ -133,6 +152,11 @@ def test_la_consola_avisa_en_vez_de_reventar_si_el_servicio_no_esta():
         [sys.executable, "scripts/asesor.py", "--rbd", "25520", "dame el diagnostico"],
         cwd=RAIZ, env=entorno, capture_output=True, text=True, timeout=120,
     )
+    salida = resultado.stdout.lower()
     assert "Traceback" not in resultado.stderr, resultado.stderr
     assert "ConnectError" not in resultado.stdout + resultado.stderr
-    assert "no fue posible conectar" in resultado.stdout.lower()
+    assert "httpx" not in salida, "la biblioteca no es asunto del usuario"
+    assert any(p in salida for p in ("conectar", "conexion", "conexión")), salida
+    assert any(
+        p in salida for p in ("no puedo", "no est", "no hay", "no fue posible")
+    ), "debe declarar que el dato no llego, en vez de responder igual"
