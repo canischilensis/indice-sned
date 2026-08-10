@@ -114,9 +114,16 @@ class ServicioDePrediccion:
             f"{c.etiqueta} aporta {c.contribucion:+.2f}" for c in contribuciones[:3]
         ) or "Sin contribuciones relevantes."
 
+        # El nombre sale del catalogo, que es la misma fuente que usa la
+        # prediccion. Si el codigo no estuviera en el catalogo se devuelve el
+        # codigo tal cual: no se inventa un nombre, y la estrategia ya habria
+        # rechazado antes un factor que no existe.
+        del_catalogo = catalogo_factores().get(factor)
+
         return RespuestaExplicacion(
             rbd=rbd,
             factor=factor,
+            nombre=del_catalogo.nombre if del_catalogo else factor,
             prediccion=explicacion.prediccion,
             valor_base=explicacion.valor_base,
             aditividad_verificada=explicacion.verificar_aditividad(tolerancia=0.5),

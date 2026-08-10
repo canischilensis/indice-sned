@@ -139,6 +139,31 @@ estático pasa y las fronteras de cuantos se respetan.
 | Directorio de usuarios en memoria | Media | Abierto: migración a `app.usuario` pendiente |
 | Versión de librería no registrada en los metadatos | Media | Abierto |
 
+**Defectos cerrados.** Se conservan en el registro. Un defecto que se corrige y
+se borra deja de enseñar, y el valor de este plan está en lo que el proyecto
+aprendió equivocándose, no en la apariencia de no haberse equivocado.
+
+| Defecto | Severidad | Cierre |
+|---------|-----------|--------|
+| Tercera copia de los códigos de factor en el adaptador determinista: pedía `SUPERACR` y el servicio la rechazaba | Alta | 2026-08-10. La copia se retiró; el código se resuelve contra el `enum` del esquema de la herramienta |
+| La explicación por factor devolvía el código y no el nombre: un directivo leía `SUPERAR` | Media | 2026-08-10. `RespuestaExplicacion` declara `nombre`, resuelto contra el catálogo oficial |
+| CP-11 aprobaba por el mensaje de error: la frase exigida aparecía dentro del código mal escrito | Alta | 2026-08-10. Se corrigió el ruteo y el caso pasó a rojo honesto antes de volver a verde |
+| La redacción omitía la ausencia de dato por ser la quinta contribución en magnitud | Alta | 2026-08-10. Toda variable con `valor: null` se nombra siempre, entre o no entre las tres mayores |
+| El veredicto de la suite dependía del entorno de la shell: `pytest` pasaba en una terminal y fallaba en otra | Alta | 2026-08-10. `tests/unitarias/q5/conftest.py` aísla las variables del cuanto 5, derivadas de los campos de la configuración |
+
+### 9.1 Reglas que salen de defectos reales
+
+No son principios importados de un manual: cada una nació de un fallo de este
+proyecto y se escribió el día que costó tiempo.
+
+| Regla | Defecto que la origina |
+|-------|------------------------|
+| Una duplicación aceptada por ADR exige una prueba **por copia**, no una por el par | Los códigos de factor vivían en tres lugares y la prueba comparaba dos. La tercera se desincronizó y la suite siguió en verde |
+| Un doble de prueba refleja el **sistema**, nunca la implementación | El doble replicaba la constante equivocada y bendecía el error que debía detectar |
+| El veredicto de la suite no puede depender del entorno de quien la ejecuta | La precedencia «variable del proceso sobre archivo» es correcta en operación y contaminante en pruebas: mismo commit, dos resultados |
+| Una prueba que aprueba por un camino de error no verifica: coincide | CP-11 exigía la cadena `superac` y la obtenía del mensaje «Factor desconocido: SUPERACR» |
+| Primero el comportamiento, después el criterio | Ante una prueba que no medía su intención declarada, se corrigió el agente y recién entonces se endureció el caso. Al revés sería ajustar la prueba a lo que el sistema hace |
+
 ## 10. Lo que este plan no cubre
 
 | Elemento | Motivo |
@@ -146,3 +171,15 @@ estático pasa y las fronteras de cuantos se respetan.
 | Pruebas de carga y concurrencia | El sistema atiende a equipos directivos, no a tráfico masivo; el requisito de concurrencia no está establecido |
 | Pruebas de penetración | Fuera del alcance del proyecto de título |
 | Auditoría de accesibilidad | Reconocido como brecha; no hay requisito formal establecido |
+
+## 11. Historial de modificaciones
+
+Nada se elimina de este documento. Lo que deja de ser cierto se marca como
+superado y conserva su texto: la trazabilidad de una decisión incluye lo que se
+creía antes de tomarla.
+
+| Fecha | Sección | Cambio | Motivo |
+|-------|---------|--------|--------|
+| 2026-08-10 | 9 | Se agrega la tabla de defectos cerrados con cinco entradas | Cinco defectos encontrados por el uso durante la verificación de la cuarta ventana |
+| 2026-08-10 | 9.1 | Sección nueva: cinco reglas derivadas de defectos reales | Las reglas existían en la cabeza del autor y en comentarios de código; faltaba registrarlas donde el plan las pueda exigir |
+| 2026-08-10 | 11 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |

@@ -255,11 +255,24 @@ cumple se declare:
   construccion —quince pruebas en `test_proveedor_gemini.py`—, y las tres
   declaraciones del catalogo se validan contra el propio SDK. Lo que no esta
   ejercitado es la llamada a la red.
+
+  > **Superado el 2026-08-10.** El adaptador de Gemini tiene llamada viva
+  > verificada contra la API. El texto anterior se conserva a proposito: la
+  > limitacion fue real, esta fechada, y saber cuando dejo de serlo vale mas que
+  > borrarla. Sigue vigente para Anthropic y OpenAI.
+
 - **La evaluacion corre contra un doble del servicio**, no contra la base
   cargada. Mide que el agente no cite cifras que el servicio no devolvio, no la
   exactitud de esas cifras: eso ya lo verifica la reconstruccion del indice.
 - **No hay medicion de costo real por consulta.** La instrumentacion existe y
   esta probada; las cifras se obtendran cuando se enchufe un proveedor.
+
+  > **Superado el 2026-08-10.** Dos consultas reales medidas contra Gemini:
+  > USD 0,01248 (4.435 tokens de entrada / 777 de salida) y USD 0,02133 (4.422 /
+  > 1.960). El dato que importa para la defensa: la mayoria de esos 1.960 tokens
+  > de salida fueron tokens de razonamiento, y el adaptador los suma al costo.
+  > Omitirlos habria mostrado la mitad del precio.
+
 - **La cuarta ventana no tiene pruebas automatizadas.** El cuanto 4 no tiene
   arnes de pruebas de interfaz: lo unico que la compuerta verifica es que
   `tsc --noEmit` pase. La verificacion de la ventana es manual y esta descrita
@@ -351,3 +364,117 @@ una traza.
 `tests/arquitectura/test_puntos_de_entrada.py` ejecuta estos puntos de entrada
 como subprocesos, desde la raiz y con `PYTHONPATH` borrado, para que esta clase
 de fallo la detecte la suite y no el usuario.
+
+---
+
+## 14. Defectos encontrados por el uso
+
+Los cinco que siguen aparecieron el 2026-08-10, al levantar los tres procesos y
+lanzar la primera consulta contra el servicio real. **Ninguno lo encontro la
+suite**, que estaba entera en verde. Se registran aqui con su causa, no solo con
+su correccion: la causa es lo que se puede evitar la proxima vez.
+
+### D-01 · Una tercera copia de los codigos de factor
+
+El adaptador determinista guardaba su propia tabla de codigos y cuatro de los
+seis estaban mal escritos. Pedia `SUPERACR` y el servicio respondia «Factor
+desconocido».
+
+Los codigos vivian en **tres** lugares: `COLUMNAS_OBJETIVO` en el cuanto 2, que
+es la fuente; `FACTORES` en el catalogo del cuanto 5, duplicado a proposito para
+no cruzar la frontera de cuantos; y el mapa de ruteo del determinista, **que
+nadie habia registrado**. La prueba `test_codigos_de_factor.py` comparaba los dos
+primeros. La tercera copia no la miraba nadie.
+
+El propio catalogo lo advertia: *«el precio de la duplicacion es que puede
+desincronizarse, y se desincronizo»*. Tenia razon y se quedo corto.
+
+**Correccion.** La copia se retiro. El determinista lee ahora el `enum` del
+esquema de la herramienta, que es el mismo que recibe un modelo de lenguaje. Esa
+simetria no es estetica: si la linea base rutea con una tabla propia y el
+proveedor externo rutea con el esquema, dejan de ser comparables, y la
+comparacion entre ambos es justamente para lo que existe la linea base.
+
+**Verificacion.** `test_codigos_de_factor.py` ejerce ahora el adaptador por su
+interfaz publica, una consulta por factor, y exige que ningun codigo emitido
+quede fuera del catalogo.
+
+### D-02 · La explicacion devolvia el codigo y no el nombre
+
+`RespuestaExplicacion` traia `factor: "SUPERAR"` y ningun nombre. La prediccion
+si lo traia. El resultado: la ventana de explicabilidad y el agente mostraban
+`SUPERAR` a un director de establecimiento. El codigo identifica; el nombre es lo
+que se lee.
+
+**Correccion.** El esquema declara `nombre`, resuelto contra el catalogo oficial
+—la misma fuente que ya usaba la prediccion—. El doble de pruebas replica el
+campo, porque un doble mas pobre que el sistema real vuelve a bendecir errores.
+
+### D-03 · CP-11 aprobaba por el mensaje de error
+
+El caso exigia que la respuesta contuviera `superac`. Con el ruteo roto, el
+servicio respondia «Factor desconocido: **SUPERAC**R» y esa cadena satisfacia la
+exigencia. **El caso llevaba meses en verde por el camino de fallo.**
+
+Al corregir D-01 la llamada empezo a tener exito y el caso se puso rojo por
+primera vez de forma honesta. Una prueba que aprueba por un camino de error no
+verifica: coincide.
+
+### D-04 · La ausencia de dato se omitia por pequeña
+
+El establecimiento de CP-11 no tiene medicion de SIMCE de segundo medio. El
+servicio lo expresa como corresponde —`valor: null`, contribucion `-0,72`— pero
+la redaccion solo nombraba las **tres contribuciones de mayor magnitud**, y esa
+era la quinta. El agente la descartaba por poco relevante.
+
+Descartar una ausencia por pequeña es exactamente tratarla como cero, que es lo
+que este sistema existe para no hacer. La nota de CP-11 lo declaraba desde el
+principio —*«la ausencia debe nombrarse, no tratarse como cero»*— y ninguna
+asercion lo exigia.
+
+**Correccion.** Toda variable sin valor observado se nombra siempre, entre o no
+entre las tres mayores, y se dice explicitamente que la cifra es el efecto de la
+falta del dato y no el de un valor bajo. **Recien despues** se agrego la frase
+`sin medicion` a CP-11: primero el comportamiento, despues el criterio. Al reves
+seria ajustar la prueba a lo que el sistema hace.
+
+### D-05 · El veredicto de la suite dependia de la shell
+
+`pytest -q` pasaba en una terminal y fallaba en otra, sobre el mismo commit. La
+causa es la precedencia declarada en `q5_agente.config` —variable del proceso por
+encima del archivo `.env`—, correcta en operacion y contaminante en pruebas: una
+sesion que hubiera exportado `AGENTE_PROVEEDOR` para levantar el servicio hacia
+fallar a una prueba que escribe su propio `.env` temporal y espera leerlo.
+
+Es la segunda vez que el entorno de la maquina se cuela en la suite. La primera
+fue mas grave: los subprocesos de `tests/arquitectura/` heredaban el `.env` de la
+raiz y salian a internet con la clave de quien ejecutara.
+
+**Correccion.** `tests/unitarias/q5/conftest.py` retira antes de cada prueba toda
+variable del cuanto 5. La lista **no se escribe a mano**: se deriva de los campos
+de `ConfiguracionDelAgente`, de modo que un campo nuevo queda protegido sin que
+nadie tenga que acordarse.
+
+### Lo que los cinco tienen en comun
+
+Cuatro de los cinco son el mismo error de fondo: **una copia de la verdad que
+nadie verificaba**. El codigo de factor duplicado tres veces, el doble mas pobre
+que el sistema, el criterio de prueba desalineado de su intencion declarada, y el
+entorno del operador filtrandose en el veredicto.
+
+La leccion quedo escrita como regla exigible en `PLAN_CALIDAD.md`, seccion 9.1.
+
+---
+
+## 15. Historial de modificaciones
+
+Nada se elimina de este documento. Lo que deja de ser cierto se marca como
+superado y conserva su texto: saber cuando una limitacion dejo de serlo vale mas
+que borrarla.
+
+| Fecha | Seccion | Cambio | Motivo |
+|-------|---------|--------|--------|
+| 2026-08-10 | 11 | Se marca como superada la limitacion «ningun adaptador externo tiene llamada viva verificada» | Gemini tiene llamada viva verificada. Sigue vigente para Anthropic y OpenAI |
+| 2026-08-10 | 11 | Se marca como superada la limitacion «no hay medicion de costo real por consulta» | Dos consultas medidas: USD 0,01248 y USD 0,02133, con tokens de razonamiento incluidos en el costo |
+| 2026-08-10 | 14 | Seccion nueva: cinco defectos encontrados por el uso, con causa y correccion | Ninguno lo detecto la suite; el registro de la causa es lo que evita la repeticion |
+| 2026-08-10 | 15 | Seccion nueva: este historial | Se adopta la convencion de conservar el registro de modificaciones en todos los documentos |

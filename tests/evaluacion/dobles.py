@@ -203,6 +203,11 @@ class ServicioFalso:
         return {
             "rbd": rbd,
             "factor": factor,
+            # El servicio real resuelve el nombre contra el catalogo oficial. El
+            # doble hace lo mismo contra su propia tabla, que es copia declarada
+            # de ese catalogo: si el doble omitiera el nombre, volveria a ser un
+            # doble mas pobre que el sistema y volveria a bendecir un error.
+            "nombre": next(f["nombre"] for f in FACTORES if f["codigo"] == factor),
             "prediccion": 71.20,
             "valor_base": 64.12,
             "aditividad_verificada": True,

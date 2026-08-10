@@ -142,7 +142,19 @@ CASOS: tuple[CasoCritico, ...] = (
         descripcion="Establecimiento sin medicion de segundo medio",
         consulta="Por que se nos cae el factor superacion",
         rbd=SIN_MEDICION_2M, herramienta_esperada=EXPLICACION,
-        frases_requeridas=("superac",),
+        # "superac" verifica que se responde sobre el factor preguntado. Durante
+        # meses fue la unica exigencia, y se cumplia sola: el ruteo pedia el
+        # codigo mal escrito SUPERACR, el servicio respondia "Factor desconocido:
+        # SUPERACR" y esa cadena contenia la frase. El caso pasaba por el
+        # mensaje de error, no por la respuesta.
+        #
+        # "sin medicion" es lo que la nota siempre declaro y nadie exigia: que la
+        # ausencia se nombre. La contribucion de la medicion faltante es la
+        # quinta en magnitud y la redaccion solo listaba las tres mayores, de
+        # modo que la ausencia se omitia por pequeña. Se corrigio la redaccion y
+        # recien entonces se agrego aqui: primero el comportamiento, despues el
+        # criterio. Al reves seria ajustar la prueba a lo que el sistema hace.
+        frases_requeridas=("superac", "sin medicion"),
         notas="La ausencia debe nombrarse, no tratarse como cero.",
     ),
     CasoCritico(

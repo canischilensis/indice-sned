@@ -15,8 +15,14 @@ dos lados justamente porque no es parte de ninguno.
 
 from __future__ import annotations
 
+from typing import Any
+
+import pytest
+
 from q2_modelamiento.validacion import COLUMNAS_OBJETIVO
-from q5_agente.herramientas.catalogo import FACTORES
+from q5_agente.herramientas.catalogo import FACTORES, construir_catalogo
+from q5_agente.proveedores.contrato import Mensaje
+from q5_agente.proveedores.determinista import AdaptadorDeterminista
 
 #: COLUMNAS_OBJETIVO incluye ademas el indice y el indicador socioeconomico, que
 #: no son factores y que G-01 prohibe expresamente como parametro.
@@ -42,3 +48,75 @@ def test_son_seis_y_no_se_repiten():
 def test_el_objetivo_no_se_cuela_como_factor():
     """CTRL-02: el indice y el SEL no son palancas ni factores explicables."""
     assert _NO_SON_FACTORES.isdisjoint(FACTORES)
+
+
+# ---------------------------------------------------------------------------
+# El proveedor determinista
+#
+# La prueba de arriba comparaba dos copias de los codigos: la del motor y la del
+# catalogo. Habia una tercera, en el mapa de ruteo del adaptador determinista, y
+# nadie la miraba: por eso la suite quedaba en verde mientras la primera consulta
+# real pedia SUPERACR y el servicio la rechazaba.
+#
+# Una duplicacion aceptada por ADR necesita una prueba por copia, no una por el
+# par. Estas pruebas cubren la tercera ejecutando el adaptador por su interfaz
+# publica, no leyendo su tabla: si manana el ruteo cambia de forma, siguen
+# valiendo.
+# ---------------------------------------------------------------------------
+
+#: Una consulta por factor, redactada como la escribiria un directivo. Incluyen
+#: "explica" y "factor" para que el ruteo elija la herramienta de explicacion y
+#: la prueba mida el codigo, que es lo que esta bajo examen.
+_CONSULTA_POR_FACTOR = {
+    "EFECTIVR": "explica el factor de efectividad",
+    "SUPERAR": "explica el factor de superacion",
+    "IGUALDR": "explica el factor de igualdad de oportunidades",
+    "INICIAR": "explica el factor de iniciativa",
+    "INTEGRAR": "explica el factor de integracion y participacion",
+    "MEJORAR": "explica el factor de mejoramiento de condiciones",
+}
+
+
+class _PuertaInerte:
+    """Cumple el protocolo PuertaDeServicio y falla si alguien la usa.
+
+    Estas pruebas solo leen esquemas y ruteo; ninguna ejecuta una herramienta.
+    Si una llegara a hacerlo, es un cambio de alcance y debe verse.
+    """
+
+    def obtener(self, ruta: str, parametros: dict[str, Any] | None = None) -> dict:
+        raise AssertionError(f"el ruteo no debe llamar al servicio: GET {ruta}")
+
+    def enviar(self, ruta: str, cuerpo: dict[str, Any]) -> dict:
+        raise AssertionError(f"el ruteo no debe llamar al servicio: POST {ruta}")
+
+
+def _rutear(consulta: str):
+    """Ejecuta el adaptador determinista como lo hace el bucle, y devuelve la peticion."""
+    herramientas = construir_catalogo(_PuertaInerte())
+    descriptores = [
+        {"nombre": h.nombre, "descripcion": h.descripcion, "esquema": h.esquema()}
+        for h in herramientas.values()
+    ]
+    proveedor = AdaptadorDeterminista({h.nombre: h.disparadores for h in herramientas.values()})
+    return proveedor.completar([Mensaje("usuario", consulta)], descriptores).peticion
+
+
+@pytest.mark.parametrize("codigo,consulta", sorted(_CONSULTA_POR_FACTOR.items()))
+def test_el_determinista_rutea_cada_factor_a_su_codigo(codigo: str, consulta: str):
+    peticion = _rutear(consulta)
+    assert peticion is not None, f"'{consulta}' no produjo peticion de herramienta"
+    assert peticion.nombre == "explicacion_por_factor"
+    assert peticion.parametros.get("factor") == codigo
+
+
+def test_el_determinista_no_emite_ningun_codigo_ajeno_al_catalogo():
+    """La regresion concreta: SUPERACR, IGUALDAR, INICIATR y MEJORAMR no existen."""
+    emitidos = {_rutear(c).parametros.get("factor") for c in _CONSULTA_POR_FACTOR.values()}
+    ajenos = sorted(emitidos - set(FACTORES))
+    assert not ajenos, f"codigos fuera del catalogo: {ajenos}"
+
+
+def test_las_consultas_de_prueba_cubren_los_seis_factores():
+    """Si el catalogo suma o retira un factor, esta prueba lo exige aqui tambien."""
+    assert set(_CONSULTA_POR_FACTOR) == set(FACTORES)

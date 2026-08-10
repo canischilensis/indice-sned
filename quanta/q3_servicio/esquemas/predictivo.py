@@ -46,6 +46,11 @@ class ContribucionSalida(BaseModel):
 class RespuestaExplicacion(BaseModel):
     rbd: str
     factor: str
+    #: Nombre del factor en el catalogo oficial. La prediccion ya lo entregaba y
+    #: la explicacion no: quien consumia esta ruta —la ventana de XAI y el agente
+    #: asesor— solo tenia el codigo, y terminaba mostrando "SUPERAR" a un
+    #: directivo. El codigo identifica; el nombre es lo que se lee.
+    nombre: str
     prediccion: float
     valor_base: float
     aditividad_verificada: bool
