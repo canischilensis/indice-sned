@@ -273,6 +273,14 @@ cumple se declare:
   > de salida fueron tokens de razonamiento, y el adaptador los suma al costo.
   > Omitirlos habria mostrado la mitad del precio.
 
+- **La latencia que espera un usuario no esta medida.** CP-17 acota en 3.000 ms
+  el bucle del agente contra un doble de respuesta fija, y eso es lo unico que
+  ese numero significa: el cronometro envuelve la llamada completa, y solo se
+  parece al sobrecosto propio del agente porque el doble responde en unidades de
+  milisegundos. Hay una medicion puntual del 2026-08-10, misma consulta de
+  explicacion por factor: **31 ms contra el doble, 5.906 ms contra el servicio
+  levantado sobre parquet**. La diferencia es el calculo de Shapley. Una serie
+  medida contra el servicio real, con percentiles, no existe.
 - **La cuarta ventana no tiene pruebas automatizadas.** El cuanto 4 no tiene
   arnes de pruebas de interfaz: lo unico que la compuerta verifica es que
   `tsc --noEmit` pase. La verificacion de la ventana es manual y esta descrita
@@ -478,3 +486,4 @@ que borrarla.
 | 2026-08-10 | 11 | Se marca como superada la limitacion «no hay medicion de costo real por consulta» | Dos consultas medidas: USD 0,01248 y USD 0,02133, con tokens de razonamiento incluidos en el costo |
 | 2026-08-10 | 14 | Seccion nueva: cinco defectos encontrados por el uso, con causa y correccion | Ninguno lo detecto la suite; el registro de la causa es lo que evita la repeticion |
 | 2026-08-10 | 15 | Seccion nueva: este historial | Se adopta la convencion de conservar el registro de modificaciones en todos los documentos |
+| 2026-08-10 | 11 | Se declara que la latencia percibida por el usuario no esta medida, con la medicion puntual 31 ms / 5.906 ms | CP-17 se llamaba «latencia propia del agente» y el arnes decia «excluida la del servicio». Ninguna de las dos etiquetas era exacta: el cronometro envuelve la llamada completa |

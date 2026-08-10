@@ -138,6 +138,8 @@ estático pasa y las fronteras de cuantos se respetan.
 | Motor desagregado bajo el umbral de R² | Media | Abierto: corresponde declarar umbrales por sistema |
 | Directorio de usuarios en memoria | Media | Abierto: migración a `app.usuario` pendiente |
 | Versión de librería no registrada en los metadatos | Media | Abierto |
+| `access violation` en un hilo secundario durante la suite en Windows, con marcos de pila corruptos. Código de salida cero y todas las pruebas pasan | Media | Abierto, sin diagnóstico. Se descartó la hipótesis del cliente `httpx`: cerrarlo no lo eliminó, solo lo movió de lugar. El 2026-08-10 se ejecutó `pytest -q -p no:faulthandler` y no apareció, **pero tampoco apareció en cinco corridas de control sin la bandera ese mismo día**: el experimento no distingue nada y se declara no concluyente. El fallo no se reprodujo en toda la sesión |
+| La latencia que espera un usuario no está medida | Media | Abierto. CP-17 acota el bucle contra un doble de respuesta fija. Medición puntual del 2026-08-10: 31 ms contra el doble, 5.906 ms contra el servicio real. Falta una serie con percentiles |
 
 **Defectos cerrados.** Se conservan en el registro. Un defecto que se corrige y
 se borra deja de enseñar, y el valor de este plan está en lo que el proyecto
@@ -183,3 +185,4 @@ creía antes de tomarla.
 | 2026-08-10 | 9 | Se agrega la tabla de defectos cerrados con cinco entradas | Cinco defectos encontrados por el uso durante la verificación de la cuarta ventana |
 | 2026-08-10 | 9.1 | Sección nueva: cinco reglas derivadas de defectos reales | Las reglas existían en la cabeza del autor y en comentarios de código; faltaba registrarlas donde el plan las pueda exigir |
 | 2026-08-10 | 11 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |
+| 2026-08-10 | 9 | Se registran dos defectos abiertos que no estaban en ningún documento: el `access violation` de Windows y la latencia percibida sin medir | Vivían en notas de trabajo. Un defecto conocido que no está en el plan no está declarado: está olvidado a medias |

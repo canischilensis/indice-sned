@@ -197,11 +197,28 @@ CASOS: tuple[CasoCritico, ...] = (
     ),
     CasoCritico(
         id="CP-17", categoria="Latencia",
-        descripcion="Presupuesto de latencia propio del agente",
+        descripcion="Presupuesto del bucle del agente contra un doble de respuesta fija",
         consulta="Dame el diagnostico del establecimiento",
         rbd=TRAMO_100, herramienta_esperada=DIAGNOSTICO,
         max_milisegundos=3000,
-        notas="Mide el agente, no el servicio: la simulacion real tarda 4,6 s por diseno.",
+        # El cronometro del arnes envuelve la llamada completa a `asesorar`, de
+        # modo que incluye lo que tarde el servicio. Lo que hace que este numero
+        # se parezca al sobrecosto propio del agente no es una exclusion: es que
+        # el doble devuelve cargas fijas y responde en unidades de milisegundos.
+        #
+        # Por eso el presupuesto NO acota lo que espera un usuario. Medicion
+        # puntual del 2026-08-10 sobre la misma consulta de explicacion por
+        # factor: 31 ms contra el doble, 5.906 ms contra el servicio levantado
+        # sobre parquet. La diferencia es el calculo de Shapley, que es lento a
+        # proposito antes que aproximado.
+        #
+        # El presupuesto se conserva en 3.000 ms porque sigue siendo util para
+        # lo que si mide: detecta que el bucle no se vaya de paseo por pasos
+        # innecesarios. Lo que se corrige aqui es la etiqueta, no el umbral.
+        notas=(
+            "Acota el bucle, los guardarrailes y la redaccion, no la espera del usuario. "
+            "El doble responde en milisegundos; el servicio real calcula."
+        ),
     ),
     CasoCritico(
         id="CP-18", categoria="Seguridad",

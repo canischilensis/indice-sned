@@ -8,7 +8,17 @@ cosas, todas verificables y ninguna opinable:
      devolviera. Es G-02 medido, no declarado.
   3. Ausencia de promesas de retorno: G-03.
   4. Resiliencia: ante 403, 404, 422 y 503 responde sin inventar cifras.
-  5. Latencia propia del agente, excluida la del servicio.
+  5. Latencia del bucle contra un doble del servicio.
+
+     Lo que este numero acota es el sobrecosto propio del agente: el bucle, los
+     guardarrailes y la redaccion. No acota lo que espera un usuario. El doble
+     responde en unidades de milisegundos porque devuelve cargas fijas; el
+     servicio real calcula. Medicion puntual del 2026-08-10, misma consulta de
+     explicacion por factor: 31 ms contra el doble, 5.906 ms contra el servicio
+     levantado sobre parquet.
+
+     Presentar el primero como latencia del sistema seria informar de menos por
+     construccion del banco de pruebas.
 
     python tests/evaluacion/arnes.py              # informe por consola
     python tests/evaluacion/arnes.py --respuestas # ademas, que contesto el agente
@@ -177,7 +187,11 @@ def informe(resultados: list[ResultadoCaso]) -> str:
         f"  Ruteo de herramienta       {ruteo}/{total}",
         f"  Sin cifras sin respaldo    {sin_huerfanas}/{total}   (G-02)",
         f"  Sin promesas de retorno    {sin_promesas}/{total}   (G-03)",
-        f"  Latencia propia p95        {p95} ms",
+        f"  Latencia del bucle p95     {p95} ms   (contra el doble)",
+        "=" * 62,
+        "  La latencia es la del bucle contra un doble de respuesta fija. No es",
+        "  la que espera un usuario: el servicio real calcula. Ver seccion 11 de",
+        "  docs/agente/AGENTE_ASESOR.md.",
         "=" * 62,
     ]
     for r in resultados:
