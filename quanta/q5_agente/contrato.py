@@ -78,6 +78,28 @@ class RespuestaAsesor:
         return not self.rechazada and any(ll.exito for ll in self.llamadas)
 
 
+def cifras_del_contexto(consulta: Consulta) -> set[float]:
+    """Magnitudes que el propio pedido aporta: identificador y bienio.
+
+    Cuentan como respaldadas para G-02. No son invencion del modelo —las puso el
+    usuario— y el agente debe poder repetirlas al explicar un error.
+
+    Vive junto al puerto y no dentro de un orquestador porque es una regla del
+    dominio. Todo adaptador de `AsesorDeGestion` debe aplicarla identica: si cada
+    uno decidiera por su cuenta que cifras admite, una comparacion entre dos
+    orquestadores estaria midiendo dos politicas distintas en vez de dos formas
+    de orquestar.
+    """
+    cifras: set[float] = set()
+    if consulta.rbd.isdigit():
+        cifras.add(float(consulta.rbd))
+    if consulta.periodo:
+        for parte in consulta.periodo.split("-"):
+            if parte.isdigit():
+                cifras.add(float(parte))
+    return cifras
+
+
 class AsesorDeGestion(ABC):
     """Puerto del cuanto 5.
 

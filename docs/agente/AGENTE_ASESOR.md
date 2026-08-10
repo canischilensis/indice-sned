@@ -132,6 +132,30 @@ el resultado y responde, con un maximo de pasos configurable. Escalar a
 planificacion explicita solo se justificaria con evidencia de que la complejidad
 lo exige, y esa evidencia no existe todavia.
 
+### 7.1 El puerto tiene dos adaptadores
+
+Desde el 2026-08-10 conviven dos orquestadores detras de `AsesorDeGestion`, y se
+eligen por configuracion:
+
+| `AGENTE_ORQUESTADOR` | Implementacion | Dependencias |
+|---|---|---|
+| `bucle_simple` | `bucle.py`, escrito a mano | `httpx` |
+| `langgraph_react` | `orquestadores/langgraph_react.py`, sobre `create_react_agent` | 15 paquetes |
+
+El segundo se importa de forma **perezosa** desde la fabrica, igual que los SDK de
+los proveedores externos. Por eso la consola sigue arrancando con `httpx` como
+unica dependencia, la compuerta de arquitectura pasa sin excepciones y las
+pruebas del adaptador se omiten enteras si el paquete no esta instalado.
+
+**Los veinte casos criticos evaluan a los dos sin modificarse.** Eso es lo que
+convierte al puerto en un puerto y no en una promesa: `RepositorioEstablecimientos`
+ya lo tenia demostrado con Parquet y PostgreSQL, y este no.
+
+La medicion completa —ruteo, guardarrailes, pasos, tokens, latencia y
+dependencias transitivas— esta en `COMPARACION_ORQUESTADORES.md`. Su resultado en
+una linea: **misma calidad, catorce dependencias mas y una decena de milisegundos
+por consulta**, porque este problema no usa nada de lo que el framework vende.
+
 ## 8. Proveedores
 
 | Adaptador | Uso previsto | Requiere |
@@ -639,3 +663,4 @@ que borrarla.
 | 2026-08-10 | 14 | Se agrega D-07: una consulta sin factor reconocible se respondia sobre Efectividad sin avisar | Quedo a la vista al retirar la tercera copia de codigos. Sin factor inferible se rutea ahora al diagnostico general |
 | 2026-08-10 | 9.1 | Seccion nueva: por que la tabla de precios conserva modelos cerrados a claves nuevas | Estaba resuelto en un comentario del codigo pero no era una decision registrada. Retirarlos convertiria una tarifa correcta en un costo cero |
 | 2026-08-10 | 14 | Se agrega D-08: la configuracion de red vivia en el codigo, en el cliente y en los origenes CORS del asesor | No molesta en localhost y hace imposible el primer despliegue en contenedores |
+| 2026-08-10 | 7.1 | Seccion nueva: el puerto pasa a tener dos adaptadores, con `AGENTE_ORQUESTADOR` para elegirlos | Un puerto con un solo adaptador es una promesa sin cobrar. Los veinte casos evaluan a los dos sin modificarse |

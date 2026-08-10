@@ -13,14 +13,24 @@ from q5_agente.bucle import AgenteDeBucleSimple
 from q5_agente.config import ConfiguracionDelAgente, config_agente, secreto
 from q5_agente.contrato import AsesorDeGestion
 from q5_agente.decoradores import ProveedorConCortacircuitos, ProveedorInstrumentado
-from q5_agente.errores import ProveedorNoConfigurado
+from q5_agente.errores import ErrorDelAgente, ProveedorNoConfigurado
 from q5_agente.gateway import PuertaDeServicio, ServicioSnedGateway
 from q5_agente.guardarrailes import PoliticaDeSalida, SanitizadorDeParametros
 from q5_agente.herramientas.catalogo import construir_catalogo
+from q5_agente.herramientas.contrato import Herramienta
 from q5_agente.proveedores.contrato import ProveedorDeModelo
 from q5_agente.proveedores.determinista import AdaptadorDeterminista
 
 PREDETERMINADO = "determinista"
+
+
+class OrquestadorDesconocido(ErrorDelAgente):
+    """El orquestador pedido no esta en el registro.
+
+    Falla al construir y no a media consulta, con la lista de los disponibles:
+    un nombre mal escrito en el entorno debe decir que escribir, no dejar al
+    usuario adivinando por que el agente no responde.
+    """
 
 
 def _determinista(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
@@ -155,4 +165,48 @@ def crear_agente(
         fundamentacion=cfg.agente_guardarrail_cifras,
         promesas=cfg.agente_guardarrail_promesas,
     )
-    return AgenteDeBucleSimple(protegido, herramientas, politica, max_pasos=cfg.agente_max_pasos)
+
+    constructor = ORQUESTADORES.get(cfg.agente_orquestador)
+    if constructor is None:
+        raise OrquestadorDesconocido(
+            f"AGENTE_ORQUESTADOR='{cfg.agente_orquestador}' no existe. "
+            f"Disponibles: {sorted(ORQUESTADORES)}"
+        )
+    return constructor(protegido, herramientas, politica, cfg.agente_max_pasos)
+
+
+def _bucle_simple(
+    proveedor: ProveedorDeModelo,
+    herramientas: dict[str, Herramienta],
+    politica: PoliticaDeSalida,
+    max_pasos: int,
+) -> AsesorDeGestion:
+    return AgenteDeBucleSimple(proveedor, herramientas, politica, max_pasos=max_pasos)
+
+
+def _langgraph_react(
+    proveedor: ProveedorDeModelo,
+    herramientas: dict[str, Herramienta],
+    politica: PoliticaDeSalida,
+    max_pasos: int,
+) -> AsesorDeGestion:
+    """Importacion perezosa, igual que la de los SDK de los proveedores.
+
+    `langgraph` arrastra `pydantic` y la pila de `langchain`, que la compuerta
+    prohibe en el cuanto 5. La prohibicion se respeta porque este modulo no se
+    importa nunca salvo que la configuracion lo pida: la consola arranca con
+    `httpx` como unica dependencia mientras el orquestador sea el bucle propio, y
+    `tests/arquitectura/` lo verifica sin necesitar excepciones.
+    """
+    from q5_agente.orquestadores.langgraph_react import AgenteLangGraph  # noqa: PLC0415
+
+    return AgenteLangGraph(proveedor, herramientas, politica, max_pasos=max_pasos)
+
+
+#: Registro de orquestadores. Dos adaptadores del mismo puerto: el bucle escrito
+#: a mano y el ReAct de LangGraph. Existe para medir la diferencia, no para
+#: elegir un ganador de antemano.
+ORQUESTADORES: dict[str, Callable[..., AsesorDeGestion]] = {
+    "bucle_simple": _bucle_simple,
+    "langgraph_react": _langgraph_react,
+}

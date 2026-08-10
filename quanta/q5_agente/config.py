@@ -65,6 +65,13 @@ class ConfiguracionDelAgente:
     agente_proveedor: str = "determinista"
     agente_modelo: str = ""
 
+    #: Adaptador del puerto AsesorDeGestion: bucle_simple | langgraph_react
+    #:
+    #: El predeterminado es el bucle escrito a mano, que no necesita mas que
+    #: httpx. `langgraph_react` arrastra la pila de LangChain y se carga de forma
+    #: perezosa, solo si se pide. Existen los dos para poder medir la diferencia.
+    agente_orquestador: str = "bucle_simple"
+
     #: Bucle y cortacircuitos (ADR-006)
     agente_max_pasos: int = 3
     agente_umbral_fallos: int = 3

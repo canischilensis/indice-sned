@@ -83,12 +83,42 @@ class ResultadoCaso:
     llamada_exitosa: bool = False
     detalle_llamada: str = ""
     guardarrailes: list[str] = field(default_factory=list)
+    #: Consumo del caso. Se agrega para poder comparar dos orquestadores sobre
+    #: los mismos veinte casos: sin estas cuatro cifras, la comparacion mide si
+    #: aprueban y no lo que cuesta aprobar, que es la mitad de la pregunta.
+    pasos: int = 0
+    llamadas_al_modelo: int = 0
+    tokens_entrada: int = 0
+    tokens_salida: int = 0
+    costo_usd: float = 0.0
 
 
-def construir_agente(servicio: ServicioFalso) -> AgenteDeBucleSimple:
+#: Orquestador por omision. Se conserva como valor por defecto para que todo lo
+#: que ya llamaba a `construir_agente(servicio)` siga midiendo lo mismo.
+BUCLE_SIMPLE = "bucle_simple"
+LANGGRAPH = "langgraph_react"
+
+
+def construir_agente(servicio: ServicioFalso, orquestador: str = BUCLE_SIMPLE):
+    """Arma el agente sobre el doble del servicio, con el orquestador pedido.
+
+    **Todo lo que rodea al orquestador es identico en los dos casos**: el mismo
+    catalogo de herramientas, el mismo doble del servicio, el mismo proveedor
+    determinista con los mismos disparadores y la misma politica de salida. Es la
+    condicion que hace que la comparacion mida orquestacion y no dos sistemas.
+
+    `langgraph_react` se importa aqui dentro, no arriba: el arnes debe seguir
+    ejecutandose en una maquina que no tenga LangGraph instalado.
+    """
     herramientas = construir_catalogo(servicio, SanitizadorDeParametros())
     proveedor = AdaptadorDeterminista({h.nombre: h.disparadores for h in herramientas.values()})
-    return AgenteDeBucleSimple(proveedor, herramientas, PoliticaDeSalida(), max_pasos=3)
+    politica = PoliticaDeSalida()
+
+    if orquestador == LANGGRAPH:
+        from q5_agente.orquestadores.langgraph_react import AgenteLangGraph  # noqa: PLC0415
+
+        return AgenteLangGraph(proveedor, herramientas, politica, max_pasos=3)
+    return AgenteDeBucleSimple(proveedor, herramientas, politica, max_pasos=3)
 
 
 def evaluar_caso(
@@ -162,14 +192,19 @@ def evaluar_caso(
         llamada_exitosa=bool(respuesta.llamadas) and respuesta.llamadas[0].exito,
         detalle_llamada=respuesta.llamadas[0].resumen if respuesta.llamadas else "",
         guardarrailes=list(respuesta.guardarrailes_aplicados),
+        pasos=len(respuesta.llamadas),
+        llamadas_al_modelo=respuesta.uso.llamadas_al_modelo,
+        tokens_entrada=respuesta.uso.tokens_entrada,
+        tokens_salida=respuesta.uso.tokens_salida,
+        costo_usd=respuesta.uso.costo_usd,
     )
 
 
-def ejecutar() -> list[ResultadoCaso]:
+def ejecutar(orquestador: str = BUCLE_SIMPLE) -> list[ResultadoCaso]:
     resultados = []
     for caso in CASOS:
         servicio = ServicioFalso()
-        agente = construir_agente(servicio)
+        agente = construir_agente(servicio, orquestador)
         resultados.append(evaluar_caso(caso, agente, servicio))
     return resultados
 
@@ -247,9 +282,14 @@ def main(argv: list[str] | None = None) -> int:
         "--respuestas", action="store_true",
         help="Imprime lo que el agente contesto en cada caso, con la herramienta que uso",
     )
+    analizador.add_argument(
+        "--orquestador", default=BUCLE_SIMPLE, choices=[BUCLE_SIMPLE, LANGGRAPH],
+        help="Adaptador del puerto AsesorDeGestion que se evalua",
+    )
     args = analizador.parse_args(argv)
 
-    resultados = ejecutar()
+    resultados = ejecutar(args.orquestador)
+    print(f"Orquestador evaluado: {args.orquestador}\n")
     print(informe(resultados))
     if args.respuestas:
         print(transcripcion(resultados))

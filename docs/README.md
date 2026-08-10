@@ -39,6 +39,8 @@ al índice del Capítulo IV de la tesis.
 | `ARCHITECTURE.md` | — | Documento vivo: motores de la arquitectura, decisiones y deuda conocida |
 | `PATRONES_DE_DISENO.md` | — | 12 patrones aplicados y 12 descartados, con fuentes citadas |
 | `adr/` | ADR-001 a 007 | Decisiones de arquitectura registradas |
+| `agente/AGENTE_ASESOR.md` | AG-SNED-01 | El cuanto 5: puerto, guardarraíles, proveedores, evaluación y defectos encontrados por el uso |
+| `agente/COMPARACION_ORQUESTADORES.md` | CO-SNED-01 | Comparación medida entre el bucle propio y el ReAct de LangGraph, sobre los mismos veinte casos |
 
 ## 3. Diseño
 

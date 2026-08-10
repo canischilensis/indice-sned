@@ -25,6 +25,7 @@ from q5_agente.contrato import (
     LlamadaHerramienta,
     RespuestaAsesor,
     Uso,
+    cifras_del_contexto,
 )
 from q5_agente.errores import (
     CircuitoAbierto,
@@ -45,16 +46,13 @@ _DISCULPA_PROVEEDOR = (
 )
 
 
-def _cifras_del_contexto(consulta: Consulta) -> set[float]:
-    """Magnitudes que el propio pedido aporta: identificador y bienio."""
-    cifras: set[float] = set()
-    if consulta.rbd.isdigit():
-        cifras.add(float(consulta.rbd))
-    if consulta.periodo:
-        for parte in consulta.periodo.split("-"):
-            if parte.isdigit():
-                cifras.add(float(parte))
-    return cifras
+#: Se mantiene el nombre local por compatibilidad con el resto del modulo. La
+#: funcion se mudo a `contrato.py` cuando aparecio el segundo adaptador del
+#: puerto: es una regla del dominio —que cuentan como respaldadas las cifras del
+#: propio pedido— y no una particularidad de este bucle. Los dos orquestadores
+#: deben aplicarla identica, o la comparacion entre ambos mediria dos politicas
+#: distintas en vez de dos formas de orquestar.
+_cifras_del_contexto = cifras_del_contexto
 
 
 def _numero(valor: Any) -> float | None:
