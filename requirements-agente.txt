@@ -19,6 +19,7 @@
 httpx==0.27.2
 
 # Proveedores de modelo. Opcionales: instale solo el que vaya a usar. Sin
-# ninguno de los dos, el proveedor determinista funciona igual.
+# ninguno de los tres, el proveedor determinista funciona igual.
 anthropic==0.40.0
 openai==1.57.0
+google-genai==2.17.0

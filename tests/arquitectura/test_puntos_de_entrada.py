@@ -51,9 +51,17 @@ def test_la_consola_del_agente_arranca_desde_la_raiz():
 
 
 # Modulos que la consola NO debe necesitar. pydantic-settings y FastAPI viven en
-# el servicio; la consola solo necesita httpx. Si algun dia alguien los importa
-# desde la cadena del CLI, esta prueba lo detiene.
-_PROHIBIDOS_EN_LA_CONSOLA = ("pydantic_settings", "pydantic", "fastapi", "anthropic", "openai")
+# el servicio; los SDK de los proveedores se importan de forma perezosa, dentro
+# del adaptador que los usa. La consola solo necesita httpx. Si algun dia alguien
+# los importa desde la cadena del CLI, esta prueba lo detiene.
+_PROHIBIDOS_EN_LA_CONSOLA = (
+    "pydantic_settings",
+    "pydantic",
+    "fastapi",
+    "anthropic",
+    "openai",
+    "google",
+)
 
 _GUION_SIN_DEPENDENCIAS = """
 import sys

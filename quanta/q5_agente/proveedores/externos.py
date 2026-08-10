@@ -30,12 +30,78 @@ _ROL_HTTP = {
     "herramienta": "user",
 }
 
+#: Gemini nombra "model" lo que las otras dos APIs llaman "assistant", y no
+#: admite un rol de sistema dentro de la conversacion: va en `system_instruction`.
+_ROL_GEMINI = {
+    "usuario": "user",
+    "herramienta": "user",
+    "asistente": "model",
+}
+
 
 def _a_esquema_de_funcion(herramienta: dict[str, Any]) -> dict[str, Any]:
     return {
         "name": herramienta["nombre"],
         "description": herramienta["descripcion"],
         "input_schema": herramienta["esquema"],
+    }
+
+
+# --- traduccion de esquema para Gemini ------------------------------------
+#
+# Gemini no acepta JSON Schema completo, sino un subconjunto de OpenAPI 3.0.
+# `additionalProperties` no forma parte de ese subconjunto, y la herramienta
+# `simulacion_de_escenario` lo usa para declarar el mapa variable -> valor.
+# Traducir es responsabilidad del adaptador: el catalogo no se deforma para
+# acomodar a un proveedor, que es justamente lo que el puerto evita.
+
+_CLAVES_ADMITIDAS = frozenset(
+    {"type", "description", "enum", "items", "properties", "required", "nullable", "format"}
+)
+
+
+def _a_esquema_gemini(nodo: Any) -> Any:
+    """Poda el esquema a las claves del subconjunto OpenAPI que Gemini admite.
+
+    Lo unico que se pierde es la restriccion de tipo sobre los valores de un
+    mapa abierto. El sanitizador G-01 ya la impone del lado del agente, que es
+    donde debe imponerse: un guardarrail no puede depender de que el proveedor
+    respete el esquema.
+    """
+    if isinstance(nodo, list):
+        return [_a_esquema_gemini(x) for x in nodo]
+    if not isinstance(nodo, dict):
+        return nodo
+
+    podado: dict[str, Any] = {}
+    for clave, valor in nodo.items():
+        if clave not in _CLAVES_ADMITIDAS:
+            continue
+        if clave == "properties" and isinstance(valor, dict):
+            # Las claves de `properties` son nombres de parametro, no palabras
+            # del esquema: se conservan todas y se poda solo su contenido.
+            podado[clave] = {nombre: _a_esquema_gemini(sub) for nombre, sub in valor.items()}
+        elif clave in {"enum", "required"}:
+            podado[clave] = list(valor) if isinstance(valor, (list, tuple)) else valor
+        else:
+            podado[clave] = _a_esquema_gemini(valor)
+
+    extra = nodo.get("additionalProperties")
+    if isinstance(extra, dict) and "properties" not in podado:
+        tipo = extra.get("type", "valor")
+        base = podado.get("description", "")
+        podado["description"] = (
+            f"{base} Mapa abierto: las claves son nombres de variable y los valores son de "
+            f"tipo {tipo}."
+        ).strip()
+    return podado
+
+
+def _a_declaracion_gemini(herramienta: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "name": herramienta["nombre"],
+        "description": herramienta["descripcion"],
+        "parameters": _a_esquema_gemini(herramienta["esquema"]),
     }
 
 
@@ -161,3 +227,132 @@ class AdaptadorOpenAI(ProveedorDeModelo):
         return RespuestaDelModelo(
             texto=eleccion.content or "", tokens_entrada=entrada, tokens_salida=salida
         )
+
+
+class AdaptadorGemini(ProveedorDeModelo):
+    """Adaptador para la API de Gemini (SDK `google-genai`).
+
+    Tres diferencias con los otros dos adaptadores, todas resueltas aqui dentro
+    para que el bucle no se entere:
+
+    1. El mensaje de sistema no viaja en la conversacion sino en
+       `system_instruction`.
+    2. El esquema de las funciones es un subconjunto de OpenAPI, no JSON Schema.
+    3. Los **tokens de razonamiento** se facturan como salida y llegan en un
+       contador aparte. Sumarlos no es opcional: omitirlos haria que la
+       instrumentacion de costo declare menos de lo que el proyecto gasta.
+    """
+
+    nombre = "gemini"
+
+    #: Precio por millon de tokens, por modelo (nivel de pago estandar,
+    #: agosto de 2026). El precio depende del modelo, de modo que fijarlo como
+    #: constante de clase haria mentir a la instrumentacion en cuanto alguien
+    #: cambiara AGENTE_MODELO.
+    PRECIOS: dict[str, tuple[float, float]] = {
+        "gemini-2.5-flash-lite": (0.10, 0.40),
+        "gemini-2.5-flash": (0.30, 2.50),
+        "gemini-2.5-pro": (1.25, 10.00),
+        "gemini-3.1-flash-lite": (0.25, 1.50),
+        "gemini-3.5-flash-lite": (0.30, 2.50),
+        "gemini-3.5-flash": (1.50, 9.00),
+        "gemini-3.6-flash": (1.50, 7.50),
+        "gemini-3.1-pro-preview": (2.00, 12.00),
+    }
+    MODELO_PREDETERMINADO = "gemini-2.5-flash"
+
+    def __init__(self, modelo: str = MODELO_PREDETERMINADO, clave: str | None = None) -> None:
+        try:
+            from google import genai  # noqa: PLC0415
+            from google.genai import types  # noqa: PLC0415
+        except ImportError as exc:
+            raise ProveedorNoConfigurado(
+                "El paquete 'google-genai' no esta instalado. Instalelo con "
+                "'pip install google-genai' o use el proveedor determinista."
+            ) from exc
+
+        api_key = clave or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            raise ProveedorNoConfigurado(
+                "Falta la variable de entorno GEMINI_API_KEY. La clave se emite en Google AI "
+                "Studio; una suscripcion de consumidor a Gemini no habilita la API."
+            )
+
+        self._tipos = types
+        self._cliente = genai.Client(api_key=api_key)
+        self._modelo = modelo
+
+        precio = self.PRECIOS.get(modelo)
+        #: Falso cuando el modelo no esta en la tabla: el costo se reporta como
+        #: cero y `describir()` lo declara, en vez de inventar una tarifa.
+        self.precio_declarado = precio is not None
+        self.usd_por_millon_entrada, self.usd_por_millon_salida = precio or (0.0, 0.0)
+
+    def completar(
+        self, mensajes: list[Mensaje], herramientas: list[dict[str, Any]]
+    ) -> RespuestaDelModelo:
+        tipos = self._tipos
+        instruccion = "\n\n".join(m.contenido for m in mensajes if m.rol == "sistema")
+        contenidos = [
+            tipos.Content(
+                role=_ROL_GEMINI.get(m.rol, "user"),
+                parts=[tipos.Part(text=m.contenido)],
+            )
+            for m in mensajes
+            if m.rol != "sistema"
+        ]
+        configuracion = tipos.GenerateContentConfig(
+            system_instruction=instruccion or None,
+            temperature=0,
+            tools=[
+                tipos.Tool(
+                    function_declarations=[_a_declaracion_gemini(h) for h in herramientas]
+                )
+            ],
+        )
+        try:
+            respuesta = self._cliente.models.generate_content(
+                model=self._modelo, contents=contenidos, config=configuracion
+            )
+        except Exception as exc:  # noqa: BLE001 - la SDK expone jerarquias propias
+            raise ErrorDelProveedor(f"Fallo la llamada al proveedor: {exc}") from exc
+
+        entrada, salida = self._contar(respuesta)
+        partes = self._partes(respuesta)
+
+        for parte in partes:
+            llamada = getattr(parte, "function_call", None)
+            if llamada is not None and getattr(llamada, "name", None):
+                return RespuestaDelModelo(
+                    peticion=PeticionDeHerramienta(llamada.name, dict(llamada.args or {})),
+                    tokens_entrada=entrada,
+                    tokens_salida=salida,
+                )
+
+        texto = "".join(getattr(p, "text", "") or "" for p in partes)
+        return RespuestaDelModelo(texto=texto, tokens_entrada=entrada, tokens_salida=salida)
+
+    @staticmethod
+    def _partes(respuesta: Any) -> list[Any]:
+        """Extrae las partes sin usar `.text`, que revienta si solo hubo llamada."""
+        candidatos = getattr(respuesta, "candidates", None) or []
+        if not candidatos:
+            return []
+        contenido = getattr(candidatos[0], "content", None)
+        return list(getattr(contenido, "parts", None) or [])
+
+    @staticmethod
+    def _contar(respuesta: Any) -> tuple[int, int]:
+        """Tokens de entrada y de salida, con el razonamiento contado como salida."""
+        uso = getattr(respuesta, "usage_metadata", None)
+        entrada = getattr(uso, "prompt_token_count", 0) or 0
+        salida = getattr(uso, "candidates_token_count", 0) or 0
+        razonamiento = getattr(uso, "thoughts_token_count", 0) or 0
+        return entrada, salida + razonamiento
+
+    def describir(self) -> dict[str, Any]:
+        return {
+            "proveedor": self.nombre,
+            "modelo": self._modelo,
+            "precio_declarado": self.precio_declarado,
+        }

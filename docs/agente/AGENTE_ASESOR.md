@@ -39,7 +39,28 @@ verifica en cada integracion, y existe una prueba negativa que introduce la
 importacion prohibida y comprueba que el script falla.
 
 Consecuencia practica: **si el cuanto 5 se retira, el sistema sigue operando**.
-El tablero, el simulador y el reporte de explicabilidad no lo conocen.
+El tablero, el simulador y el reporte de explicabilidad no lo conocen. La cuarta
+ventana del cliente si lo conoce, pero hacia el otro lado: es la unica que deja
+de funcionar, y lo declara en pantalla en vez de romper la interfaz.
+
+### 3.1 Identidad delegada
+
+El agente **no tiene identidad propia frente al servicio cuando lo usa una
+persona**: reenvia el token de quien pregunta. Es la condicion que hace
+admisible exponerlo a un navegador. Sin delegacion, CTRL-04 protegeria a la
+cuenta con la que el agente se autentica, y un directivo alcanzaria por el
+agente establecimientos que la interfaz le niega.
+
+| Punto de entrada | Identidad | Motivo |
+|---|---|---|
+| Ruta HTTP `/asesor/consulta` | Token del usuario, exigido en la cabecera | Detras hay una persona con jurisdiccion propia |
+| Consola `scripts/asesor.py` | Cuenta de servicio de `.env` | No hay usuario detras; es operacion y diagnostico |
+
+Un token delegado vencido **no se renueva solo**: se traduce a `SesionExpirada`,
+porque renovar por cuenta propia seria suplantar al usuario. El agente se
+construye por peticion y no se memoriza entre llamadas: guardar un agente
+compartido significaria compartir tambien la identidad.
+`tests/unitarias/q5/test_identidad_delegada.py` fija estas cuatro condiciones.
 
 ## 4. Las tres herramientas
 
@@ -118,6 +139,44 @@ lo exige, y esa evidencia no existe todavia.
 | `determinista` | Pruebas, evaluacion e integracion continua | Nada |
 | `anthropic` | Operacion | Paquete `anthropic` y `ANTHROPIC_API_KEY` |
 | `openai` | Operacion | Paquete `openai` y `OPENAI_API_KEY` |
+| `gemini` | Operacion | Paquete `google-genai` y `GEMINI_API_KEY` |
+
+Cambiar de proveedor es cambiar dos variables de entorno. El bucle, el catalogo
+de herramientas y los cuatro guardarrailes no se tocan: es lo que el puerto
+`ProveedorDeModelo` compra.
+
+```bash
+AGENTE_PROVEEDOR=gemini
+GEMINI_API_KEY=...        # se emite en Google AI Studio
+```
+
+### 8.1 Tres asimetrias que el adaptador de Gemini absorbe
+
+El puerto solo sirve si el adaptador se hace cargo de lo que su proveedor tiene
+de particular, en vez de filtrarlo hacia el bucle. Gemini tiene tres cosas
+particulares, y las tres quedan dentro de `AdaptadorGemini`:
+
+1. **El mensaje de sistema no es un turno.** Viaja en `system_instruction`.
+   Mandarlo como turno de la conversacion degrada el seguimiento de la
+   instruccion.
+2. **El esquema de funciones es un subconjunto de OpenAPI, no JSON Schema.**
+   `additionalProperties`, que `simulacion_de_escenario` usa para declarar el
+   mapa variable -> valor, no existe alli. El adaptador poda esa clave y traslada
+   la restriccion perdida a la descripcion en prosa. Lo que se pierde es la
+   validacion de tipo del lado del proveedor; G-01 la impone igual del lado del
+   agente, que es donde corresponde: **un guardarrail no puede depender de que
+   el proveedor respete el esquema**.
+3. **Los tokens de razonamiento se facturan como salida** y llegan en un
+   contador aparte, `thoughts_token_count`. El adaptador los suma a la salida.
+   Omitirlos haria que la instrumentacion de costo declare menos de lo que el
+   proyecto gasta, que es exactamente la clase de cifra que este trabajo no
+   puede permitirse.
+
+**El precio depende del modelo, no del proveedor.** Los otros dos adaptadores
+fijan la tarifa como constante de clase; el de Gemini la resuelve por modelo
+desde una tabla, y cuando el modelo no esta en ella reporta costo cero **y lo
+declara** en `describir()` con `precio_declarado: false`. Una tarifa inventada
+seria peor que una ausente.
 
 **Dependencias del cuanto.** La consola necesita **httpx y nada mas**: la
 configuracion se resuelve con biblioteca estandar, no con pydantic-settings.
@@ -174,16 +233,66 @@ cumple se declare:
   casos se ejecutan contra el adaptador determinista. Lo que esta verificado es
   el bucle, el ruteo, los guardarrailes y la resiliencia, no la prosa de un
   modelo externo.
+- **Ninguno de los tres adaptadores externos tiene una llamada viva verificada.**
+  De Gemini se verifican sin clave la traduccion del esquema, la separacion del
+  mensaje de sistema, la traduccion de roles, el conteo de tokens con
+  razonamiento incluido, la lectura de la respuesta y los dos modos de fallo de
+  construccion —quince pruebas en `test_proveedor_gemini.py`—, y las tres
+  declaraciones del catalogo se validan contra el propio SDK. Lo que no esta
+  ejercitado es la llamada a la red.
 - **La evaluacion corre contra un doble del servicio**, no contra la base
   cargada. Mide que el agente no cite cifras que el servicio no devolvio, no la
   exactitud de esas cifras: eso ya lo verifica la reconstruccion del indice.
 - **No hay medicion de costo real por consulta.** La instrumentacion existe y
   esta probada; las cifras se obtendran cuando se enchufe un proveedor.
-- **No hay cuarta ventana.** La interfaz del agente es una ruta HTTP y una
-  consola. Integrarla al prototipo es alcance nuevo, sujeto al procedimiento de
-  control de cambios.
+- **La cuarta ventana no tiene pruebas automatizadas.** El cuanto 4 no tiene
+  arnes de pruebas de interfaz: lo unico que la compuerta verifica es que
+  `tsc --noEmit` pase. La verificacion de la ventana es manual y esta descrita
+  en la seccion 12.
 
-## 12. Como se ejecuta
+## 12. La cuarta ventana
+
+El agente dejo de ser solo una ruta HTTP y una consola: `q4_cliente` incorpora
+**Asesor de gestion** como cuarta ventana, junto al tablero, el simulador y el
+reporte de explicabilidad.
+
+| Elemento | Archivo |
+|---|---|
+| Ventana | `quanta/q4_cliente/src/paginas/Asesor.tsx` |
+| Cliente HTTP y tipos | `src/api.ts` (`consultarAsesor`), `src/tipos.ts` |
+| Navegacion | `src/App.tsx` (`type Ventana` incorpora `'asesor'`) |
+| Direccion del servicio | `VITE_AGENTE_URL`, por defecto `http://127.0.0.1:8010` |
+
+Tres decisiones de esa pantalla, que no son cosmeticas:
+
+1. **La traza es parte de la respuesta, no un detalle plegado.** Cada turno
+   muestra que herramienta se invoco, con que resultado y en cuantos
+   milisegundos, mas los guardarrailes aplicados y el costo. Un asesor cuya
+   cadena de consultas no se puede inspeccionar no es auditable, y este proyecto
+   sostiene lo contrario para el resto del sistema.
+2. **`VITE_AGENTE_URL` es una direccion distinta de `VITE_API_URL`.** Son dos
+   unidades de despliegue, no dos rutas del mismo servicio. Cuando el puerto
+   8010 no responde, la ventana dice que el asesor es una unidad aparte y que
+   las otras tres siguen operativas, en vez de mostrar un error generico.
+3. **El historial no se persiste.** Cambiar de establecimiento o cerrar sesion
+   lo descarta. Guardar conversaciones sobre establecimientos identificados
+   seria tratamiento de datos que el proyecto no declaro y que ninguna tabla del
+   esquema `app` contempla.
+
+Verificacion manual, que es la que hay:
+
+```bash
+# tres procesos
+uvicorn q3_servicio.main:app --reload --app-dir quanta --port 8000
+uvicorn q5_agente.app:app    --reload --app-dir quanta --port 8010
+cd quanta/q4_cliente && npm run dev        # http://localhost:5173
+```
+
+Con el puerto 8010 apagado, la cuarta ventana debe avisar y las otras tres deben
+seguir respondiendo. Es la comprobacion de que el cuanto 5 es retirable, hecha
+desde la interfaz.
+
+## 13. Como se ejecuta
 
 Los cuantos viven en `quanta/`, que no esta en la ruta de Python salvo que algo
 la ponga: pytest lo hace por el `pythonpath` de `pyproject.toml` y uvicorn por
@@ -208,10 +317,14 @@ $env:PYTHONPATH = "quanta"
 python -m q5_agente.cli --rbd 25520 --trazas "por que se nos cae la superacion"
 ```
 
-Y la evaluacion, tambien desde la raiz:
+Y la evaluacion, tambien desde la raiz. Con `--respuestas` imprime, caso por
+caso, la pregunta, la herramienta que eligio, el resultado de la llamada, los
+guardarrailes aplicados y el texto que devolvio. Es la forma de ver el agente
+funcionando sin levantar el servicio ni tener credenciales:
 
 ```bash
 python tests/evaluacion/arnes.py
+python tests/evaluacion/arnes.py --respuestas
 python tests/evaluacion/arnes.py --json informe_evaluacion.json
 ```
 

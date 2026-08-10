@@ -39,10 +39,19 @@ def _openai(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     return AdaptadorOpenAI(modelo=cfg.agente_modelo or "gpt-4.1")
 
 
+def _gemini(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
+    from q5_agente.proveedores.externos import AdaptadorGemini
+
+    return AdaptadorGemini(
+        modelo=cfg.agente_modelo or AdaptadorGemini.MODELO_PREDETERMINADO
+    )
+
+
 PROVEEDORES: dict[str, Callable[[ConfiguracionDelAgente], ProveedorDeModelo]] = {
     "determinista": _determinista,
     "anthropic": _anthropic,
     "openai": _openai,
+    "gemini": _gemini,
 }
 
 
@@ -57,8 +66,23 @@ def crear_proveedor(cfg: ConfiguracionDelAgente | None = None) -> ProveedorDeMod
     return constructor(cfg)
 
 
-def crear_puerta(cfg: ConfiguracionDelAgente | None = None) -> PuertaDeServicio:
+def crear_puerta(
+    cfg: ConfiguracionDelAgente | None = None, token: str | None = None
+) -> PuertaDeServicio:
+    """Gateway con identidad delegada si llega un token; propia si no llega.
+
+    La interfaz debe pasar SIEMPRE el token del usuario. La consola no lo tiene
+    y usa la cuenta de servicio, que es lo correcto porque ahi no hay un usuario
+    a quien proteger.
+    """
     cfg = cfg or config_agente()
+    if token:
+        return ServicioSnedGateway(
+            base_url=cfg.agente_base_url,
+            token=token,
+            prefijo=cfg.agente_prefijo_api,
+            segundos_espera=cfg.agente_segundos_espera,
+        )
     return ServicioSnedGateway(
         base_url=cfg.agente_base_url,
         usuario=cfg.agente_usuario,
@@ -72,10 +96,13 @@ def crear_agente(
     cfg: ConfiguracionDelAgente | None = None,
     puerta: PuertaDeServicio | None = None,
     proveedor: ProveedorDeModelo | None = None,
+    token: str | None = None,
 ) -> AsesorDeGestion:
     """Arma la cadena completa: cortacircuitos -> instrumentacion -> proveedor."""
     cfg = cfg or config_agente()
-    herramientas = construir_catalogo(puerta or crear_puerta(cfg), SanitizadorDeParametros())
+    herramientas = construir_catalogo(
+        puerta or crear_puerta(cfg, token), SanitizadorDeParametros()
+    )
     base = proveedor or crear_proveedor(cfg)
     if isinstance(base, AdaptadorDeterminista):
         # El proveedor determinista rutea con los disparadores del catalogo real,
