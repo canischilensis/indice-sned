@@ -108,3 +108,23 @@ class ConfiguracionDelAgente:
 @lru_cache(maxsize=1)
 def config_agente() -> ConfiguracionDelAgente:
     return ConfiguracionDelAgente.desde_entorno()
+
+
+def secreto(nombre: str, archivo_env: Path | None = None) -> str | None:
+    """Credencial de un proveedor, del entorno o del .env, con la misma precedencia.
+
+    Deliberadamente **fuera** de ConfiguracionDelAgente. Las claves de proveedor
+    no son parametros de operacion: no deben viajar en el objeto que la ruta de
+    salud describe ni aparecer en una traza. Se leen donde se necesitan y no se
+    guardan.
+
+    Existe por un defecto real: `.env.example` documentaba GEMINI_API_KEY en el
+    .env, pero el adaptador consultaba solo os.environ, de modo que la clave
+    puesta en el archivo se ignoraba en silencio y el agente respondia que
+    faltaba una variable que el usuario ya habia escrito.
+    """
+    del_proceso = os.environ.get(nombre)
+    if del_proceso:
+        return del_proceso
+    del_archivo = _leer_env(archivo_env if archivo_env is not None else RAIZ / ".env")
+    return del_archivo.get(nombre.upper()) or None

@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from q5_agente.bucle import AgenteDeBucleSimple
-from q5_agente.config import ConfiguracionDelAgente, config_agente
+from q5_agente.config import ConfiguracionDelAgente, config_agente, secreto
 from q5_agente.contrato import AsesorDeGestion
 from q5_agente.decoradores import ProveedorConCortacircuitos, ProveedorInstrumentado
 from q5_agente.errores import ProveedorNoConfigurado
@@ -30,20 +30,27 @@ def _determinista(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
 def _anthropic(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     from q5_agente.proveedores.externos import AdaptadorAnthropic
 
-    return AdaptadorAnthropic(modelo=cfg.agente_modelo or "claude-sonnet-4-5")
+    return AdaptadorAnthropic(
+        modelo=cfg.agente_modelo or "claude-sonnet-4-5",
+        clave=secreto("ANTHROPIC_API_KEY"),
+    )
 
 
 def _openai(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     from q5_agente.proveedores.externos import AdaptadorOpenAI
 
-    return AdaptadorOpenAI(modelo=cfg.agente_modelo or "gpt-4.1")
+    return AdaptadorOpenAI(
+        modelo=cfg.agente_modelo or "gpt-4.1",
+        clave=secreto("OPENAI_API_KEY"),
+    )
 
 
 def _gemini(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     from q5_agente.proveedores.externos import AdaptadorGemini
 
     return AdaptadorGemini(
-        modelo=cfg.agente_modelo or AdaptadorGemini.MODELO_PREDETERMINADO
+        modelo=cfg.agente_modelo or AdaptadorGemini.MODELO_PREDETERMINADO,
+        clave=secreto("GEMINI_API_KEY") or secreto("GOOGLE_API_KEY"),
     )
 
 
