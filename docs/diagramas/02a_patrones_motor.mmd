@@ -1,0 +1,74 @@
+---
+title: "Patrones del motor predictivo (Q2): Strategy, Decorator, Factory Method, Registry, Virtual Proxy y Builder"
+---
+classDiagram
+    direction TB
+
+    class EstrategiaPredictiva {
+        <<STRATEGY - puerto>>
+        +predecir(observacion)*
+    }
+    class EstrategiaDesagregada
+    class EstrategiaGlobal
+    EstrategiaPredictiva <|-- EstrategiaDesagregada
+    EstrategiaPredictiva <|-- EstrategiaGlobal
+
+    class DecoradorDeEstrategia {
+        <<DECORATOR>>
+        -_envuelta: EstrategiaPredictiva
+        +describir() dict
+    }
+    class EstrategiaAuditada {
+        -_sumidero: Callable
+        +inferencias_emitidas: int
+        CTRL-05
+    }
+    class EstrategiaConCache {
+        -_cache: OrderedDict
+        +aciertos: int
+        +fallos: int
+    }
+    EstrategiaPredictiva <|-- DecoradorDeEstrategia
+    DecoradorDeEstrategia <|-- EstrategiaAuditada
+    DecoradorDeEstrategia <|-- EstrategiaConCache
+    DecoradorDeEstrategia o-- EstrategiaPredictiva : envuelve
+
+    class FabricaDeEstrategias {
+        <<FACTORY METHOD>>
+        -_registro: dict
+        +registrar(clase)
+        +crear(nombre, auditar, cachear)
+    }
+    FabricaDeEstrategias ..> EstrategiaAuditada : arma la cadena
+    FabricaDeEstrategias ..> EstrategiaConCache : arma la cadena
+
+    class RegistroDeModelos {
+        <<REGISTRY>>
+        +obtener(archivo) ArtefactoDiferido
+        +metadatos_factores() dict
+        +inventario() list
+    }
+    class ArtefactoDiferido {
+        <<VIRTUAL PROXY>>
+        -_real: Any
+        +materializado: bool
+        +segundos_de_carga: float
+        +predict(X)
+        +materializar()
+    }
+    RegistroDeModelos o-- ArtefactoDiferido : entrega sin materializar
+    EstrategiaDesagregada ..> ArtefactoDiferido : 6 artefactos
+
+    class ConstructorDeEscenario {
+        <<BUILDER>>
+        +desde(observacion)$
+        +con(variable, valor)
+        +incrementar(variable, delta)
+        +construir() Escenario
+    }
+    class Escenario {
+        <<objeto de valor inmutable>>
+        +variables: dict
+        +cambios: dict
+    }
+    ConstructorDeEscenario ..> Escenario : construye

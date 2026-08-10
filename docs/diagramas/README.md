@@ -1,15 +1,16 @@
 # Modelo de clases y diagramas de secuencia
 
-Los cinco diagramas se derivaron **del código real**, no de un diseño ideal. Donde el código
+Los diagramas se derivaron **del código real**, no de un diseño ideal. Donde el código
 no coincidía con lo esperado, se documentó lo que hay.
 
-Los dos diagramas de datos (`00_*`) son los originales de ERDPlus y draw.io. Los cinco de
-arquitectura (`01_*` a `05_*`) tienen fuente en Mermaid (`.mmd`) más exportación a PNG para
+Los dos diagramas de datos (`00_*`) son los originales de ERDPlus y draw.io. Los de
+arquitectura (`01_*` a `06_*`) tienen fuente en Mermaid (`.mmd`) más exportación a PNG para
 pegar en el documento de tesis.
 
 Documentos relacionados fuera de esta carpeta: `docs/Anexo_mapeo_conceptual_fisico.docx`
-(la derivación conceptual → físico) y `db/esquema_sned_canonico.sql` (el DDL de referencia
-del que se partió `db/esquemas/`).
+(la derivación conceptual → físico), `docs/informes/` (el informe del Hito 2, que cita estas
+figuras) y `db/esquema_sned_canonico.sql` (el DDL de referencia del que se partió
+`db/esquemas/`).
 
 | # | Archivo | Qué muestra | Origen |
 |---|---------|-------------|--------|
@@ -17,9 +18,23 @@ del que se partió `db/esquemas/`).
 | 0 | `00_modelo_fisico_bd.drawio.png` | Modelo físico del dominio `core` + `hechos` | draw.io |
 | 1 | `01_hexagonal` | Los cuatro puertos con sus adaptadores concretos | Mermaid |
 | 2 | `02_patrones` | Los doce patrones aplicados | Mermaid |
+| 2a | `02a_patrones_motor` | Los patrones del motor predictivo, derivado de `02_patrones` | Mermaid |
+| 2b | `02b_patrones_servicio` | Los patrones del servicio y la ingesta, derivado de `02_patrones` | Mermaid |
 | 3 | `03_secuencia_prediccion` | De la petición HTTP a la respuesta, pasando por los seis modelos | Mermaid |
 | 4 | `04_secuencia_simulacion` | El what-if completo y las 54 inferencias que explican los 4,6 s | Mermaid |
 | 5 | `05_secuencia_shap` | De la petición a la atribución por variable, y de dónde sale el vector | Mermaid |
+| 6 | `06_contexto` | Las cuatro etapas del sistema y los cinco controles de arquitectura | Mermaid |
+| 6 | `06_despliegue` | Las tres unidades de despliegue y los cuatro cuantos lógicos | Mermaid |
+
+**Sobre el `02_patrones` partido en dos.** El original tiene razón de aspecto 3,47:1: al
+ancho de una página quedaba en ~2,7 pt de cuerpo, es decir ilegible. `02a` y `02b` son
+derivados suyos para el documento, no reemplazos: el original se conserva porque es el que
+muestra los doce patrones juntos, y es el que cita el informe del Hito 2 como Figura 4.
+
+**Sobre el 6 repetido.** `06_contexto` y `06_despliegue` comparten número a propósito: son
+las dos figuras que el informe del Hito 2 ya entregado referencia con esos nombres exactos.
+Renumerar una rompería los enlaces de un documento entregado. El prefijo aquí ordena, no
+identifica.
 
 ## Regenerar los PNG
 

@@ -1,0 +1,72 @@
+---
+title: "Patrones de ingesta y servicio (Q1 y Q3): Specification, Template Method, Repository, Adapter, Abstract Factory y Facade"
+---
+classDiagram
+    direction TB
+
+    class Especificacion~T~ {
+        <<SPECIFICATION>>
+        +es_satisfecha_por(candidato)*
+        +y(otra)
+        +o(otra)
+        +no() 
+    }
+    class _Conjuncion
+    class _Disyuncion
+    class _Negacion
+    class ReglaDeAlerta {
+        +construir(c) Alerta*
+    }
+    class TrampaDeSuperacion
+    class RiesgoNormativo
+    class CaidaIdps
+    class FactorAcotadoDominante
+    Especificacion <|-- _Conjuncion
+    Especificacion <|-- _Disyuncion
+    Especificacion <|-- _Negacion
+    Especificacion <|-- ReglaDeAlerta
+    ReglaDeAlerta <|-- TrampaDeSuperacion
+    ReglaDeAlerta <|-- RiesgoNormativo
+    ReglaDeAlerta <|-- CaidaIdps
+    ReglaDeAlerta <|-- FactorAcotadoDominante
+    _Conjuncion o-- Especificacion : compone
+
+    class IngestorDeFuente {
+        <<TEMPLATE METHOD>>
+        +ejecutar() invariante
+        #_leer_archivo()* gancho
+    }
+    class IngestorExcel
+    class IngestorCsv
+    IngestorDeFuente <|-- IngestorExcel
+    IngestorDeFuente <|-- IngestorCsv
+
+    class RepositorioEstablecimientos {
+        <<REPOSITORY - puerto>>
+        +obtener(rbd, periodo)*
+    }
+    class RepositorioParquet {
+        <<ADAPTER>>
+    }
+    class RepositorioPostgres {
+        <<ADAPTER>>
+    }
+    class fabrica_repositorios {
+        <<ABSTRACT FACTORY>>
+        +ADAPTADORES: dict
+        +obtener_repositorio(nombre)
+        REPOSITORIO_DATOS
+    }
+    RepositorioEstablecimientos <|-- RepositorioParquet
+    RepositorioEstablecimientos <|-- RepositorioPostgres
+    fabrica_repositorios ..> RepositorioParquet : instancia
+    fabrica_repositorios ..> RepositorioPostgres : instancia
+
+    class ServicioDePrediccion {
+        <<FACADE>>
+        +predecir()
+        +explicar()
+        +simular()
+    }
+    ServicioDePrediccion o-- RepositorioEstablecimientos
+    ServicioDePrediccion o-- ReglaDeAlerta
