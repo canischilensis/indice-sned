@@ -38,7 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from arnes import BUCLE_SIMPLE, LANGGRAPH, ResultadoCaso, ejecutar  # noqa: E402
+from arnes import BUCLE_SIMPLE, DETERMINISTA, LANGGRAPH, ResultadoCaso, ejecutar  # noqa: E402
 
 #: Paquetes que cada orquestador incorpora al entorno, por encima de lo que el
 #: cuanto 5 ya necesitaba. Es la fila que mas informa en una decision de
@@ -88,11 +88,15 @@ def _percentil(valores: list[int], p: float) -> int:
     return ordenados[indice]
 
 
-def medir(orquestador: str) -> tuple[Medicion, list[ResultadoCaso]]:
-    resultados = ejecutar(orquestador)
+def medir(
+    orquestador: str, proveedor: str = DETERMINISTA, limite: int | None = None
+) -> tuple[Medicion, list[ResultadoCaso]]:
+    etiqueta = proveedor if proveedor != DETERMINISTA else orquestador
+    print(f"Midiendo {etiqueta}...", file=sys.stderr, flush=True)
+    resultados = ejecutar(orquestador, proveedor, progreso=True, limite=limite)
     latencias = [r.milisegundos for r in resultados]
     medicion = Medicion(
-        orquestador=orquestador,
+        orquestador=orquestador if proveedor == DETERMINISTA else proveedor,
         casos=len(resultados),
         aprobados=sum(1 for r in resultados if r.aprobado),
         ruteo_correcto=sum(1 for r in resultados if r.ruteo_correcto),
@@ -111,7 +115,7 @@ def medir(orquestador: str) -> tuple[Medicion, list[ResultadoCaso]]:
         costo_usd=round(sum(r.costo_usd for r in resultados), 6),
         latencia_p50=_percentil(latencias, 0.50),
         latencia_p95=_percentil(latencias, 0.95),
-        dependencias=len(DEPENDENCIAS[orquestador]),
+        dependencias=len(DEPENDENCIAS.get(orquestador, ())),
         fallos=[f"{r.id}: {' | '.join(r.fallos)}" for r in resultados if not r.aprobado],
     )
     return medicion, resultados
@@ -135,13 +139,28 @@ _FILAS: tuple[tuple[str, str, str], ...] = (
 )
 
 
-def informe(a: Medicion, b: Medicion) -> str:
-    ancho = 30
-    lineas = [
+_CABECERAS = {
+    "orquestador": (
         "COMPARACION DE ORQUESTADORES · 20 casos criticos, sin modificar",
-        "=" * 74,
         "  Una variable en movimiento: el orquestador. Mismo doble del servicio,",
         "  mismo catalogo, mismo proveedor determinista, misma politica de salida.",
+    ),
+    "proveedor": (
+        "COMPARACION DE PROVEEDORES · 20 casos criticos, sin modificar",
+        "  Una variable en movimiento: el proveedor de modelo. Mismo bucle propio,",
+        "  mismo doble del servicio, mismo catalogo, misma politica de salida.",
+    ),
+}
+
+
+def informe(a: Medicion, b: Medicion, eje: str = "orquestador") -> str:
+    ancho = 30
+    titulo, nota1, nota2 = _CABECERAS[eje]
+    lineas = [
+        titulo,
+        "=" * 74,
+        nota1,
+        nota2,
         "=" * 74,
         f"{'Metrica':<{ancho}} {a.orquestador:>19} {b.orquestador:>19}",
         "-" * 74,
@@ -158,23 +177,67 @@ def informe(a: Medicion, b: Medicion) -> str:
             lineas.extend(f"  {f}" for f in medicion.fallos)
 
     lineas.append("")
-    lineas.append(
-        "El costo es cero porque el proveedor es el determinista: sin red y sin\n"
-        "clave, para que la diferencia observada no pueda venir de dos respuestas\n"
-        "distintas del mismo modelo. La medicion con un proveedor real es otro\n"
-        "experimento, con su propia tabla."
-    )
+    if eje == "orquestador":
+        lineas.append(
+            "El costo es cero porque el proveedor es el determinista: sin red y sin\n"
+            "clave, para que la diferencia observada no pueda venir de dos respuestas\n"
+            "distintas del mismo modelo. La medicion con un proveedor real es otro\n"
+            "experimento, con su propia tabla: --eje proveedor."
+        )
+    else:
+        lineas.append(
+            "La fila de dependencias no aplica a este eje y queda en cero para el\n"
+            "proveedor real: los SDK son opcionales y su peso se declara aparte.\n\n"
+            "Lo que esta tabla NO mide es exactitud del dato: los dos corren contra\n"
+            "el mismo doble, que devuelve cargas fijas. Mide ruteo, guardarrailes,\n"
+            "resiliencia y consumo. Que un modelo de lenguaje elija la herramienta\n"
+            "correcta tantas veces como un puñado de reglas es el resultado, y si\n"
+            "elige peor, tambien."
+        )
     return "\n".join(lineas)
 
 
 def main(argv: list[str] | None = None) -> int:
-    analizador = argparse.ArgumentParser(description="Compara los dos orquestadores")
+    analizador = argparse.ArgumentParser(description="Compara dos configuraciones del agente")
     analizador.add_argument("--json", default=None, help="Ruta donde escribir el detalle")
+    analizador.add_argument(
+        "--eje", default="orquestador", choices=["orquestador", "proveedor"],
+        help=(
+            "Que variable se mueve. 'orquestador' compara el bucle propio con LangGraph, "
+            "ambos con el proveedor determinista. 'proveedor' compara el determinista con "
+            "un proveedor real, ambos con el bucle propio: SALE A LA RED Y CUESTA DINERO."
+        ),
+    )
+    analizador.add_argument(
+        "--proveedor", default="gemini",
+        help="Proveedor real contra el que comparar cuando el eje es 'proveedor'",
+    )
+    analizador.add_argument(
+        "--casos", type=int, default=None,
+        help=(
+            "Ejecuta solo los primeros N casos de cada lado. Sirve para ver la forma "
+            "del resultado antes de comprometer una corrida larga. Una tabla parcial "
+            "NO es una medicion: se marca como parcial y no se publica."
+        ),
+    )
     args = analizador.parse_args(argv)
 
-    propio, casos_propio = medir(BUCLE_SIMPLE)
-    grafo, casos_grafo = medir(LANGGRAPH)
-    print(informe(propio, grafo))
+    if args.eje == "proveedor":
+        # Segundo experimento, con su propia tabla. Cruzar los dos ejes daria
+        # ocho celdas que se leen como fuerza bruta en vez de como diseno.
+        primera, casos_propio = medir(BUCLE_SIMPLE, DETERMINISTA, args.casos)
+        primera.orquestador = DETERMINISTA
+        segunda, casos_grafo = medir(BUCLE_SIMPLE, args.proveedor, args.casos)
+    else:
+        primera, casos_propio = medir(BUCLE_SIMPLE, DETERMINISTA, args.casos)
+        segunda, casos_grafo = medir(LANGGRAPH, DETERMINISTA, args.casos)
+    propio, grafo = primera, segunda
+    print(informe(propio, grafo, args.eje))
+    if args.casos:
+        print(
+            f"\nPARCIAL: solo los primeros {args.casos} casos de veinte. "
+            "No es la medicion; sirve para ver la forma del resultado."
+        )
 
     if args.json:
         Path(args.json).write_text(

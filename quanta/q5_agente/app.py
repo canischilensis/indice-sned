@@ -44,6 +44,14 @@ class RespuestaDeAsesoria(BaseModel):
     motivo_rechazo: str | None = None
     guardarrailes_aplicados: list[str] = []
     llamadas: list[LlamadaSalida] = []
+    #: Documentos del proyecto que se consultaron para responder.
+    #:
+    #: Viajan hasta la pantalla porque la distincion entre una cifra que calculo
+    #: el motor y una que dice un archivo solo sirve si el usuario la ve. Un
+    #: guardarrail que separa la evidencia en grados y no lo muestra hace la
+    #: auditoria mas fina y la lectura igual de ciega.
+    documentos_consultados: list[str] = []
+    cifras_documentales: list[float] = []
     tokens_entrada: int = 0
     tokens_salida: int = 0
     costo_usd: float = 0.0
@@ -152,6 +160,8 @@ def consultar(
             )
             for ll in respuesta.llamadas
         ],
+        documentos_consultados=list(respuesta.documentos_consultados),
+        cifras_documentales=list(respuesta.cifras_documentales),
         tokens_entrada=respuesta.uso.tokens_entrada,
         tokens_salida=respuesta.uso.tokens_salida,
         costo_usd=respuesta.uso.costo_usd,

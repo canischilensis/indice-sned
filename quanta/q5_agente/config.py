@@ -65,6 +65,24 @@ class ConfiguracionDelAgente:
     agente_proveedor: str = "determinista"
     agente_modelo: str = ""
 
+    #: Modelo local servido por Ollama. Sin clave y sin salida a internet: el
+    #: dato del establecimiento no abandona la maquina, que en este dominio es
+    #: un argumento de politica de datos y no una optimizacion de costo.
+    agente_ollama_url: str = "http://127.0.0.1:11434"
+    #: Modelo local, en su PROPIO campo y no en AGENTE_MODELO.
+    #:
+    #: Nace de un defecto real del 2026-08-10: AGENTE_MODELO era una sola
+    #: variable compartida por cuatro proveedores. Al cambiar de proveedor sin
+    #: cambiar de modelo, el modelo del anterior se filtraba al nuevo, y una
+    #: evaluacion entera de veinte casos se fue al suelo pidiendole a Ollama un
+    #: modelo de Google. Un valor correcto para un proveedor no es un valor
+    #: correcto para otro, y compartir el campo lo daba por supuesto.
+    agente_ollama_modelo: str = "qwen3:8b"
+    #: Tres minutos, no diez segundos. En CPU un paso puede tardar mas de un
+    #: minuto, y un tiempo de espera corto convertiria la lentitud esperada en un
+    #: fallo del proveedor: dos conclusiones distintas y una equivocada.
+    agente_ollama_espera: float = 180.0
+
     #: Adaptador del puerto AsesorDeGestion: bucle_simple | langgraph_react
     #:
     #: El predeterminado es el bucle escrito a mano, que no necesita mas que

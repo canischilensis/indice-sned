@@ -21,7 +21,9 @@ import pytest
 from q5_agente.contrato import Consulta
 from q5_agente.doctrina import (
     RecuperadorDeDoctrina,
+    RecuperadorPorEmbeddings,
     RecuperadorPorPalabrasClave,
+    Vectorizador,
     fragmentar,
 )
 from q5_agente.guardarrailes import (
@@ -221,3 +223,63 @@ def test_la_respuesta_transporta_el_tercer_conjunto(corpus: Path):
 
     assert hasattr(respuesta, "cifras_documentales")
     assert hasattr(respuesta, "documentos_consultados")
+
+
+class _VectorizadorFalso(Vectorizador):
+    """Vectoriza contando terminos compartidos con un vocabulario fijo.
+
+    No imita a un modelo real y no pretende hacerlo: existe para que las pruebas
+    del recuperador vectorial corran sin red, sin clave y sin costo. Lo que
+    verifican es el contrato del puerto y la mecanica del indice, no la calidad
+    semantica, que solo se puede medir con un modelo de verdad.
+    """
+
+    nombre = "falso"
+    VOCABULARIO = ("acotad", "factor", "signif", "decisi", "limita", "conte")
+
+    def vectorizar(self, textos):
+        plano = [t.lower() for t in textos]
+        return [[float(t.count(p)) for p in self.VOCABULARIO] for t in plano]
+
+
+class TestSegundoAdaptadorDeRecuperacion:
+    """El puerto de recuperacion tiene dos implementaciones, como el de datos."""
+
+    def test_ambos_implementan_el_mismo_puerto(self, corpus: Path):
+        porPalabras = RecuperadorPorPalabrasClave(corpus)
+        porVectores = RecuperadorPorEmbeddings(_VectorizadorFalso(), corpus)
+
+        assert isinstance(porPalabras, RecuperadorDeDoctrina)
+        assert isinstance(porVectores, RecuperadorDeDoctrina)
+
+    def test_el_vectorial_recupera_del_mismo_corpus(self, corpus: Path):
+        fragmentos = RecuperadorPorEmbeddings(_VectorizadorFalso(), corpus).recuperar(
+            "por que el factor esta acotado", 2
+        )
+
+        assert fragmentos
+        assert all(f.documento.endswith("ADR-PRUEBA.md") for f in fragmentos)
+
+    def test_los_fragmentos_conservan_su_procedencia(self, corpus: Path):
+        """La procedencia es del fragmento, no de la estrategia que lo encontro.
+
+        Si dependiera del recuperador, cambiar de estrategia cambiaria lo que la
+        auditoria puede afirmar sobre una misma cifra.
+        """
+        fragmentos = RecuperadorPorEmbeddings(_VectorizadorFalso(), corpus).recuperar(
+            "coeficiente declarado", 3
+        )
+        procedencias = [p for f in fragmentos for p in f.procedencias()]
+
+        assert any(p.valor == 0.583 for p in procedencias)
+        assert all(p.documento and p.ancla for p in procedencias)
+
+    def test_una_consulta_vacia_no_vectoriza(self, corpus: Path):
+        """Vectorizar cuesta dinero: una consulta vacia no debe gastarlo."""
+        assert RecuperadorPorEmbeddings(_VectorizadorFalso(), corpus).recuperar("  ", 3) == []
+
+    def test_declara_su_costo(self, corpus: Path):
+        descripcion = RecuperadorPorEmbeddings(_VectorizadorFalso(), corpus).describir()
+
+        assert descripcion["recuperador"] == "embeddings"
+        assert "usd_por_millon" in descripcion, "el costo se declara, no se descubre en la factura"

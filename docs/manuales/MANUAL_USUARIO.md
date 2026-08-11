@@ -175,6 +175,18 @@ caso normal cuando la pregunta pide algo que la política no permite responder.
 Si una herramienta aparece **fallida**, la respuesta se lo dirá y le dirá qué no pudo entregarle.
 El asesor cierra la respuesta con lo que sí tiene, en lugar de completar el hueco.
 
+### De dónde salen las cifras
+
+A veces aparece un segundo bloque con ese título. Significa que parte de lo que se afirma **no
+viene de una consulta al sistema, sino de la documentación del proyecto**: una decisión
+registrada, un manual, un plan. Fue cierto cuando se escribió y puede haber cambiado desde
+entonces.
+
+La diferencia importa. Una cifra calculada para su establecimiento en esta consulta y una cifra
+escrita en un documento hace meses **no valen lo mismo**, y el sistema se lo dice en vez de
+presentarlas juntas. Cuando el asesor use una cifra de documento, además, **nombrará el documento
+en la misma frase**: si no lo hace, la respuesta se retira antes de mostrársela.
+
 ### Regla que no se rompe
 
 **Ninguna cifra que aparezca en una respuesta puede venir de otra parte que no sea una consulta al
@@ -275,5 +287,6 @@ texto.
 | 2026-08-10 | 7 | Sección nueva: Ventana 4 · Asesor de gestión | El manual documentaba tres ventanas y el sistema tiene cuatro desde la incorporación del cuanto 5 |
 | 2026-08-10 | 7 | Se documenta qué conserva y qué limpia la conversación, y que no se almacena | La ventana declaraba en pantalla que el historial se pierde al cambiar de establecimiento, pero el código lo perdía también al cambiar de pestaña. Se corrigió el comportamiento y se documentó la regla completa |
 | 2026-08-10 | 9 | Cuatro preguntas frecuentes nuevas sobre el asesor | Cubren las dudas que la ventana genera: historial, ausencia de cifras y proceso separado |
+| 2026-08-10 | 7 | Se documenta el bloque «De dónde salen las cifras» | El asesor puede citar la documentación del proyecto, y una cifra de archivo no es una medición |
 | 2026-08-10 | 10 | Sección nueva: este historial | Se adopta la convención de conservar el registro de modificaciones en todos los documentos |
 | 2026-08-10 | 2 | Se documenta qué ve un auditor al entrar y por qué no es una negativa de autorización | La pantalla le mostraba el mensaje de «sin establecimientos asignados», que decía lo contrario de la verdad: su alcance es mayor, no menor. Ver ADR-007 |

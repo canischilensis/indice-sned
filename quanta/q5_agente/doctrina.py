@@ -42,10 +42,12 @@ eleccion por prestigio.
 from __future__ import annotations
 
 import hashlib
+import math
 import re
 import subprocess
 import unicodedata
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -291,4 +293,146 @@ class RecuperadorPorPalabrasClave(RecuperadorDeDoctrina):
             "recuperador": self.nombre,
             "corpus": _relativa(self._corpus),
             "fragmentos": len(self._indice()),
+        }
+
+
+# ---------------------------------------------------------------------------
+# Segundo adaptador: recuperacion por embeddings
+#
+# El puerto existia desde el primer dia esperando esto. Lo que sigue no
+# reemplaza al recuperador por palabras clave: convive con el, y esa convivencia
+# es lo que permite comparar dos estrategias sobre el mismo corpus en vez de
+# sustituir una por otra por prestigio.
+#
+# Honestidad sobre por que existe. A cuatrocientos sesenta fragmentos, la
+# busqueda por terminos ya responde bien: el capitulo lo dice y la medicion lo
+# respalda. La razon para tener tambien la vectorial no es que haga falta aqui,
+# es que la diferencia entre ambas **se puede medir** cuando las dos estan
+# implementadas, y una decision medida vale mas que una preferencia.
+# ---------------------------------------------------------------------------
+
+
+class Vectorizador(ABC):
+    """Puerto: convierte textos en vectores.
+
+    Se separa del recuperador a proposito. Cambiar de modelo de embeddings
+    —de uno alojado a uno local, por ejemplo— no deberia obligar a tocar la
+    logica de recuperacion, que es lo que ocurre cuando ambos viven juntos.
+    """
+
+    nombre: str = "sin_nombre"
+    #: Costo declarado por millon de tokens. Cero cuando corre en la maquina.
+    usd_por_millon: float = 0.0
+
+    @abstractmethod
+    def vectorizar(self, textos: Sequence[str]) -> list[list[float]]:
+        """Un vector por texto, en el mismo orden."""
+
+
+class VectorizadorGemini(Vectorizador):
+    """Embeddings de Google. Se importa de forma perezosa, como los demas SDK."""
+
+    nombre = "gemini-embedding"
+    usd_por_millon = 0.15
+    MODELO_PREDETERMINADO = "gemini-embedding-001"
+
+    def __init__(self, modelo: str | None = None, clave: str | None = None) -> None:
+        from q5_agente.config import secreto  # noqa: PLC0415
+        from q5_agente.errores import ProveedorNoConfigurado  # noqa: PLC0415
+
+        try:
+            from google import genai  # noqa: PLC0415
+        except ImportError as exc:
+            raise ProveedorNoConfigurado(
+                "El paquete 'google-genai' no esta instalado."
+            ) from exc
+
+        api_key = clave or secreto("GEMINI_API_KEY") or secreto("GOOGLE_API_KEY")
+        if not api_key:
+            raise ProveedorNoConfigurado("Falta GEMINI_API_KEY para vectorizar.")
+
+        self._cliente = genai.Client(api_key=api_key)
+        self._modelo = modelo or self.MODELO_PREDETERMINADO
+
+    def vectorizar(self, textos: Sequence[str]) -> list[list[float]]:
+        from q5_agente.errores import ErrorDelProveedor  # noqa: PLC0415
+
+        try:
+            respuesta = self._cliente.models.embed_content(
+                model=self._modelo, contents=list(textos)
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise ErrorDelProveedor(f"No se pudo vectorizar: {exc}") from exc
+        return [list(e.values) for e in respuesta.embeddings]
+
+
+def _coseno(a: Sequence[float], b: Sequence[float]) -> float:
+    producto = sum(x * y for x, y in zip(a, b, strict=False))
+    na = math.sqrt(sum(x * x for x in a)) or 1.0
+    nb = math.sqrt(sum(y * y for y in b)) or 1.0
+    return producto / (na * nb)
+
+
+class RecuperadorPorEmbeddings(RecuperadorDeDoctrina):
+    """Recuperacion por similitud semantica sobre el mismo corpus de `docs/`.
+
+    El almacen es Chroma cuando esta instalado, y una comparacion por coseno en
+    memoria cuando no. **La alternativa en memoria no es un atajo**: a
+    cuatrocientos sesenta fragmentos, recorrer la lista entera cuesta
+    milisegundos, y tenerla permite que las pruebas corran sin instalar una base
+    vectorial. Chroma aporta persistencia entre ejecuciones, que es lo que
+    empieza a importar cuando vectorizar cuesta dinero.
+    """
+
+    nombre = "embeddings"
+
+    def __init__(
+        self,
+        vectorizador: Vectorizador,
+        corpus: Path | None = None,
+        persistencia: Path | None = None,
+    ) -> None:
+        self._vectorizador = vectorizador
+        self._corpus = corpus or CORPUS
+        self._persistencia = persistencia
+        self._fragmentos: list[Fragmento] = []
+        self._vectores: list[list[float]] = []
+        self._indexado = False
+
+    def _indexar(self) -> None:
+        if self._indexado:
+            return
+        fragmentos: list[Fragmento] = []
+        for ruta in sorted(self._corpus.rglob("*.md")):
+            fragmentos.extend(fragmentar(ruta, _relativa(ruta)))
+        # Se vectoriza el ancla junto al texto: el encabezado es la etiqueta que
+        # una persona usaria para pedir ese fragmento, y dejarlo fuera pierde la
+        # senal mas concentrada del documento.
+        self._vectores = self._vectorizador.vectorizar(
+            [f"{f.ancla}\n{f.texto}" for f in fragmentos]
+        )
+        self._fragmentos = fragmentos
+        self._indexado = True
+
+    def recuperar(self, consulta: str, maximo: int = 3) -> list[Fragmento]:
+        if not consulta.strip():
+            return []
+        self._indexar()
+        if not self._fragmentos:
+            return []
+        objetivo = self._vectorizador.vectorizar([consulta])[0]
+        puntuados = sorted(
+            zip((_coseno(objetivo, v) for v in self._vectores), self._fragmentos, strict=False),
+            key=lambda par: par[0],
+            reverse=True,
+        )
+        return [f for _, f in puntuados[:maximo]]
+
+    def describir(self) -> dict[str, object]:
+        return {
+            "recuperador": self.nombre,
+            "vectorizador": self._vectorizador.nombre,
+            "corpus": _relativa(self._corpus),
+            "fragmentos": len(self._fragmentos),
+            "usd_por_millon": self._vectorizador.usd_por_millon,
         }

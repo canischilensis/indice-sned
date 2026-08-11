@@ -144,6 +144,18 @@ python tests/evaluacion/comparar.py
 python tests/evaluacion/comparar.py --json comparacion.json
 ```
 
+El **segundo eje** —proveedor de modelo, con el bucle propio en ambos lados—
+tiene su propia tabla y **sale a la red**:
+
+```bash
+python tests/evaluacion/comparar.py --eje proveedor --proveedor gemini
+```
+
+Esa tabla no mide exactitud del dato: los dos corren contra el mismo doble, que
+devuelve cargas fijas. Mide ruteo, guardarraíles, resiliencia y consumo. Que un
+modelo de lenguaje elija la herramienta correcta tantas veces como un puñado de
+reglas es el resultado; si elige peor, también.
+
 El arnés admite además evaluar un orquestador por separado:
 
 ```bash
@@ -168,3 +180,4 @@ el paquete no está instalado.
 | Fecha | Sección | Cambio | Motivo |
 |---|---|---|---|
 | 2026-08-10 | — | Documento nuevo | Primera medición entre los dos adaptadores del puerto `AsesorDeGestion` |
+| 2026-08-10 | 7 | Se agrega el segundo eje de comparación: proveedor de modelo | La disciplina acordada es una variable por tabla. Con un solo eje medido, la mitad del diseño experimental quedaba sin ejecutar |

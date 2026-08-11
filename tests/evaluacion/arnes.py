@@ -98,8 +98,16 @@ class ResultadoCaso:
 BUCLE_SIMPLE = "bucle_simple"
 LANGGRAPH = "langgraph_react"
 
+#: Proveedor por omision del arnes. Sin red y sin clave, de modo que la suite
+#: corra en cualquier maquina y ninguna evaluacion gaste dinero por descuido.
+DETERMINISTA = "determinista"
 
-def construir_agente(servicio: ServicioFalso, orquestador: str = BUCLE_SIMPLE):
+
+def construir_agente(
+    servicio: ServicioFalso,
+    orquestador: str = BUCLE_SIMPLE,
+    proveedor_nombre: str = DETERMINISTA,
+):
     """Arma el agente sobre el doble del servicio, con el orquestador pedido.
 
     **Todo lo que rodea al orquestador es identico en los dos casos**: el mismo
@@ -111,8 +119,39 @@ def construir_agente(servicio: ServicioFalso, orquestador: str = BUCLE_SIMPLE):
     ejecutandose en una maquina que no tenga LangGraph instalado.
     """
     herramientas = construir_catalogo(servicio, SanitizadorDeParametros())
-    proveedor = AdaptadorDeterminista({h.nombre: h.disparadores for h in herramientas.values()})
     politica = PoliticaDeSalida()
+
+    if proveedor_nombre == DETERMINISTA:
+        proveedor = AdaptadorDeterminista(
+            {h.nombre: h.disparadores for h in herramientas.values()}
+        )
+    else:
+        # Un proveedor real se arma con la fabrica y se envuelve igual que en
+        # operacion: instrumentado para medir tokens y costo, y con
+        # cortacircuitos. Medir sin los decoradores mediria otro sistema.
+        from q5_agente.config import config_agente  # noqa: PLC0415
+        from q5_agente.decoradores import (  # noqa: PLC0415
+            ProveedorConCortacircuitos,
+            ProveedorInstrumentado,
+        )
+        from q5_agente.fabrica import crear_proveedor, proveedor_de_modelo  # noqa: PLC0415
+
+        cfg = config_agente().con(agente_proveedor=proveedor_nombre)
+        # El experimento mueve la variable PROVEEDOR. El modelo es una propiedad
+        # del proveedor, no del experimento: si el configurado pertenece a otro,
+        # se descarta y cada proveedor usa el suyo.
+        #
+        # No es una comodidad. Sin esto, una evaluacion completa contra un
+        # proveedor pedia el modelo del proveedor anterior, recibia 404 en los
+        # veinte casos y producia una tabla que parecia decir «este modelo rutea
+        # pesimo» cuando en realidad no se le habia preguntado nada.
+        if proveedor_de_modelo(cfg.agente_modelo or "") not in (None, proveedor_nombre):
+            cfg = cfg.con(agente_modelo="")
+        proveedor = ProveedorConCortacircuitos(
+            ProveedorInstrumentado(crear_proveedor(cfg)),
+            umbral_fallos=cfg.agente_umbral_fallos,
+            segundos_reposo=cfg.agente_segundos_reposo,
+        )
 
     if orquestador == LANGGRAPH:
         from q5_agente.orquestadores.langgraph_react import AgenteLangGraph  # noqa: PLC0415
@@ -200,12 +239,39 @@ def evaluar_caso(
     )
 
 
-def ejecutar(orquestador: str = BUCLE_SIMPLE) -> list[ResultadoCaso]:
+def ejecutar(
+    orquestador: str = BUCLE_SIMPLE,
+    proveedor: str = DETERMINISTA,
+    progreso: bool = False,
+    limite: int | None = None,
+) -> list[ResultadoCaso]:
+    """Ejecuta los casos criticos y devuelve un resultado por cada uno.
+
+    `progreso` imprime cada caso al terminarlo, por el error estandar. Nace de
+    una corrida real contra un modelo local: media hora sin imprimir nada es
+    indistinguible de un proceso colgado, y quien la lanzo la interrumpio
+    creyendo que estaba trabado. Un proceso largo que no informa obliga a
+    adivinar, y adivinar termina en Ctrl+C.
+
+    `limite` corre solo los primeros casos. Sirve para mirar la forma del
+    resultado antes de comprometer treinta minutos, no para publicar: una tabla
+    parcial se marca como parcial.
+    """
+    casos = CASOS[:limite] if limite else CASOS
     resultados = []
-    for caso in CASOS:
+    for numero, caso in enumerate(casos, start=1):
         servicio = ServicioFalso()
-        agente = construir_agente(servicio, orquestador)
-        resultados.append(evaluar_caso(caso, agente, servicio))
+        agente = construir_agente(servicio, orquestador, proveedor)
+        resultado = evaluar_caso(caso, agente, servicio)
+        resultados.append(resultado)
+        if progreso:
+            marca = "OK   " if resultado.aprobado else "FALLA"
+            print(
+                f"  [{numero}/{len(casos)}] {marca} {caso.id} "
+                f"({resultado.milisegundos} ms)",
+                file=sys.stderr,
+                flush=True,
+            )
     return resultados
 
 
@@ -286,10 +352,18 @@ def main(argv: list[str] | None = None) -> int:
         "--orquestador", default=BUCLE_SIMPLE, choices=[BUCLE_SIMPLE, LANGGRAPH],
         help="Adaptador del puerto AsesorDeGestion que se evalua",
     )
+    analizador.add_argument(
+        "--proveedor", default=DETERMINISTA,
+        help="Proveedor de modelo. Uno distinto de 'determinista' sale a la red y cuesta dinero",
+    )
+    analizador.add_argument(
+        "--casos", type=int, default=None,
+        help="Ejecuta solo los primeros N casos. Para mirar, no para publicar",
+    )
     args = analizador.parse_args(argv)
 
-    resultados = ejecutar(args.orquestador)
-    print(f"Orquestador evaluado: {args.orquestador}\n")
+    resultados = ejecutar(args.orquestador, args.proveedor, progreso=True, limite=args.casos)
+    print(f"Orquestador evaluado: {args.orquestador} · proveedor: {args.proveedor}\n")
     print(informe(resultados))
     if args.respuestas:
         print(transcripcion(resultados))

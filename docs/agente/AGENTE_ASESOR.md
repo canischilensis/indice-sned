@@ -174,6 +174,19 @@ Y el motivo del rechazo distingue los dos casos. Inventar una cifra y no
 atribuirla se corrigen distinto, de modo que decir cual de los dos ocurrio es
 parte de lo que el guardarrail debe entregar.
 
+**La distincion llega hasta la pantalla.** `RespuestaDeAsesoria` transporta
+`documentos_consultados` y `cifras_documentales`, y la cuarta ventana muestra un
+bloque «De donde salen las cifras» cuando los hay. Un guardarrail que separa la
+evidencia en grados y no lo muestra hace la auditoria mas fina y la lectura igual
+de ciega.
+
+**El puerto de recuperacion tiene dos adaptadores**, como el de datos y como el
+de orquestacion: `RecuperadorPorPalabrasClave` y `RecuperadorPorEmbeddings`, este
+ultimo sobre un puerto propio de vectorizacion para que cambiar de modelo de
+embeddings no obligue a tocar la logica de recuperacion. A cuatrocientos sesenta
+fragmentos la busqueda por terminos ya responde bien; la vectorial existe **para
+poder medir la diferencia**, no porque haga falta.
+
 **Lo que no esta implementado, y por que.** Detectar que una cifra documental
 **contradice** una de diagnostico exige saber que ambas hablan del mismo
 concepto, y ninguno de los dos conjuntos transporta el concepto: transportan el
@@ -219,6 +232,26 @@ por consulta**, porque este problema no usa nada de lo que el framework vende.
 | `anthropic` | Operacion | Paquete `anthropic` y `ANTHROPIC_API_KEY` |
 | `openai` | Operacion | Paquete `openai` y `OPENAI_API_KEY` |
 | `gemini` | Operacion | Paquete `google-genai` y `GEMINI_API_KEY` |
+| `ollama` | Operacion local y medicion | **Nada**: habla HTTP con `httpx` |
+
+**El cuarto no es un modelo alojado mas: es otro eje.** Los tres primeros son APIs
+de frontera y entre ellas se miden matices. Ollama corre en la maquina de quien
+opera, y eso cambia tres cosas que en este dominio no son secundarias: el costo
+por consulta es cero, la disponibilidad no depende de un tercero y **el dato del
+establecimiento no sale hacia una API extranjera**. Son establecimientos
+identificados por RBD, de educacion publica chilena; que el asesor pueda correr
+en la infraestructura del sostenedor es un argumento de politica de datos.
+
+Es ademas el unico adaptador **sin SDK**: la API nativa de Ollama es HTTP con
+JSON, de modo que `httpx` alcanza. En una comparacion donde se cuentan las
+dependencias transitivas, eso se nota.
+
+**Lo que se espera medir, y la trampa que hay que evitar.** Un modelo de siete u
+ocho mil millones de parametros no rutea como uno de frontera. Si de veinte casos
+acierta doce, **doce es el resultado**: ajustar los casos hasta que apruebe seria
+exactamente lo que este plan de calidad prohibe. Y la fila de latencia, sin GPU,
+**no compara dos modelos sino una maquina de escritorio contra un centro de
+datos**; hay que escribirlo asi o el numero miente.
 
 Cambiar de proveedor es cambiar dos variables de entorno. El bucle, el catalogo
 de herramientas y los cuatro guardarrailes no se tocan: es lo que el puerto
@@ -721,3 +754,5 @@ que borrarla.
 | 2026-08-10 | 7.1 | Seccion nueva: el puerto pasa a tener dos adaptadores, con `AGENTE_ORQUESTADOR` para elegirlos | Un puerto con un solo adaptador es una promesa sin cobrar. Los veinte casos evaluan a los dos sin modificarse |
 | 2026-08-10 | 6.2 | Seccion nueva: el tercer conjunto de cifras y los tres veredictos de G-02 | Una herramienta que lee documentacion trae cifras que no son mediciones. Sin separarlas, la auditoria diria «fundada» sobre un archivo |
 | 2026-08-10 | 5 | Se marca como completada —no revertida— la seccion que declaraba que no hay recuperacion aumentada | El argumento sigue en pie para datos estructurados. Lo que aparecio es recuperacion sobre `docs/`, que es otra cosa |
+| 2026-08-10 | 6.2 | La procedencia documental llega a la pantalla, y el puerto de recuperacion suma su segundo adaptador | Una separacion de evidencia que no se muestra no cambia lo que el lector puede juzgar |
+| 2026-08-10 | 8 | Cuarto proveedor: `ollama`, modelo local sin SDK | No es un modelo alojado mas sino otro eje: costo cero, disponibilidad propia y el dato sin salir de la maquina |

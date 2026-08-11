@@ -55,6 +55,21 @@ def _openai(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     )
 
 
+def _ollama(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
+    """Modelo local. Sin clave, sin red hacia afuera y sin SDK: solo httpx.
+
+    La importacion es perezosa por coherencia con los demas, aunque este modulo
+    no arrastre nada: si manana el adaptador creciera, la regla ya esta puesta.
+    """
+    from q5_agente.proveedores.ollama import AdaptadorOllama  # noqa: PLC0415
+
+    return AdaptadorOllama(
+        modelo=cfg.agente_ollama_modelo or None,
+        url_base=cfg.agente_ollama_url,
+        segundos_espera=cfg.agente_ollama_espera,
+    )
+
+
 def _gemini(cfg: ConfiguracionDelAgente) -> ProveedorDeModelo:
     from q5_agente.proveedores.externos import AdaptadorGemini
 
@@ -69,6 +84,7 @@ PROVEEDORES: dict[str, Callable[[ConfiguracionDelAgente], ProveedorDeModelo]] = 
     "anthropic": _anthropic,
     "openai": _openai,
     "gemini": _gemini,
+    "ollama": _ollama,
 }
 
 
@@ -82,15 +98,51 @@ _PREFIJOS_DE_MODELO = {
 }
 
 
-def _proveedor_de(nombre_de_modelo: str) -> str | None:
+def proveedor_de_modelo(nombre_de_modelo: str) -> str | None:
+    """A que proveedor pertenece un nombre de modelo, si es reconocible.
+
+    Publica porque el arnes de evaluacion la necesita: al mover la variable
+    proveedor tiene que decidir que hacer con el modelo configurado, y esa
+    decision debe tomarla con el mismo criterio que la fabrica.
+    """
     for proveedor, prefijos in _PREFIJOS_DE_MODELO.items():
         if nombre_de_modelo.startswith(prefijos):
             return proveedor
     return None
 
 
+#: Nombre interno historico. Se conserva para no tocar sus usos.
+_proveedor_de = proveedor_de_modelo
+
+
+def _exigir_modelo_coherente(cfg: ConfiguracionDelAgente) -> None:
+    """El modelo configurado debe pertenecer al proveedor seleccionado.
+
+    Falla al construir, con las dos variables a la vista. Un modelo ajeno
+    produce mas abajo un 404 que el bucle traduce a «proveedor no disponible»,
+    y esa traduccion es correcta pero inutil: el usuario concluye que su
+    proveedor esta caido cuando lo que tiene es una variable mal puesta.
+
+    Ocurrio de verdad: una evaluacion de veinte casos contra un modelo local
+    fallo entera porque AGENTE_MODELO conservaba el modelo del proveedor
+    anterior. La tabla resultante parecia decir que el modelo local ruteaba mal
+    y en realidad no se le habia preguntado nada.
+    """
+    if not cfg.agente_modelo:
+        return
+    dueno = _proveedor_de(cfg.agente_modelo)
+    if dueno is not None and dueno != cfg.agente_proveedor:
+        raise ProveedorNoConfigurado(
+            f"AGENTE_MODELO='{cfg.agente_modelo}' pertenece al proveedor '{dueno}', "
+            f"pero AGENTE_PROVEEDOR='{cfg.agente_proveedor}'. Deje AGENTE_MODELO "
+            f"vacio para usar el modelo por omision de '{cfg.agente_proveedor}', "
+            f"o escriba uno de ese proveedor."
+        )
+
+
 def crear_proveedor(cfg: ConfiguracionDelAgente | None = None) -> ProveedorDeModelo:
     cfg = cfg or config_agente()
+    _exigir_modelo_coherente(cfg)
     constructor = PROVEEDORES.get(cfg.agente_proveedor)
     if constructor is not None:
         return constructor(cfg)
