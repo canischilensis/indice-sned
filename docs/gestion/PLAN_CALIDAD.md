@@ -158,6 +158,8 @@ aprendió equivocándose, no en la apariencia de no haberse equivocado.
 | El cliente nunca leyó su configuración: Vite buscaba un `.env` que nunca existió y las direcciones venían de constantes de reserva en `api.ts` | Alta | 2026-08-10. `envDir` apunta a la raíz: un solo archivo de configuración. Se agrega `tests/arquitectura/test_variables_del_cliente.py`, porque exponer la raíz al empaquetador depende de que ninguna credencial lleve prefijo `VITE_` |
 | Los orígenes CORS del asesor estaban escritos a mano en el código | Media | 2026-08-10. `AGENTE_CORS_ORIGENES` pasa a configuración. Una dirección de red no es una constante del programa |
 | El estado del repositorio dependía de la instalación de git de quien preguntara: sobre el mismo commit, un Windows informaba el árbol limpio y un Linux setenta archivos modificados | Media | 2026-08-10. No existía `.gitattributes`: el fin de línea lo decidía el `core.autocrlf` de cada máquina. Se declara la normalización en el repositorio, con los binarios explícitos y los guiones de shell forzados a LF |
+| `AGENTE_MODELO` era una sola variable compartida por cuatro proveedores: al cambiar de proveedor, el modelo del anterior se filtraba y producía una evaluación entera falsa | Alta | 2026-08-10. El modelo local pasa a tener campo propio, la fábrica falla ruidosamente ante un modelo de otro proveedor, y el arnés declara qué hace con él al mover la variable |
+| Una corrida de veintiséis minutos no imprimía nada y era indistinguible de un proceso colgado: quien la lanzó la interrumpió dos veces | Media | 2026-08-10. El arnés informa cada caso al terminarlo y admite correr los primeros N, marcando la salida como parcial |
 
 ### 9.1 Reglas que salen de defectos reales
 
@@ -178,6 +180,9 @@ proyecto y se escribió el día que costó tiempo.
 | Un error silencioso es peor que uno visible | El ruteo adivinaba un factor y respondía bien sobre la pregunta equivocada. El defecto anterior —un código mal escrito— producía un fallo que se veía y por eso se corrigió; este no dejaba rastro |
 | Una capacidad sin interfaz se declara, no se disimula | El rol de auditoría existe y está verificado en el servicio. Se decidió no construirle ventana y dejarlo escrito en un ADR, en lugar de recortar el rol para que calzara con la pantalla |
 | Verificar contra una línea base no sustituye verificar contra el sistema real | Los veinte casos corren contra el adaptador determinista, que cumple el contrato de formato por construcción. El defecto solo apareció en la primera consulta a un proveedor externo |
+| **Un resultado sin consumo no es un resultado** | Una evaluación de veinte casos devolvió 0/20 con cero tokens y cero llamadas al modelo: parecía decir que un modelo local ruteaba pésimo y en realidad nunca se le preguntó nada. Antes de leer una tabla se comprueba que hubo consumo |
+| **La métrica válida depende de la variable que se mueve** | «Casos aprobados» sirve cuando ambos lados redactan igual —eje de orquestadores— y castiga la variación léxica cuando uno de los lados es generativo —eje de proveedores—. Ahí la métrica es ruteo más guardarraíles. Se declara antes de mirar el resultado, no después |
+| **La expectativa se escribe antes de medir** | El módulo del proveedor local declaró que esperaba doce aciertos de veinte. Midió diecisiete. Sin la predicción escrita, cualquier cifra habría confirmado lo que se pensara después |
 
 ## 10. Lo que este plan no cubre
 
@@ -201,4 +206,5 @@ creía antes de tomarla.
 | 2026-08-10 | 9 | Se registran dos defectos abiertos que no estaban en ningún documento: el `access violation` de Windows y la latencia percibida sin medir | Vivían en notas de trabajo. Un defecto conocido que no está en el plan no está declarado: está olvidado a medias |
 | 2026-08-10 | 9 | Se cierra el defecto de formato del proveedor externo y se corrige la atribución de la latencia: fue arranque en frío, no cómputo | Una medición aislada se había declarado como propiedad del sistema |
 | 2026-08-10 | 9.1 | Dos reglas nuevas: lo que se le pide a un modelo se verifica aparte, y la línea base no sustituye al sistema real | Ambas salen del mismo defecto: la evaluación completa corría contra un proveedor que cumple el contrato por construcción |
+| 2026-08-10 | 9 y 9.1 | Se cierran dos defectos de la evaluación —modelo compartido entre proveedores y corrida sin señal de avance— y se agregan tres reglas sobre cómo leer una medición | Los tres salen de la misma sesión: una tabla falsa que parecía un hallazgo, y una corrida interrumpida por falta de información |
 | 2026-08-10 | 9 y 9.1 | Se cierran dos defectos más —el factor adivinado en silencio y el mensaje al rol de auditoría— y se agregan sus dos reglas | El primero salió a la luz al retirar la copia de códigos; el segundo al preparar la captura del perfil sin establecimientos |

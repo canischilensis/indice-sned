@@ -253,6 +253,19 @@ exactamente lo que este plan de calidad prohibe. Y la fila de latencia, sin GPU,
 **no compara dos modelos sino una maquina de escritorio contra un centro de
 datos**; hay que escribirlo asi o el numero miente.
 
+> **Medido el 2026-08-10. El parrafo anterior se conserva porque su prediccion
+> quedo desmentida y esa es su utilidad.** Sobre los mismos veinte casos,
+> `qwen3:8b` en CPU **acerto diecisiete de veinte en ruteo**, no doce. Y no se
+> ajusto ningun caso: los ocho que fallan solo por la frase exigida quedan
+> fallando, y lo que cambio fue **que metrica se cita en este eje** —ruteo mas
+> guardarrailes, no casos aprobados—, declarado antes de mirar el detalle.
+>
+> El resultado que el proyecto sostiene con esa corrida: **G-02 y G-03 salen
+> 20/20 con el modelo debil**, identicos al determinista. La fundamentacion de
+> las cifras es una propiedad de la arquitectura, no del proveedor.
+>
+> Tabla completa, fallo por fallo, en `COMPARACION_PROVEEDORES.md` (CP-SNED-01).
+
 Cambiar de proveedor es cambiar dos variables de entorno. El bucle, el catalogo
 de herramientas y los cuatro guardarrailes no se tocan: es lo que el puerto
 `ProveedorDeModelo` compra.
@@ -756,3 +769,4 @@ que borrarla.
 | 2026-08-10 | 5 | Se marca como completada —no revertida— la seccion que declaraba que no hay recuperacion aumentada | El argumento sigue en pie para datos estructurados. Lo que aparecio es recuperacion sobre `docs/`, que es otra cosa |
 | 2026-08-10 | 6.2 | La procedencia documental llega a la pantalla, y el puerto de recuperacion suma su segundo adaptador | Una separacion de evidencia que no se muestra no cambia lo que el lector puede juzgar |
 | 2026-08-10 | 8 | Cuarto proveedor: `ollama`, modelo local sin SDK | No es un modelo alojado mas sino otro eje: costo cero, disponibilidad propia y el dato sin salir de la maquina |
+| 2026-08-10 | — | Se remite a COMPARACION_PROVEEDORES.md, con el segundo eje medido | Ruteo 17/20 y guardarrailes 20/20 con un modelo local: la fundamentacion de las cifras no depende del proveedor |

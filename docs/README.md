@@ -41,6 +41,8 @@ al índice del Capítulo IV de la tesis.
 | `adr/` | ADR-001 a 007 | Decisiones de arquitectura registradas |
 | `agente/AGENTE_ASESOR.md` | AG-SNED-01 | El cuanto 5: puerto, guardarraíles, proveedores, evaluación y defectos encontrados por el uso |
 | `agente/COMPARACION_ORQUESTADORES.md` | CO-SNED-01 | Comparación medida entre el bucle propio y el ReAct de LangGraph, sobre los mismos veinte casos |
+| `agente/COMPARACION_PROVEEDORES.md` | CP-SNED-01 | Comparación medida entre el adaptador determinista y un modelo local de 8B, sobre los mismos veinte casos |
+| `agente/evidencia/` | — | Salida completa de las corridas que sustentan las comparaciones, caso por caso |
 
 ## 3. Diseño
 

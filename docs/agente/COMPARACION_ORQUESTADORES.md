@@ -156,6 +156,12 @@ devuelve cargas fijas. Mide ruteo, guardarraíles, resiliencia y consumo. Que un
 modelo de lenguaje elija la herramienta correcta tantas veces como un puñado de
 reglas es el resultado; si elige peor, también.
 
+**Ese segundo eje ya está medido** contra un modelo local de ocho mil millones de
+parámetros: ver `COMPARACION_PROVEEDORES.md`. Resultado en una línea: el ruteo
+baja a 17/20 y **los guardarraíles se mantienen en 20/20**, lo que sostiene que
+la fundamentación de las cifras es una propiedad de la arquitectura y no del
+proveedor.
+
 El arnés admite además evaluar un orquestador por separado:
 
 ```bash
