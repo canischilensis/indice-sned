@@ -19,6 +19,47 @@ const HERRAMIENTAS: Record<string, { rotulo: string; ayuda: string }> = {
     rotulo: 'Simulacion de escenario',
     ayuda: 'Pidio al motor una estimacion con las variables de gestion modificadas.',
   },
+  consulta_de_doctrina: {
+    rotulo: 'Documentacion del proyecto',
+    ayuda: 'Leyo las decisiones registradas del sistema. No consulto datos del establecimiento.',
+  },
+}
+
+/* Aviso de procedencia documental.
+ *
+ * Una cifra que calculo el motor durante esta consulta y una que estaba escrita
+ * en un documento hace meses no valen lo mismo, y hasta ahora la pantalla las
+ * presentaba con la misma autoridad. El guardarrail ya las separa por dentro; si
+ * la separacion no llega aqui, la auditoria es mas fina y la lectura sigue igual
+ * de ciega. */
+function Procedencia({ documentos, cifras }: { documentos: string[]; cifras: number[] }) {
+  if (documentos.length === 0) return null
+  const nombre = (ruta: string) => ruta.split('/').pop() ?? ruta
+  return (
+    <div className="traza">
+      <div className="traza-tit">De donde salen las cifras</div>
+      <div className="nota">
+        Parte de lo que se afirma arriba proviene de la <b>documentacion del proyecto</b>, no de
+        una consulta al motor. Fue cierto cuando se escribio y puede haber cambiado desde
+        entonces. Las cifras calculadas para este establecimiento en esta consulta se distinguen
+        porque el agente no las atribuye a ningun documento.
+      </div>
+      <div className="paso">
+        <div className="paso-cab">
+          <span className="paso-nom">Documentos consultados</span>
+          <span className="pill">
+            <span className="punto" />
+            {cifras.length === 1 ? '1 cifra documental' : `${cifras.length} cifras documentales`}
+          </span>
+        </div>
+        <div className="paso-det">{documentos.map(nombre).join(' · ')}</div>
+        <div className="paso-ayuda">
+          El agente debe nombrar el documento en la misma frase que la cifra. Si no lo hace, el
+          guardarrail G-02 retira la respuesta en vez de dejarla pasar como si fuera una medicion.
+        </div>
+      </div>
+    </div>
+  )
 }
 
 /* Preguntas de arranque. Cubren las tres herramientas del catalogo y una
@@ -116,6 +157,10 @@ function Respuesta({ turno }: { turno: Turno }) {
           )}
 
           <Traza llamadas={r.llamadas} />
+          <Procedencia
+            documentos={r.documentos_consultados ?? []}
+            cifras={r.cifras_documentales ?? []}
+          />
           <Guardarrailes r={r} />
 
           <div className="medicion">

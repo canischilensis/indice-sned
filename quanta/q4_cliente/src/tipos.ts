@@ -128,6 +128,13 @@ export interface RespuestaAsesor {
   motivo_rechazo: string | null
   guardarrailes_aplicados: string[]
   llamadas: LlamadaDeHerramienta[]
+  /** Documentos del proyecto consultados para responder.
+   *
+   *  Una cifra leida de un documento es evidencia mas debil que una consulta al
+   *  motor: el documento pudo escribirse hace meses. La pantalla lo declara en
+   *  vez de presentar ambas con la misma autoridad. */
+  documentos_consultados: string[]
+  cifras_documentales: number[]
   tokens_entrada: number
   tokens_salida: number
   costo_usd: number
