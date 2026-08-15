@@ -19,7 +19,7 @@ def _recolectar_cifras(nodo: Any, acumulado: set[float]) -> None:
     """Recorre la respuesta y acumula toda cifra finita que contenga."""
     if isinstance(nodo, bool):
         return
-    if isinstance(nodo, (int, float)):
+    if isinstance(nodo, int | float):
         if math.isfinite(float(nodo)):
             acumulado.add(round(float(nodo), 6))
         return
@@ -27,7 +27,7 @@ def _recolectar_cifras(nodo: Any, acumulado: set[float]) -> None:
         for valor in nodo.values():
             _recolectar_cifras(valor, acumulado)
         return
-    if isinstance(nodo, (list, tuple)):
+    if isinstance(nodo, list | tuple):
         for valor in nodo:
             _recolectar_cifras(valor, acumulado)
 

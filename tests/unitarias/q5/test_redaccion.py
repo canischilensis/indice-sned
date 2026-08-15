@@ -18,7 +18,6 @@ contrato se puede cumplir con independencia del proveedor.
 from __future__ import annotations
 
 import pytest
-
 from q5_agente.redaccion import a_prosa_plana, con_coma_decimal, sin_markdown
 
 #: Fragmento textual de la respuesta de Gemini del 2026-08-10. Se conserva tal

@@ -115,7 +115,7 @@ que gobierna la cuarentena de la ingesta y las reglas de alerta del servicio.
 |---|---|---|---|
 | **G-01** | Inyeccion por parametro y movimiento del objetivo del modelo | `SanitizadorDeParametros` | 7 pruebas unitarias; CP-18 |
 | **G-02** | Cifras que ninguna herramienta devolvio | `CifrasFundadasEnHerramientas` | 5 pruebas; los 20 casos, agregado |
-| **G-03** | Promesas de obtencion del beneficio | `SinPromesasDeRetorno` | 4 pruebas; CP-07 |
+| **G-03** | Promesas de obtencion del beneficio, **salvo cuando vienen negadas** | `SinPromesasDeRetorno` | 13 pruebas; CP-07 |
 | **G-04** | Responder cuando el proveedor esta caido | Bucle y cortacircuitos | 4 pruebas de decorador |
 
 El gateway traduce ademas los fallos de **transporte** —servicio apagado, tiempo
@@ -769,4 +769,5 @@ que borrarla.
 | 2026-08-10 | 5 | Se marca como completada —no revertida— la seccion que declaraba que no hay recuperacion aumentada | El argumento sigue en pie para datos estructurados. Lo que aparecio es recuperacion sobre `docs/`, que es otra cosa |
 | 2026-08-10 | 6.2 | La procedencia documental llega a la pantalla, y el puerto de recuperacion suma su segundo adaptador | Una separacion de evidencia que no se muestra no cambia lo que el lector puede juzgar |
 | 2026-08-10 | 8 | Cuarto proveedor: `ollama`, modelo local sin SDK | No es un modelo alojado mas sino otro eje: costo cero, disponibilidad propia y el dato sin salir de la maquina |
+| 2026-08-15 | 6 | G-03 evalua oracion por oracion y respeta la negacion; el mensaje de sistema deja de usar la raiz que G-03 prohibe | Defecto en uso real: la instruccion enseñaba «ninguna mejora lo garantiza» y el guardarrail retenia esa misma advertencia. Se cede un falso negativo posible —una negacion que no rige— a cambio de un falso positivo comprobado |
 | 2026-08-10 | — | Se remite a COMPARACION_PROVEEDORES.md, con el segundo eje medido | Ruteo 17/20 y guardarrailes 20/20 con un modelo local: la fundamentacion de las cifras no depende del proveedor |

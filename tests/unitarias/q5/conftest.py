@@ -26,7 +26,6 @@ from __future__ import annotations
 from dataclasses import fields
 
 import pytest
-
 from q5_agente.config import ConfiguracionDelAgente
 
 #: Credenciales de proveedor. No son campos de la configuracion —a proposito, la

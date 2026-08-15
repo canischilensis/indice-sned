@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import httpx
 import pytest
-
 from q5_agente.errores import ErrorDelProveedor, ProveedorNoConfigurado
 from q5_agente.proveedores.contrato import Mensaje, ProveedorDeModelo
 from q5_agente.proveedores.ollama import AdaptadorOllama

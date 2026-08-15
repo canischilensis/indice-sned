@@ -17,7 +17,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from q5_agente.contrato import Consulta
 from q5_agente.doctrina import (
     RecuperadorDeDoctrina,
@@ -207,7 +206,6 @@ def test_la_respuesta_transporta_el_tercer_conjunto(corpus: Path):
 
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "evaluacion"))
     from dobles import ServicioFalso  # noqa: PLC0415
-
     from q5_agente.bucle import AgenteDeBucleSimple  # noqa: PLC0415
     from q5_agente.proveedores.determinista import AdaptadorDeterminista  # noqa: PLC0415
 

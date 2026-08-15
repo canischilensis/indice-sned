@@ -51,7 +51,7 @@ def _a_flotante(valor: object) -> float | None:
     """Acepta el numero, o su escritura en castellano con coma decimal."""
     if isinstance(valor, bool):
         return None
-    if isinstance(valor, (int, float)):
+    if isinstance(valor, int | float):
         return float(valor)
     if isinstance(valor, str):
         texto = valor.strip().replace(" ", "")
@@ -297,18 +297,78 @@ def _sin_tildes(texto: str) -> str:
     return "".join(c for c in descompuesto if unicodedata.category(c) != "Mn")
 
 
+#: Negacion inmediatamente anterior a la promesa, dentro de la misma oracion y
+#: sin puntuacion de por medio.
+#:
+#: La ventana de 28 caracteres y la prohibicion de comas o dos puntos hacen el
+#: trabajo pesado: en «ninguna mejora garantiza el beneficio» la negacion rige
+#: sobre la promesa, y en «no hay duda: le garantizo el beneficio» no, porque
+#: los dos puntos cierran la clausula. Sin esa condicion, anteponer cualquier
+#: "no" desactivaria el guardarrail.
+_NEGACION = re.compile(
+    r"\b(no|ni|nunca|jamas|nada|nadie|ningun|ninguna|ninguno|tampoco|sin|imposible)\b"
+    r"[^,;:.!?]{0,28}$"
+)
+
+
+def _esta_negada(previo: str) -> bool:
+    """Verdadero si lo que viene despues de `previo` cae bajo una negacion."""
+    return bool(_NEGACION.search(previo))
+
+
+@dataclass(frozen=True)
+class PromesaDetectada:
+    """Una promesa hallada, con la oracion que la contiene.
+
+    La oracion viaja porque sin ella el motivo del rechazo es inauditable: leer
+    «se detecto 'garantiz'» no permite saber si el texto prometia el beneficio o
+    si explicaba que nadie puede prometerlo.
+    """
+
+    frase: str
+    oracion: str
+
+
 class SinPromesasDeRetorno(Especificacion[Fundamentacion]):
-    """G-03. El beneficio se asigna por posicion relativa: nada lo garantiza."""
+    """G-03. El beneficio se asigna por posicion relativa: nada lo asegura.
+
+    **Se evalua oracion por oracion y respetando la negacion.** La version
+    anterior buscaba la raiz en el texto completo, de modo que «ninguna mejora
+    garantiza el beneficio» —la frase exactamente correcta, y la que el propio
+    mensaje de sistema induce— se retenia igual que «le garantizo el beneficio».
+    Un guardarrail que castiga la advertencia ademas de la promesa no protege
+    mas: ensena a no advertir.
+
+    Lo que se cede al aceptar la negacion queda declarado: una promesa redactada
+    con una negacion cercana que no la rija —«no exagero al garantizar»— pasa.
+    Es un falso negativo posible a cambio de un falso positivo comprobado.
+    """
 
     codigo = "G-03"
     descripcion = "El texto no promete la obtencion del beneficio."
 
+    def detectar(self, candidato: Fundamentacion) -> list[PromesaDetectada]:
+        halladas: list[PromesaDetectada] = []
+        for oracion in _FIN_DE_ORACION.split(candidato.texto):
+            plano = _sin_tildes(oracion)
+            for frase in _PROMESAS:
+                posicion = plano.find(frase)
+                while posicion != -1:
+                    if not _esta_negada(plano[:posicion]):
+                        halladas.append(PromesaDetectada(frase, oracion.strip()))
+                        break
+                    posicion = plano.find(frase, posicion + 1)
+        return halladas
+
     def frases_detectadas(self, candidato: Fundamentacion) -> list[str]:
-        plano = _sin_tildes(candidato.texto)
-        return [frase for frase in _PROMESAS if frase in plano]
+        vistas: list[str] = []
+        for promesa in self.detectar(candidato):
+            if promesa.frase not in vistas:
+                vistas.append(promesa.frase)
+        return vistas
 
     def es_satisfecha_por(self, candidato: Fundamentacion) -> bool:
-        return not self.frases_detectadas(candidato)
+        return not self.detectar(candidato)
 
 
 # --- composicion ------------------------------------------------------------
@@ -357,11 +417,15 @@ class PoliticaDeSalida:
             documentos=documentos,
         )
         if self._usar_promesas:
-            frases = self.promesas.frases_detectadas(candidato)
-            if frases:
+            detectadas = self.promesas.detectar(candidato)
+            if detectadas:
+                # La oracion completa viaja en el motivo: sin ella, quien revisa
+                # un rechazo no puede distinguir una promesa de una advertencia.
+                detalle = "; ".join(
+                    f"'{p.frase}' en la frase «{p.oracion}»" for p in detectadas[:2]
+                )
                 return False, self.promesas.codigo, (
-                    "La respuesta prometia la obtencion del beneficio: "
-                    + ", ".join(f"'{f}'" for f in frases)
+                    "La respuesta prometia la obtencion del beneficio: " + detalle
                 )
         if self._usar_cifras:
             huerfanas = self.cifras.cifras_sin_respaldo(candidato)

@@ -21,7 +21,6 @@ pytest.importorskip("langgraph", reason="dependencia opcional del orquestador al
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "evaluacion"))
 
 from dobles import RBD_AJENO, RBDS_MUESTRA, ServicioFalso  # noqa: E402
-
 from q5_agente.contrato import AsesorDeGestion, Consulta  # noqa: E402
 from q5_agente.guardarrailes import PoliticaDeSalida, SanitizadorDeParametros  # noqa: E402
 from q5_agente.herramientas.catalogo import construir_catalogo  # noqa: E402

@@ -82,7 +82,7 @@ def _a_esquema_gemini(nodo: Any) -> Any:
             # del esquema: se conservan todas y se poda solo su contenido.
             podado[clave] = {nombre: _a_esquema_gemini(sub) for nombre, sub in valor.items()}
         elif clave in {"enum", "required"}:
-            podado[clave] = list(valor) if isinstance(valor, (list, tuple)) else valor
+            podado[clave] = list(valor) if isinstance(valor, list | tuple) else valor
         else:
             podado[clave] = _a_esquema_gemini(valor)
 

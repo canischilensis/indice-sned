@@ -18,7 +18,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from q2_modelamiento.validacion import COLUMNAS_OBJETIVO
 from q5_agente.herramientas.catalogo import FACTORES, construir_catalogo
 from q5_agente.proveedores.contrato import Mensaje

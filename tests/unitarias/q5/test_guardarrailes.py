@@ -124,6 +124,66 @@ def test_una_lectura_prudente_no_es_una_promesa():
     assert regla.es_satisfecha_por(Fundamentacion(texto))
 
 
+@pytest.mark.parametrize(
+    "texto",
+    [
+        "Ninguna mejora garantiza la obtencion del beneficio.",
+        "No puedo garantizarle el beneficio: depende de la posicion relativa.",
+        "Nadie garantiza el cambio de tramo, porque el grupo tambien se mueve.",
+        "Subir ese factor ayuda, pero sin garantizar el resultado.",
+        "Nunca voy a garantizar que obtendra el beneficio.",
+    ],
+)
+def test_advertir_que_nadie_promete_no_es_prometer(texto):
+    """Defecto encontrado en produccion: G-03 retenia la frase correcta.
+
+    La version anterior buscaba la raiz en el texto completo, sin mirar si venia
+    negada. Como el propio mensaje de sistema le ensena al modelo que "ninguna
+    mejora lo garantiza", el modelo parafraseaba la instruccion y la respuesta
+    se bloqueaba. La prueba de la lectura prudente no lo detectaba porque estaba
+    escrita con "asegura", esquivando justo la palabra que fallaba.
+    """
+    regla = SinPromesasDeRetorno()
+    assert regla.es_satisfecha_por(Fundamentacion(texto))
+
+
+@pytest.mark.parametrize(
+    "texto",
+    [
+        "No hay duda: le garantizo el beneficio.",
+        "No se preocupe. Le garantizo el beneficio.",
+        "Ninguna otra medida hace falta, le garantizo el beneficio.",
+    ],
+)
+def test_una_negacion_que_no_rige_sobre_la_promesa_no_la_salva(texto):
+    """Aceptar la negacion no puede convertirse en una llave para desactivar G-03.
+
+    La negacion debe regir sobre la promesa: misma oracion, sin puntuacion de
+    por medio y a corta distancia. Anteponer un "no" cualquiera no basta.
+    """
+    regla = SinPromesasDeRetorno()
+    assert not regla.es_satisfecha_por(Fundamentacion(texto))
+
+
+def test_el_rechazo_cita_la_oracion_completa():
+    """Sin la oracion, un rechazo de G-03 es inauditable."""
+    politica = PoliticaDeSalida()
+    _, _, motivo = politica.evaluar("Le garantizo el beneficio este ciclo.", set())
+    assert "Le garantizo el beneficio este ciclo." in motivo
+
+
+def test_el_mensaje_de_sistema_cumple_su_propia_politica():
+    """Lo que se le prohibe al modelo no puede estar escrito en la instruccion.
+
+    Esta es la prueba que habria evitado el defecto: el mensaje de sistema usaba
+    la raiz que G-03 vigila, y el modelo la repetia por obediencia.
+    """
+    from q5_agente.prompts import SISTEMA
+
+    regla = SinPromesasDeRetorno()
+    assert regla.es_satisfecha_por(Fundamentacion(SISTEMA))
+
+
 # --- composicion ------------------------------------------------------------
 
 

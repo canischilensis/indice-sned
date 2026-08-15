@@ -59,7 +59,7 @@ def _numero(valor: Any) -> float | None:
     """Convierte a magnitud lo que sea magnitud, y descarta el resto."""
     if isinstance(valor, bool):
         return None
-    if isinstance(valor, (int, float)):
+    if isinstance(valor, int | float):
         return float(valor)
     if isinstance(valor, str) and valor.isdigit():
         return float(valor)

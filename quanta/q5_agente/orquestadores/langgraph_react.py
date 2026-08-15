@@ -238,10 +238,13 @@ class AgenteLangGraph(AsesorDeGestion):
         mensajes = estado.get("messages", [])
         texto = ""
         for mensaje in reversed(mensajes):
-            if isinstance(mensaje, AIMessage) and isinstance(mensaje.content, str):
-                if mensaje.content.strip():
-                    texto = mensaje.content
-                    break
+            if (
+                isinstance(mensaje, AIMessage)
+                and isinstance(mensaje.content, str)
+                and mensaje.content.strip()
+            ):
+                texto = mensaje.content
+                break
 
         return self._cerrar(
             texto, llamadas, cifras, diagnostico, self._uso(mensajes), documentales, procedencias
