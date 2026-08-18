@@ -16,6 +16,7 @@ al índice del Capítulo IV de la tesis.
 | Saber qué no se puede tocar | `gestion/PLAN_GESTION_CAMBIOS.md`, sección 3 |
 | Usar el sistema | `manuales/MANUAL_USUARIO.md` |
 | Saber qué se probó y cómo | `planes/PLAN_PRUEBAS.md` |
+| Conducir la prueba con un usuario | `aceptacion/PLAN_SESION_ACEPTACION.md` |
 | Ver de dónde sale cada requisito | `requisitos/MATRIZ_TRAZABILIDAD.md` |
 | Leer el informe del Hito 2 | `Informe_Hito2.docx`, con `INFORME_HITO_2.md` como versión en texto |
 
@@ -70,6 +71,11 @@ al índice del Capítulo IV de la tesis.
 | `planes/PLAN_PRUEBAS.md` | PPM-SNED-01 | Plan maestro |
 | `planes/PLAN_INTEGRACION.md` | PPI-SNED-01 | 5 de 5 integraciones cubiertas |
 | `planes/PLAN_ACEPTACION.md` | PPA-SNED-01 | Escenarios redactados, sin implementar |
+| `aceptacion/PLAN_SESION_ACEPTACION.md` | PSA-SNED-01 | Protocolo de la sesión con usuario: roles, tareas, umbrales y qué se declara |
+| `aceptacion/PAUTA_OBSERVACION.md` | PO-SNED-01 | Formulario de observación, seis tareas |
+| `aceptacion/CUESTIONARIO_ACEPTACION.md` | CA-SNED-01 | Comprensión (6 preguntas) + escala de usabilidad (10 ítems) |
+| `aceptacion/MATRIZ_RESULTADOS.md` | MR-SNED-01 | Matriz de los 11 escenarios, hallazgos y correcciones |
+| `aceptacion/ACTA_VALIDACION.md` | AV-SNED-01 | Acta firmable, con consentimiento y veredicto |
 | `planes/PLAN_COMPATIBILIDAD.md` | PPC-SNED-01 | Sin implementar |
 
 ## 6. Manuales y operación

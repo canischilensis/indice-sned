@@ -108,6 +108,16 @@ Sprint como acta de aceptación.
 
 ## 9. Estado actual
 
+> **Actualizado el 2026-08-15.** Lo de abajo sigue describiendo la **automatización**, que sigue
+> sin implementarse. Lo que cambió es que la aceptación ya no depende solo de ella: los once
+> escenarios se validan además **con una persona**, cinco por uso directo de la interfaz y seis por
+> llamada a la API mostrada en pantalla. El protocolo, los formularios y la matriz de resultados
+> están en `docs/aceptacion/`.
+>
+> Por qué seis no son alcanzables desde la interfaz: el selector solo lista los establecimientos
+> autorizados y no hay campo libre de RBD. Es consecuencia de una decisión de diseño, y se
+> registra como resultado en vez de forzar un camino que el sistema no ofrece.
+
 **No implementado.** La estructura de carpetas existe y los escenarios están redactados; falta
 traducirlos a `.feature` ejecutables e instalar `pytest-bdd`. El número exacto de historias del
 Product Backlog está por confirmar, y de él depende el cálculo de cobertura del 90 %.
