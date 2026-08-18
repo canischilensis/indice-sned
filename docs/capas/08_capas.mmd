@@ -1,0 +1,49 @@
+%% Vista en capas del ecosistema SNED · VC-SNED-01
+%% Direccion TB a proposito: cuatro capas apiladas leen como capas.
+%% Una disposicion LR daria una relacion de aspecto inservible en A4.
+flowchart TB
+    subgraph P["1 · PRESENTACION"]
+        direction LR
+        CLIENTE["q4_cliente<br/>React + Vite"]
+        ROUTERS["q3_servicio/api/v1/routers<br/>+ esquemas"]
+        CLIENTE -->|"JSON tipado"| ROUTERS
+    end
+
+    subgraph A["2 · APLICACION"]
+        direction LR
+        MOTOR["servicios/motor.py<br/>Facade · P7"]
+        ALERTAS["servicios/reglas_alerta.py<br/>Specification · P4"]
+        SEGURIDAD["core/seguridad.py<br/>jurisdiccion · CTRL-04"]
+    end
+
+    subgraph D["3 · DOMINIO"]
+        direction LR
+        ESTRATEGIA["q2/contrato.py<br/>Strategy · P1"]
+        FABRICA["q2/fabrica.py<br/>Factory Method · P6"]
+        ESCENARIO["q2/escenario.py<br/>Builder · P8"]
+        CATALOGO["q2/catalogo.py<br/>Registry · P10"]
+        DECORADOR["q2/decoradores.py<br/>Decorator · P5"]
+    end
+
+    subgraph PE["4 · PERSISTENCIA"]
+        direction LR
+        REPO["repositorios/contrato.py<br/>Repository · P2"]
+        PARQUET["parquet.py<br/>Adapter · P11"]
+        POSTGRES["postgres.py<br/>Adapter · P11"]
+        INGESTA["q1/ingestor.py<br/>Template Method · P3"]
+        ARTEFACTOS["q2/artefactos.py<br/>Lazy Load · P9"]
+        REPO --> PARQUET
+        REPO --> POSTGRES
+    end
+
+    P ==>|"caso de uso"| A
+    A ==>|"calcula"| D
+    A ==>|"lee"| PE
+    PE ==>|"devuelve objetos de"| D
+
+    SALUD["routers/salud.py"] -.->|"H-2: salta la capa de aplicacion"| CATALOGO
+
+    classDef capa fill:#f8f9fa,stroke:#495057,stroke-width:2px
+    classDef deuda stroke:#c92a2a,stroke-width:2px,stroke-dasharray: 5 5
+    class P,A,D,PE capa
+    class SALUD deuda

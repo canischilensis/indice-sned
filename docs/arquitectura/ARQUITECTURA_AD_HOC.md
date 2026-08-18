@@ -148,6 +148,11 @@ sistema aplica sin haberlos declarado hasta ahora.
 | Q3 · Servicio | Capas con capas cerradas | cap. 10, p. 135 | `router → servicio → repositorio`. Ningún router alcanza la persistencia: la fachada se interpone siempre, y esa clausura protege las reglas de negocio de cambios en el esquema |
 | Q2 · Modelamiento | Microkernel | cap. 12, p. 150 | El registro resuelve estrategias por clave y el núcleo no las conoce: añadir una arquitectura algorítmica es registrar una clase. El registro es **explícito**, no por descubrimiento —`fabrica.registrar(...)` al final del módulo—, de modo que la topología es de microkernel pero la carga no es dinámica |
 
+La vista completa del sistema por capas —las cuatro capas, la regla de dependencia, el recorrido
+de una petición y los tres puntos donde la clausura no se cumple— está en
+`docs/capas/VISTA_EN_CAPAS.md`. Este documento describe la arquitectura por cuantos; aquel la
+describe por capas, y su sección 6 explica por qué ninguna de las dos vistas sobra.
+
 La correspondencia del microkernel es de topología, no de identidad: a nivel de patrón, el mismo
 mecanismo se documenta en `docs/PATRONES_DE_DISENO.md` como Registry más Factory Method. Los dos
 niveles describen la misma estructura con vocabularios distintos.

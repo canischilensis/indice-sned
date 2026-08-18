@@ -52,6 +52,10 @@ el paper describe tienen correspondencia directa en este proyecto:
 
 ---
 
+> **Ordenados por capa:** esta tabla mapea cada patrón a su **cuanto**. El mismo conjunto ordenado
+> por **capa** —presentación, aplicación, dominio, persistencia— está en
+> `docs/capas/PATRONES_POR_CAPA.md`. No hay patrones nuevos allí: es el otro eje de lectura.
+
 ## 1.bis Principios de diseño que gobiernan los cuatro cuantos
 
 Los patrones no son la unidad de decisión más pequeña: debajo de cada uno hay un principio que

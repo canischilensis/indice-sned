@@ -11,6 +11,7 @@ al índice del Capítulo IV de la tesis.
 |-----------|--------|
 | Levantar el sistema desde cero | `manuales/MANUAL_INSTALACION.md` |
 | Entender la arquitectura | `arquitectura/ARQUITECTURA_AD_HOC.md` y `ARCHITECTURE.md` |
+| Ver el sistema por capas y sus patrones | `capas/VISTA_EN_CAPAS.md` y `capas/PATRONES_POR_CAPA.md` |
 | Saber qué hace cada clase | `diseno/DISENO_DEL_SOFTWARE.md` |
 | Entender la base de datos | `diseno/DISENO_BASE_DATOS.md` y `db/README.md` |
 | Saber qué no se puede tocar | `gestion/PLAN_GESTION_CAMBIOS.md`, sección 3 |
@@ -40,6 +41,8 @@ al índice del Capítulo IV de la tesis.
 | `arquitectura/PLATAFORMA_DE_OPERACION.md` | PO-SNED-01 | Despliegue con servidores separados de datos y aplicación, dimensionamiento y contingencia |
 | `ARCHITECTURE.md` | — | Documento vivo: motores de la arquitectura, decisiones y deuda conocida |
 | `PATRONES_DE_DISENO.md` | — | 12 patrones aplicados y 12 descartados, con fuentes citadas |
+| `capas/VISTA_EN_CAPAS.md` | VC-SNED-01 | Las cuatro capas, la regla de dependencia y **los tres puntos donde la clausura no se cumple** |
+| `capas/PATRONES_POR_CAPA.md` | PC-SNED-01 | Los mismos 12 patrones, ordenados por capa en vez de por cuanto |
 | `adr/` | ADR-001 a 005 | Decisiones de arquitectura registradas |
 
 ## 3. Diseño
@@ -97,7 +100,8 @@ al índice del Capítulo IV de la tesis.
 | Gestión de proyecto: metodología, objetivos y cronograma | `gestion/METODOLOGIA_Y_GESTION.md` + `gestion/PLAN_GESTION_CRONOGRAMA.md` |
 | Diseño de los componentes funcionales, con artefactos UML | `requisitos/CASOS_DE_USO.md` + `diagramas/` (secuencia) + `diseno/DISENO_DEL_SOFTWARE.md` |
 | Matriz de trazabilidad de requerimientos | `requisitos/MATRIZ_TRAZABILIDAD.md` |
-| Arquitectura de software a implementar | `arquitectura/ARQUITECTURA_AD_HOC.md` (sección 2: dónde se ve en cada artefacto UML) |
+| Arquitectura de software a implementar | `arquitectura/ARQUITECTURA_AD_HOC.md` (sección 2: dónde se ve en cada artefacto UML) + `capas/VISTA_EN_CAPAS.md` |
+| Arquitectura en capas y patrones de diseño | `capas/VISTA_EN_CAPAS.md` + `capas/PATRONES_POR_CAPA.md` |
 | Plan de Calidad | `gestion/PLAN_CALIDAD.md` |
 | Plan de Gestión de Cambios | `gestion/PLAN_GESTION_CAMBIOS.md` |
 | Plan de Comunicaciones | `gestion/PLAN_COMUNICACIONES.md` |
@@ -149,3 +153,5 @@ correspondiente.
 | Escenarios de aceptación sin implementar | `planes/PLAN_ACEPTACION.md` |
 | Compatibilidad de navegadores sin implementar | `planes/PLAN_COMPATIBILIDAD.md` |
 | Motor desagregado bajo el umbral de R² declarado | `gestion/PLAN_CALIDAD.md`, sección 4 |
+| La ruta de salud salta la capa de aplicación (H-2) | `capas/VISTA_EN_CAPAS.md`, sección 5 |
+| La clausura de capas dentro de Q3 no está automatizada | `capas/VISTA_EN_CAPAS.md`, sección 2 |
