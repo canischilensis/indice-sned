@@ -39,7 +39,15 @@ flowchart TB
     P ==>|"caso de uso"| A
     A ==>|"calcula"| D
     A ==>|"lee"| PE
-    PE ==>|"devuelve objetos de"| D
+
+    %% Enlace invisible: fija el orden 1-2-3-4 de arriba hacia abajo.
+    %% Sin el, Mermaid coloca DOMINIO debajo de PERSISTENCIA porque le llegan
+    %% dos flechas, y la numeracion de las capas deja de coincidir con el dibujo.
+    D ~~~ PE
+
+    %% La relacion "la persistencia devuelve objetos de dominio" NO se dibuja
+    %% como flecha a proposito: cerraria un ciclo con el enlace de orden y el
+    %% grafo volveria a reordenarse. Queda declarada en VISTA_EN_CAPAS.md §4.
 
     SALUD["routers/salud.py"] -.->|"H-2: salta la capa de aplicacion"| CATALOGO
 
