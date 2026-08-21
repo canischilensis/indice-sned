@@ -182,7 +182,7 @@ artefactos costosos; los de comportamiento donde viven las reglas que cambian po
 | # | Deuda | Consecuencia | Solución de fondo |
 |---|-------|--------------|-------------------|
 | 1 | El directorio de usuarios vive en memoria | No hay administración de usuarios | Migrar a `app.usuario`, ya creada |
-| 2 | Ocho variables derivadas se calculan en el entrenamiento y no se persisten | Cobertura de 35/43 = 81,4 %; el servicio las imputa | Materializarlas en `hechos.indicador_anual` durante la ingesta |
+| 2 | Ocho variables derivadas se calculan en el entrenamiento y no se persisten | Cobertura de 35/43 = 81,4 %; el servicio las imputa. **Desde el 2026-08-18 el simulador arrastra la variacion junto a su palanca**, de modo que la simulacion es coherente aunque la cobertura no cambie | Materializarlas en `hechos.indicador_anual` durante la ingesta |
 | 3 | Los artefactos están acoplados a la versión de la librería con que se entrenaron | Fallan con una versión mayor distinta | Registrar la versión en los metadatos y verificarla al cargar |
 | 4 | La simulación no reutiliza cómputo entre puntos de la malla | 4,6 s por llamada | Vectorizar la malla en una sola inferencia por modelo |
 | 5 | La ruta de detalle devuelve 66 variables y el tablero usa 2 | Acoplamiento de estampilla verificado: ancho de banda y acoplamiento innecesarios | Objeto de transferencia acotado o proyección de campos por parámetro |

@@ -211,6 +211,16 @@ API y se renderiza en el dashboard: la limitacion es parte del producto, no una 
    notebook de entrenamiento y no se persisten; el servicio las imputa por mediana (cobertura
    35/43 = 81,4 %). Observable vía `GET /api/v1/salud/composicion`. La solución de fondo es
    materializarlas en `hechos.indicador_anual` durante la ingesta.
+
+   **Mitigado parcialmente el 2026-08-18, sin resolver.** El defecto tenia una consecuencia no
+   declarada, que aparecio al demostrar el simulador: al mover una palanca `simce_*`, su
+   variacion asociada `dif_simce_*` quedaba congelada en el valor imputado, de modo que el
+   modelo recibia media senal y el indice respondia poco o de forma incoherente.
+   `ConstructorDeEscenario` arrastra ahora la variacion con el mismo delta de la palanca
+   —`dif = actual - previo`, y el bienio previo no es simulable, de manera que es aritmetica y
+   no estimacion— y lo declara en `Escenario.derivados` en lugar de moverlo en silencio.
+   Corrige la **coherencia de la simulacion**; **no** corrige la cobertura, que sigue en
+   81,4 %. La solucion de fondo sigue siendo materializarlas en la ingesta.
 6. **Desajuste de version entre entrenamiento y ejecucion.** Los artefactos `.joblib` se
    serializaron con **scikit-learn 1.6.1** —la version del entorno de los cuadernos— y el
    entorno de servicio fija **1.5.2** en `requirements.txt`. Cargar un artefacto de una version

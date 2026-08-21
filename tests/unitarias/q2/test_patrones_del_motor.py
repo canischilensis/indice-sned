@@ -183,3 +183,75 @@ def test_la_fabrica_arma_la_cadena_de_decoradores():
     decorada.predecir({"rbd": "1"})
     assert decorada.describir()["decoradores"] == ["EstrategiaAuditada", "EstrategiaConCache"]
 
+
+
+# --- desajuste entrenamiento-servicio: la variacion sigue a su palanca -------
+
+
+def test_mover_el_simce_arrastra_su_variacion():
+    """Defecto observado en la demostracion: el indice no respondia al mover una barra.
+
+    `dif_simce_x = x_actual - x_previo` y el bienio previo es un hecho consumado.
+    Si la palanca sube diez puntos, la variacion sube exactamente diez: no es una
+    estimacion, es aritmetica. Sin esta propagacion el modelo recibia el puntaje
+    movido y la variacion congelada en su valor imputado.
+    """
+    from q2_modelamiento.escenario import ConstructorDeEscenario
+
+    escenario = (
+        ConstructorDeEscenario.desde({"simce_mate_4b": 250.0, "dif_simce_mate_4b": 3.0})
+        .con("simce_mate_4b", 260.0)
+        .construir()
+    )
+
+    assert escenario.variables["dif_simce_mate_4b"] == 13.0
+    assert escenario.derivados["dif_simce_mate_4b"] == (3.0, 13.0)
+
+
+def test_la_variacion_arrastrada_parte_del_valor_imputado():
+    """Una variable ausente no vale cero al predecir: vale su mediana."""
+    from q2_modelamiento.escenario import ConstructorDeEscenario
+
+    escenario = (
+        ConstructorDeEscenario.desde({"simce_lect_8b": 240.0})
+        .con_referencias({"dif_simce_lect_8b": -3.0})
+        .con("simce_lect_8b", 245.0)
+        .construir()
+    )
+
+    assert escenario.variables["dif_simce_lect_8b"] == 2.0
+
+
+def test_sin_valor_de_partida_no_se_inventa_una_variacion():
+    """Sin delta calculable no se propaga nada: no se supone un punto de partida."""
+    from q2_modelamiento.escenario import ConstructorDeEscenario
+
+    escenario = (
+        ConstructorDeEscenario.desde({"simce_mate_2m": None})
+        .con("simce_mate_2m", 270.0)
+        .construir()
+    )
+
+    assert not escenario.derivados
+
+
+def test_una_variacion_no_se_valida_contra_el_rango_absoluto_del_simce():
+    """`dif_simce_*` = +12 son doce puntos de mejora, no un puntaje de doce."""
+    from q2_modelamiento.escenario import ConstructorDeEscenario
+
+    assert ConstructorDeEscenario.rango_valido("dif_simce_mate_4b") == (-300.0, 300.0)
+    assert ConstructorDeEscenario.rango_valido("simce_mate_4b") == (100.0, 400.0)
+
+
+def test_el_arrastre_se_declara_y_no_ocurre_en_silencio():
+    """El directivo no pidio ese cambio y tiene derecho a saber que se movio."""
+    from q2_modelamiento.escenario import ConstructorDeEscenario
+
+    escenario = (
+        ConstructorDeEscenario.desde({"simce_mate_6b": 250.0, "dif_simce_mate_6b": 0.0})
+        .con("simce_mate_6b", 258.0)
+        .construir()
+    )
+
+    assert "Por consecuencia" in escenario.describir()
+    assert "dif_simce_mate_6b" in escenario.describir()

@@ -38,6 +38,15 @@ class EstrategiaGlobal(EstrategiaPredictiva):
         self._medianas = medianas_imputacion()
         self._modelo = None
 
+    def valores_de_referencia(self) -> dict[str, float]:
+        """Valor con que se imputa cada variable ausente.
+
+        Lo publica para que quien construya un escenario pueda partir del mismo
+        punto que usara la prediccion. Sin esto, propagar una variacion sobre una
+        variable ausente introduciria un salto artificial.
+        """
+        return dict(self._medianas)
+
     @property
     def variables_requeridas(self) -> list[str]:
         return list(self._meta["features_entrada"])

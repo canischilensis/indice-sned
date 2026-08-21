@@ -138,6 +138,8 @@ estático pasa y las fronteras de cuantos se respetan.
 | Motor desagregado bajo el umbral de R² | Media | Abierto: corresponde declarar umbrales por sistema |
 | Directorio de usuarios en memoria | Media | Abierto: migración a `app.usuario` pendiente |
 | Versión de librería no registrada en los metadatos | Media | Abierto |
+| Las ocho variables `dif_simce_*` se imputan por mediana: cobertura 81,4 % | Alta | Abierto: la solución de fondo es materializarlas en la ingesta |
+| El simulador movía la palanca y dejaba congelada su variación derivada, de modo que el índice respondía poco o de forma incoherente | Alta | **Corregido el 2026-08-18.** El constructor de escenarios propaga el mismo delta a la variación y lo declara. Detectado al demostrar el sistema, no por la suite: 61 pruebas en verde no lo vieron porque ninguna movía una palanca y observaba su derivada |
 
 ## 10. Lo que este plan no cubre
 

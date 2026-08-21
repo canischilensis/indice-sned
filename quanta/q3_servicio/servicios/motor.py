@@ -59,7 +59,12 @@ class ServicioDePrediccion:
     def variables_de(self, rbd: str, periodo: str | None = None, sobreescrituras: dict | None = None) -> dict:
         base = self._repositorio.obtener(rbd, periodo)
         if sobreescrituras:
-            constructor = ConstructorDeEscenario.desde(base)
+            # Las variables ausentes se imputan al predecir. El constructor
+            # necesita ese mismo punto de partida para arrastrar las variaciones
+            # asociadas a cada palanca; sin el, el escenario mueve el puntaje y
+            # deja congelada la variacion, y el indice responde a medias.
+            referencias = getattr(self._estrategia, "valores_de_referencia", lambda: {})()
+            constructor = ConstructorDeEscenario.desde(base).con_referencias(referencias)
             for variable, valor in sobreescrituras.items():
                 if valor is not None:
                     constructor = constructor.con(variable, valor)

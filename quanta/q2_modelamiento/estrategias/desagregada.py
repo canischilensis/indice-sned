@@ -58,6 +58,15 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
     def _variables(self, codigo: str) -> list[str]:
         return list(self._meta[codigo]["features"])
 
+    def valores_de_referencia(self) -> dict[str, float]:
+        """Valor con que se imputa cada variable ausente.
+
+        Lo publica para que quien construya un escenario pueda partir del mismo
+        punto que usara la prediccion. Sin esto, propagar una variacion sobre una
+        variable ausente introduciria un salto artificial.
+        """
+        return dict(self._medianas)
+
     @property
     def variables_requeridas(self) -> list[str]:
         vistas: list[str] = []
@@ -169,6 +178,11 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
         actual = base.get(variable)
         if actual is None:
             actual = self._medianas.get(variable, 0.0)
+            # Se fija el punto de partida en la propia observacion. Sin esto, el
+            # constructor no puede calcular el delta y la variacion asociada no
+            # se arrastra: la curva quedaria con la palanca movida y su derivada
+            # congelada, que es justamente el defecto que se corrige.
+            base[variable] = float(actual)
 
         limites = ConstructorDeEscenario.rango_valido(variable)
         if rango is None:
@@ -189,6 +203,7 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
             escenario = (
                 ConstructorDeEscenario.desde(base)
                 .con_variables_permitidas(self._variables(codigo))
+                .con_referencias(self._medianas)
                 .con(variable, float(punto))
                 .construir()
             )
