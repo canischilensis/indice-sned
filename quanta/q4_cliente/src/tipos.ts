@@ -118,5 +118,8 @@ export interface FilaTablero {
   bienio: string | null
   indicerOficial: number | null
   estimacion: number | null
+  /** Error absoluto medio del motor. Define la banda que se pinta junto a la
+   *  estimacion: un numero solo se lee como exacto, y esta no lo es. */
+  incertidumbre: number | null
   error: string | null
 }

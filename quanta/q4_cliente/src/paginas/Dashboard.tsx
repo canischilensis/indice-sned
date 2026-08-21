@@ -19,6 +19,17 @@ function cifra(n: number | null, decimales = 1): string {
   return n === null ? '—' : n.toLocaleString('es-CL', { minimumFractionDigits: decimales, maximumFractionDigits: decimales })
 }
 
+/** Banda de la estimacion: valor central menos y mas el error medio del motor.
+ *
+ *  No es un intervalo de confianza y no debe presentarse como tal. Es el error
+ *  absoluto medio: alrededor de la mitad de los establecimientos cae fuera de
+ *  esta banda. Se pinta igualmente porque un numero solo se lee como exacto, y
+ *  esta estimacion no lo es. */
+function banda(centro: number | null, mae: number | null): [number, number] | null {
+  if (centro === null || mae === null || !Number.isFinite(mae) || mae <= 0) return null
+  return [Math.max(0, centro - mae), Math.min(100, centro + mae)]
+}
+
 export default function Dashboard({ rbds }: { rbds: string[] }) {
   const [filas, setFilas] = useState<FilaTablero[] | null>(null)
   const [composicion, setComposicion] = useState<Composicion | null>(null)
@@ -44,6 +55,7 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
             bienio: resumen?.bienio_premio ?? null,
             indicerOficial: resumen?.indicer ?? null,
             estimacion: null,
+            incertidumbre: null,
             error: null,
           }
           try {
@@ -57,6 +69,7 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
               nombre: typeof nombre === 'string' && nombre ? nombre : base.nombre,
               matricula: num(observacion['matricula_total']),
               estimacion: prediccion.indice,
+              incertidumbre: prediccion.incertidumbre_mae ?? null,
             }
           } catch (e) {
             return { ...base, error: (e as Error).message }
@@ -88,6 +101,13 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
   const indicePromedio = conEstimacion.length
     ? conEstimacion.reduce((a, f) => a + (f.estimacion ?? 0), 0) / conEstimacion.length
     : null
+  // Se toma el error medio declarado por el motor. Es el mismo para todas las
+  // estimaciones porque el motor publica un unico MAE, no uno por observacion:
+  // la banda dice cuanto se equivoca el modelo en promedio, no cuanto se
+  // equivoca en ESTE establecimiento. La diferencia importa y por eso el aviso
+  // de abajo la enuncia.
+  const maeDelMotor = conEstimacion.find((f) => f.incertidumbre !== null)?.incertidumbre ?? null
+  const bandaPromedio = banda(indicePromedio, maeDelMotor)
   const cobertura = composicion?.cobertura_de_variables ?? null
   const enRiesgo = filas.filter(
     (f) => f.estimacion !== null && f.indicerOficial !== null && f.estimacion - f.indicerOficial < -MARGEN_RIESGO,
@@ -112,6 +132,11 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
         <div className="metrica">
           <div className="metrica-cab"><span className="rotulo">Indice SNED promedio</span></div>
           <div className="valor">{cifra(indicePromedio)}</div>
+          {bandaPromedio && (
+            <div className="nota" style={{ fontWeight: 600 }}>
+              entre {cifra(bandaPromedio[0])} y {cifra(bandaPromedio[1])}
+            </div>
+          )}
           <div className="nota">Escala 0-100 · promedio de {conEstimacion.length} estimacion{conEstimacion.length === 1 ? '' : 'es'}</div>
         </div>
 
@@ -178,6 +203,14 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
                     {!f.error && (
                       <div className="estimacion">
                         <span className="num" style={{ fontWeight: 600 }}>{cifra(f.estimacion)}</span>
+                        {(() => {
+                          const b = banda(f.estimacion, f.incertidumbre)
+                          return b && (
+                            <span className="nota" style={{ marginLeft: '.4rem' }}>
+                              entre {cifra(b[0])} y {cifra(b[1])}
+                            </span>
+                          )
+                        })()}
                         {d !== null && (
                           <span className={`delta ${riesgo || limite ? 'baja' : 'sube'}`}>
                             {d >= 0 ? '+' : ''}{cifra(d)}
@@ -209,6 +242,32 @@ export default function Dashboard({ rbds }: { rbds: string[] }) {
                 <div>{a.detalle}</div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {maeDelMotor !== null && (
+        <div className="aviso-neutro" style={{ borderLeftWidth: '4px' }}>
+          <b>Esta cifra no es exacta, y el rango que la acompana dice cuanto.</b> El motor se
+          equivoca en promedio {cifra(maeDelMotor)} puntos de 100, de modo que una estimacion de{' '}
+          {cifra(indicePromedio)} se lee como <b>entre {cifra(bandaPromedio?.[0] ?? null)} y{' '}
+          {cifra(bandaPromedio?.[1] ?? null)}</b>.
+          <div style={{ marginTop: '.5rem' }}>
+            Tres precisiones, porque el rango se malinterpreta con facilidad:
+            <ul style={{ margin: '.35rem 0 0 1.1rem' }}>
+              <li>
+                Es el error <b>promedio</b>, no un limite garantizado. Cerca de la mitad de los
+                establecimientos cae fuera de esa banda.
+              </li>
+              <li>
+                Es el error del <b>modelo completo</b>, no el de este establecimiento en
+                particular. Donde faltan mediciones, el error real es mayor.
+              </li>
+              <li>
+                El sistema dispone del insumo directo de un solo factor de los seis. El resto lo
+                estima de forma indirecta, y ese es el origen del margen.
+              </li>
+            </ul>
           </div>
         </div>
       )}

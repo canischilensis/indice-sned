@@ -45,7 +45,7 @@ Contiene tres elementos:
 
 | Tarjeta | Qué muestra | Cómo leerla |
 |---------|-------------|-------------|
-| **Índice SNED estimado** | El valor estimado en escala 0-100 y el error medio | El error medio es la desviación típica de la estimación. Un índice de 67,60 con error medio ±2,31 significa que el valor real está razonablemente cerca de ese rango, no que sea exactamente 67,60 |
+| **Índice SNED estimado** | El valor estimado en escala 0-100 y **el rango en que se lee**: «entre X e Y» | El rango es el valor estimado más y menos el error medio del motor. **No es una garantía**: es el error promedio, y alrededor de la mitad de los establecimientos cae fuera de esa banda. Un índice de 67,60 con error medio de 2,31 se lee «entre 65,29 y 69,91», no como 67,60 exacto |
 | **Motor** | Qué modelo produjo la estimación y su versión | Sirve para trazar la estimación al artefacto que la generó |
 | **Factores acotados** | Cuántos de los seis están limitados por información que el Estado no publica | Cuanto mayor sea este número, con más cautela debe tomarse la estimación |
 
