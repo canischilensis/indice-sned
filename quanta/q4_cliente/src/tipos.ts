@@ -76,6 +76,14 @@ export interface RespuestaEstablecimientos {
   detalle: ResumenEstablecimiento[]
 }
 
+export interface LiderDeGrupo {
+  rbd: string
+  nombre: string
+  indicer: number | null
+  posicion: number
+  es_consultado: boolean
+}
+
 export interface Ranking {
   rbd: string
   ciclo: string
@@ -85,6 +93,11 @@ export interface Ranking {
   n_grupo: number
   percentil: number
   sel: number | null
+  premiados_en_grupo: number
+  /** Indice mas bajo que obtuvo el beneficio en este grupo y ciclo. No es un
+   *  umbral: es el resultado observado, y cambia de grupo en grupo. */
+  corte_premiado: number | null
+  lideres: LiderDeGrupo[]
 }
 
 /** Diagnostico de cobertura tal como lo devuelve el servicio. */

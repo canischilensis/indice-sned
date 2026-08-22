@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { evaluarEscenario, obtenerObservacion, obtenerPrediccion } from '../api'
-import type { Observacion } from '../tipos'
+import { evaluarEscenario, listarEstablecimientos, obtenerObservacion, obtenerPrediccion, obtenerRanking } from '../api'
+import type { Observacion, Ranking } from '../tipos'
 
 /* Metadatos de presentacion. El rango final lo valida el dominio: si un valor
    sale del admisible, el constructor de escenarios lo recorta en el servidor.
@@ -55,6 +55,15 @@ export default function Simulador({ rbd }: { rbd: string }) {
   const [indiceActual, setIndiceActual] = useState<number | null>(null)
   const [valores, setValores] = useState<Record<string, number>>({})
   const [proyectado, setProyectado] = useState<number | null>(null)
+  const [incertidumbre, setIncertidumbre] = useState<number | null>(null)
+  /* Indice OFICIAL publicado por el organismo, con el ciclo al que corresponde.
+     Se muestra junto a la estimacion porque son cosas distintas y la pantalla
+     debe permitir distinguirlas: uno es un hecho, el otro es un calculo. */
+  const [oficial, setOficial] = useState<{ valor: number | null; ciclo: string | null }>({
+    valor: null,
+    ciclo: null,
+  })
+  const [ranking, setRanking] = useState<Ranking | null>(null)
   const [calculando, setCalculando] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const temporizador = useRef<number | undefined>(undefined)
@@ -63,12 +72,21 @@ export default function Simulador({ rbd }: { rbd: string }) {
   useEffect(() => {
     let vigente = true
     setObservacion(null); setProyectado(null); setError(null)
-    Promise.all([obtenerObservacion(rbd), obtenerPrediccion(rbd)])
-      .then(([obs, pred]) => {
+    Promise.all([
+      obtenerObservacion(rbd),
+      obtenerPrediccion(rbd),
+      listarEstablecimientos().catch(() => null),
+      obtenerRanking(rbd).catch(() => null),
+    ])
+      .then(([obs, pred, listado, posicion]) => {
         if (!vigente) return
+        const resumen = listado?.detalle.find((d) => String(d.rbd) === String(rbd))
+        setOficial({ valor: resumen?.indicer ?? null, ciclo: resumen?.bienio_premio ?? null })
+        setRanking(posicion)
         setObservacion(obs)
         setIndiceActual(pred.indice)
         setProyectado(pred.indice)
+        setIncertidumbre(pred.incertidumbre_mae ?? null)
         const iniciales: Record<string, number> = {}
         PALANCAS.forEach((p) => {
           const v = leer(obs, p.variable)
@@ -98,6 +116,7 @@ export default function Simulador({ rbd }: { rbd: string }) {
         })
         const resp = await evaluarEscenario(rbd, envio)
         setProyectado(resp.indice)
+        if (resp.incertidumbre_mae !== undefined) setIncertidumbre(resp.incertidumbre_mae ?? null)
         setError(null)
       } catch (e) {
         setError((e as Error).message)
@@ -130,6 +149,14 @@ export default function Simulador({ rbd }: { rbd: string }) {
 
   const indice = proyectado ?? indiceActual ?? 0
   const delta = indiceActual !== null ? indice - indiceActual : 0
+  /* Banda de lectura del escenario: el valor central mas y menos el error medio
+     del motor. No es un intervalo de confianza, y por eso se rotula como rango
+     de lectura y no como minimo y maximo posibles: el indice real puede caer
+     fuera. Pintar solo el numero central invita a leerlo como exacto. */
+  const banda: [number, number] | null =
+    incertidumbre !== null && Number.isFinite(incertidumbre) && incertidumbre > 0
+      ? [Math.max(0, indice - incertidumbre), Math.min(100, indice + incertidumbre)]
+      : null
   const color = indice >= 70 ? 'var(--verde)' : indice >= 55 ? 'var(--navy)' : 'var(--rojo)'
 
   return (
@@ -220,20 +247,30 @@ export default function Simulador({ rbd }: { rbd: string }) {
                 </svg>
                 <div className="aro-centro">
                   <div className="aro-num">{fmt(indice)}</div>
-                  <div className="aro-rot">Puntos</div>
+                  <div className="aro-rot">
+                    {banda ? `entre ${fmt(banda[0])} y ${fmt(banda[1])}` : 'Puntos'}
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="comparacion">
               <div className="comp">
-                <div className="r">Situacion actual</div>
-                <div className="v">{indiceActual !== null ? fmt(indiceActual) : '—'}</div>
+                <div className="r">{oficial.ciclo ? `SNED ${oficial.ciclo}` : 'Indice oficial'}</div>
+                <div className="v">{oficial.valor !== null ? fmt(oficial.valor) : '—'}</div>
               </div>
-              <div className="comp">
-                <div className="r">Escenario</div>
-                <div className="v">{fmt(indice)}</div>
-              </div>
+              {banda && (
+                <>
+                  <div className="comp">
+                    <div className="r">Minimo estimado</div>
+                    <div className="v" style={{ color: 'var(--rojo)' }}>{fmt(banda[0])}</div>
+                  </div>
+                  <div className="comp">
+                    <div className="r">Maximo estimado</div>
+                    <div className="v" style={{ color: 'var(--navy)' }}>{fmt(banda[1])}</div>
+                  </div>
+                </>
+              )}
               <div className="comp">
                 <div className="r">Diferencia</div>
                 <div className="v" style={{ color: Math.abs(delta) < 0.05 ? 'var(--tenue)' : delta > 0 ? 'var(--verde)' : 'var(--rojo)' }}>
@@ -242,14 +279,72 @@ export default function Simulador({ rbd }: { rbd: string }) {
               </div>
             </div>
 
+            {ranking && (
+              <>
+                <div className="comparacion" style={{ marginTop: 12 }}>
+                  <div className="comp">
+                    <div className="r">Lugar en su grupo</div>
+                    <div className="v">{ranking.posicion_en_grupo} de {ranking.n_grupo}</div>
+                  </div>
+                  <div className="comp">
+                    <div className="r">Grupo homogeneo</div>
+                    <div className="v">{ranking.cluster_codigo}</div>
+                  </div>
+                  <div className="comp">
+                    <div className="r">Premiados</div>
+                    <div className="v">{ranking.premiados_en_grupo}</div>
+                  </div>
+                  {ranking.corte_premiado !== null && (
+                    <div className="comp">
+                      <div className="r">Corte del ciclo</div>
+                      <div className="v" style={{ color: 'var(--rojo)' }}>{fmt(ranking.corte_premiado)}</div>
+                    </div>
+                  )}
+                </div>
+
+                {ranking.lideres.length > 0 && (
+                  <div className="comparacion" style={{ marginTop: 12 }}>
+                    {ranking.lideres.map((l) => (
+                      <div
+                        key={l.rbd}
+                        className="comp"
+                        style={l.es_consultado ? { borderColor: 'var(--navy)' } : undefined}
+                      >
+                        <div className="r">{l.posicion}. {l.nombre.slice(0, 26)}</div>
+                        <div className="v">{l.indicer !== null ? fmt(l.indicer) : '—'}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+
             {error && <div className="error" style={{ marginTop: 16 }}>{error}</div>}
 
+            {banda && (
+              <div className="aviso">
+                <b>El movimiento que ve es menor que el margen de error del modelo.</b> El
+                escenario da {fmt(indice)} y el motor se equivoca en promedio{' '}
+                {fmt(incertidumbre ?? 0)} puntos, de modo que este resultado se lee{' '}
+                <b>entre {fmt(banda[0])} y {fmt(banda[1])}</b>.
+                {Math.abs(delta) > 0 && Math.abs(delta) < (incertidumbre ?? 0) && (
+                  <> La diferencia de {delta >= 0 ? '+' : ''}{fmt(delta)} puntos que produce este
+                  escenario es <b>menor que ese margen</b>: indica direccion, no una ganancia
+                  medible.</>
+                )}
+                <div style={{ marginTop: '.5rem' }}>
+                  El minimo y el maximo son el rango de lectura, no un piso ni un techo
+                  garantizados: cerca de la mitad de los establecimientos cae fuera de esa banda.
+                </div>
+              </div>
+            )}
+
             <div className="aviso">
-              <b>Magnitud realista del movimiento.</b> Subir 83 puntos en una medicion
-              estandarizada, cerca de dos desviaciones estandar respecto de la media nacional,
-              equivale a solo <b>+2,24 puntos</b> de indice. El indice se construye por
-              escalamiento relativo frente al resto del pais: mejorar mucho en una variable mueve
-              poco el resultado si el resto tambien mejora.
+              <b>Por que mover mucho una variable mueve poco el indice.</b> El indice se construye
+              por escalamiento relativo frente al resto del pais: la posicion del establecimiento
+              depende tanto de lo que haga el como de lo que hagan los demas. Mejorar de forma
+              sostenida en una medicion puede desplazar el indice apenas unas decimas si el
+              conjunto tambien mejora.
             </div>
 
             <div className="aviso-neutro">

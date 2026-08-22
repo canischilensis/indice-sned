@@ -116,6 +116,20 @@ class RespuestaEstablecimientos(BaseModel):
     detalle: list[ResumenEstablecimiento]
 
 
+class LiderDeGrupo(BaseModel):
+    """Un establecimiento de la cabeza del grupo homogeneo.
+
+    Viaja con nombre porque el objetivo es que el directivo reconozca contra
+    quien compite: un RBD suelto no le dice nada.
+    """
+
+    rbd: str
+    nombre: str
+    indicer: float | None = None
+    posicion: int
+    es_consultado: bool = False
+
+
 class RespuestaRanking(BaseModel):
     """Posicion dentro del grupo homogeneo: la mecanica real de la seleccion.
 
@@ -130,6 +144,16 @@ class RespuestaRanking(BaseModel):
     posicion_en_grupo: int
     n_grupo: int
     percentil: float
+    premiados_en_grupo: int = 0
+    corte_premiado: float | None = Field(
+        default=None,
+        description=(
+            "Indice mas bajo que obtuvo el beneficio en este grupo y ciclo. No es "
+            "un umbral: el SNED no los tiene. Es el resultado observado, y cambia "
+            "de grupo en grupo y de ciclo en ciclo."
+        ),
+    )
+    lideres: list[LiderDeGrupo] = Field(default_factory=list)
     sel: int | None = Field(
         default=None,
         description="1 = tramo 100 %; 2 = tramo 60 %; 3 = no seleccionado",
