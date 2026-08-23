@@ -1,0 +1,164 @@
+{
+  "escenario": "LT-02",
+  "entorno": {
+    "procesador": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+    "nucleos_logicos": 12,
+    "memoria_total": "15.8 GB",
+    "sistema_operativo": "Windows 11",
+    "python": "3.12.2",
+    "backend_datos_variable_entorno": "predeterminado del servicio",
+    "backend_datos_declarado_por_el_servicio": null,
+    "base_en_la_misma_maquina": "si",
+    "version_evaluada": "326fd79",
+    "fecha_hora_inicio": "2026-08-23T17:46:34",
+    "calentamiento": [
+      {
+        "ruta": "GET /establecimientos",
+        "ms": 6.4,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /prediccion/{rbd}",
+        "ms": 9.0,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /xai/{rbd}/shapley",
+        "ms": 10.2,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /establecimientos/{rbd}/ranking",
+        "ms": 156.1,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "POST /prediccion/{rbd}/escenario",
+        "ms": 5626.0,
+        "codigo": 200,
+        "detalle": null
+      }
+    ]
+  },
+  "usuarios": 20,
+  "segundos": 600,
+  "por_ruta": {
+    "GET /establecimientos": {
+      "peticiones": 10407,
+      "p50_ms": 56.3,
+      "p95_ms": 127.7,
+      "p99_ms": 197.3,
+      "max_ms": 817.9,
+      "media_ms": 65.1,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 10407
+      },
+      "peticiones_por_segundo": 17.34,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /prediccion/{rbd}": {
+      "peticiones": 10405,
+      "p50_ms": 81.4,
+      "p95_ms": 166.0,
+      "p99_ms": 241.5,
+      "max_ms": 562.7,
+      "media_ms": 91.5,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 10405
+      },
+      "peticiones_por_segundo": 17.34,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /xai/{rbd}/shapley": {
+      "peticiones": 10405,
+      "p50_ms": 81.6,
+      "p95_ms": 166.6,
+      "p99_ms": 241.1,
+      "max_ms": 1010.1,
+      "media_ms": 91.9,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 10405
+      },
+      "peticiones_por_segundo": 17.34,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /establecimientos/{rbd}/ranking": {
+      "peticiones": 10404,
+      "p50_ms": 737.4,
+      "p95_ms": 1344.1,
+      "p99_ms": 1743.2,
+      "max_ms": 3058.6,
+      "media_ms": 812.4,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 10404
+      },
+      "peticiones_por_segundo": 17.34,
+      "cumple_rnf13": false,
+      "ejemplos_de_error": []
+    },
+    "POST /prediccion/{rbd}/escenario": {
+      "peticiones": 10389,
+      "p50_ms": 83.3,
+      "p95_ms": 165.9,
+      "p99_ms": 240.9,
+      "max_ms": 747.0,
+      "media_ms": 92.9,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 10389
+      },
+      "peticiones_por_segundo": 17.32,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    }
+  },
+  "global": {
+    "peticiones": 52010,
+    "p50_ms": 86.2,
+    "p95_ms": 911.1,
+    "p99_ms": 1344.1,
+    "max_ms": 3058.6,
+    "errores": 0,
+    "tasa_error": 0.0,
+    "peticiones_por_segundo": 86.68
+  },
+  "ventanas": [
+    {
+      "intervalo": "minutos 0 a 2",
+      "peticiones": 10212,
+      "p95_ms": 927.1,
+      "errores": 0,
+      "tasa_error": 0.0
+    },
+    {
+      "intervalo": "minutos 4 a 6",
+      "peticiones": 10586,
+      "p95_ms": 893.0,
+      "errores": 0,
+      "tasa_error": 0.0
+    },
+    {
+      "intervalo": "minutos 8 a 10",
+      "peticiones": 11152,
+      "p95_ms": 842.9,
+      "errores": 0,
+      "tasa_error": 0.0
+    }
+  ]
+}

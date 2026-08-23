@@ -1,0 +1,113 @@
+{
+  "escenario": "LT-03",
+  "entorno": {
+    "procesador": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+    "nucleos_logicos": 12,
+    "memoria_total": "15.8 GB",
+    "sistema_operativo": "Windows 11",
+    "python": "3.12.2",
+    "backend_datos_variable_entorno": "predeterminado del servicio",
+    "backend_datos_declarado_por_el_servicio": null,
+    "base_en_la_misma_maquina": "si",
+    "version_evaluada": "326fd79",
+    "fecha_hora_inicio": "2026-08-23T17:58:03",
+    "calentamiento": [
+      {
+        "ruta": "GET /establecimientos",
+        "ms": 4.9,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /prediccion/{rbd}",
+        "ms": 7.8,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /xai/{rbd}/shapley",
+        "ms": 8.6,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /establecimientos/{rbd}/ranking",
+        "ms": 152.7,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "POST /prediccion/{rbd}/escenario",
+        "ms": 7.5,
+        "codigo": 200,
+        "detalle": null
+      }
+    ]
+  },
+  "rampa": [
+    10,
+    20,
+    40,
+    80,
+    160
+  ],
+  "segundos_por_nivel": 30,
+  "niveles": [
+    {
+      "usuarios": 10,
+      "peticiones": 3272,
+      "p50_ms": 17.6,
+      "p95_ms": 439.2,
+      "p99_ms": 598.5,
+      "max_ms": 796.7,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "peticiones_por_segundo": 109.07
+    },
+    {
+      "usuarios": 20,
+      "peticiones": 2174,
+      "p50_ms": 112.3,
+      "p95_ms": 1066.7,
+      "p99_ms": 1622.3,
+      "max_ms": 2528.8,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "peticiones_por_segundo": 72.47
+    },
+    {
+      "usuarios": 40,
+      "peticiones": 2960,
+      "p50_ms": 297.7,
+      "p95_ms": 1002.1,
+      "p99_ms": 1325.3,
+      "max_ms": 2029.2,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "peticiones_por_segundo": 98.67
+    },
+    {
+      "usuarios": 80,
+      "peticiones": 1752,
+      "p50_ms": 996.6,
+      "p95_ms": 4019.2,
+      "p99_ms": 5486.3,
+      "max_ms": 8295.5,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "peticiones_por_segundo": 58.4
+    },
+    {
+      "usuarios": 160,
+      "peticiones": 1780,
+      "p50_ms": 2482.4,
+      "p95_ms": 6631.5,
+      "p99_ms": 9875.5,
+      "max_ms": 13558.0,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "peticiones_por_segundo": 59.33
+    }
+  ],
+  "punto_de_quiebre": null
+}

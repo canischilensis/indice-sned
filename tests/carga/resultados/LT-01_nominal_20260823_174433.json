@@ -1,0 +1,141 @@
+{
+  "escenario": "LT-01",
+  "entorno": {
+    "procesador": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+    "nucleos_logicos": 12,
+    "memoria_total": "15.8 GB",
+    "sistema_operativo": "Windows 11",
+    "python": "3.12.2",
+    "backend_datos_variable_entorno": "predeterminado del servicio",
+    "backend_datos_declarado_por_el_servicio": null,
+    "base_en_la_misma_maquina": "si",
+    "version_evaluada": "326fd79",
+    "fecha_hora_inicio": "2026-08-23T17:43:23",
+    "calentamiento": [
+      {
+        "ruta": "GET /establecimientos",
+        "ms": 1017.2,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /prediccion/{rbd}",
+        "ms": 4198.0,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /xai/{rbd}/shapley",
+        "ms": 3459.4,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "GET /establecimientos/{rbd}/ranking",
+        "ms": 345.9,
+        "codigo": 200,
+        "detalle": null
+      },
+      {
+        "ruta": "POST /prediccion/{rbd}/escenario",
+        "ms": 364.2,
+        "codigo": 200,
+        "detalle": null
+      }
+    ]
+  },
+  "usuarios": 20,
+  "segundos": 60,
+  "por_ruta": {
+    "GET /establecimientos": {
+      "peticiones": 801,
+      "p50_ms": 56.2,
+      "p95_ms": 167.3,
+      "p99_ms": 340.5,
+      "max_ms": 834.4,
+      "media_ms": 73.5,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 801
+      },
+      "peticiones_por_segundo": 13.35,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /prediccion/{rbd}": {
+      "peticiones": 799,
+      "p50_ms": 79.6,
+      "p95_ms": 206.0,
+      "p99_ms": 8555.2,
+      "max_ms": 9409.7,
+      "media_ms": 287.5,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 799
+      },
+      "peticiones_por_segundo": 13.32,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /xai/{rbd}/shapley": {
+      "peticiones": 796,
+      "p50_ms": 78.1,
+      "p95_ms": 216.4,
+      "p99_ms": 2875.1,
+      "max_ms": 3684.5,
+      "media_ms": 141.2,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 796
+      },
+      "peticiones_por_segundo": 13.27,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    },
+    "GET /establecimientos/{rbd}/ranking": {
+      "peticiones": 796,
+      "p50_ms": 708.5,
+      "p95_ms": 1147.4,
+      "p99_ms": 1406.9,
+      "max_ms": 1933.8,
+      "media_ms": 749.2,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 796
+      },
+      "peticiones_por_segundo": 13.27,
+      "cumple_rnf13": false,
+      "ejemplos_de_error": []
+    },
+    "POST /prediccion/{rbd}/escenario": {
+      "peticiones": 783,
+      "p50_ms": 79.4,
+      "p95_ms": 207.0,
+      "p99_ms": 6994.2,
+      "max_ms": 7493.8,
+      "media_ms": 264.2,
+      "errores": 0,
+      "tasa_error": 0.0,
+      "codigos_http": {
+        "200": 783
+      },
+      "peticiones_por_segundo": 13.05,
+      "cumple_rnf13": true,
+      "ejemplos_de_error": []
+    }
+  },
+  "global": {
+    "peticiones": 3975,
+    "p50_ms": 84.3,
+    "p95_ms": 906.6,
+    "p99_ms": 3684.5,
+    "max_ms": 9409.7,
+    "errores": 0,
+    "tasa_error": 0.0,
+    "peticiones_por_segundo": 66.25
+  }
+}
