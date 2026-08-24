@@ -39,6 +39,19 @@ const CONTEXTO: { variable: string; rotulo: string; escala?: number; unidad?: st
   { variable: 'n_directivos', rotulo: 'Cargos directivos' },
 ]
 
+/* Los seis factores con su ponderacion legal, en orden de peso. La ponderacion
+   se muestra junto a cada uno porque una brecha de 20 puntos en Integracion —que
+   pesa 5 %— y otra de 20 en Efectividad —que pesa 37 %— no son comparables, y
+   presentarlas sin su peso invita a priorizar mal. */
+const FACTORES: { codigo: string; rotulo: string; peso: number }[] = [
+  { codigo: 'EFECTIVR', rotulo: 'Efectividad', peso: 37 },
+  { codigo: 'SUPERAR', rotulo: 'Superacion', peso: 28 },
+  { codigo: 'IGUALDR', rotulo: 'Igualdad de oportunidades', peso: 22 },
+  { codigo: 'INICIAR', rotulo: 'Iniciativa', peso: 6 },
+  { codigo: 'INTEGRAR', rotulo: 'Integracion y participacion', peso: 5 },
+  { codigo: 'MEJORAR', rotulo: 'Mejoramiento', peso: 2 },
+]
+
 const CIRC = 2 * Math.PI * 96
 
 function leer(obs: Observacion, clave: string): number | null {
@@ -285,6 +298,23 @@ export default function Simulador({ rbd }: { rbd: string }) {
                   <div className="comp">
                     <div className="r">Lugar en su grupo</div>
                     <div className="v">{ranking.posicion_en_grupo} de {ranking.n_grupo}</div>
+                    {ranking.premiados_en_grupo > 0 && (() => {
+                      // El SNED no premia por puntaje sino por posicion dentro del
+                      // grupo homogeneo. Decir "dentro" o "fuera" es traducir el
+                      // numero a la unica consecuencia que le importa al sostenedor.
+                      const dentro = ranking.posicion_en_grupo <= ranking.premiados_en_grupo
+                      const faltan = ranking.posicion_en_grupo - ranking.premiados_en_grupo
+                      return dentro ? (
+                        <div className="nota" style={{ color: 'var(--navy)', fontWeight: 600 }}>
+                          Dentro del tramo premiado · se premiaron {ranking.premiados_en_grupo}
+                        </div>
+                      ) : (
+                        <div className="nota" style={{ color: 'var(--rojo)', fontWeight: 600 }}>
+                          Fuera del tramo · faltan {faltan} lugar{faltan === 1 ? '' : 'es'} para
+                          entrar a los {ranking.premiados_en_grupo} premiados
+                        </div>
+                      )
+                    })()}
                   </div>
                   <div className="comp">
                     <div className="r">Grupo homogeneo</div>
@@ -303,20 +333,92 @@ export default function Simulador({ rbd }: { rbd: string }) {
                 </div>
 
                 {ranking.lideres.length > 0 && (
-                  <div className="comparacion" style={{ marginTop: 12 }}>
+                  <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {ranking.lideres.map((l) => (
                       <div
                         key={l.rbd}
                         className="comp"
-                        style={l.es_consultado ? { borderColor: 'var(--navy)' } : undefined}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 12,
+                          textAlign: 'left',
+                          ...(l.es_consultado ? { borderColor: 'var(--navy)' } : {}),
+                        }}
                       >
-                        <div className="r">{l.posicion}. {l.nombre.slice(0, 26)}</div>
-                        <div className="v">{l.indicer !== null ? fmt(l.indicer) : '—'}</div>
+                        <div className="r" style={{ textAlign: 'left', margin: 0 }}>
+                          {l.posicion}. {l.nombre}
+                        </div>
+                        <div className="v" style={{ margin: 0, whiteSpace: 'nowrap' }}>
+                          {l.indicer !== null ? fmt(l.indicer) : '—'}
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
               </>
+            )}
+
+            {ranking?.referencia_de_corte && (
+              <div className="panel" style={{ marginTop: 16 }}>
+                <div className="panel-cab">
+                  <h3>
+                    {ranking.posicion_en_grupo <= ranking.premiados_en_grupo
+                      ? 'Su margen sobre el ultimo premiado'
+                      : 'Que lo separa del ultimo que si obtuvo el beneficio'}
+                  </h3>
+                  <div className="sub">
+                    Lugar {ranking.referencia_de_corte.posicion} del grupo ·{' '}
+                    {ranking.referencia_de_corte.nombre} · indice{' '}
+                    {ranking.referencia_de_corte.indicer !== null
+                      ? fmt(ranking.referencia_de_corte.indicer)
+                      : '—'}
+                  </div>
+                </div>
+                <div className="panel-cuerpo">
+                  <table className="tabla">
+                    <thead>
+                      <tr>
+                        <th>Factor</th>
+                        <th className="num">Peso</th>
+                        <th className="num">Este colegio</th>
+                        <th className="num">Corte</th>
+                        <th className="num">Brecha</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {FACTORES.map((f) => {
+                        const propio = ranking.factores?.[f.codigo] ?? null
+                        const otro = ranking.referencia_de_corte?.factores?.[f.codigo] ?? null
+                        const d = propio !== null && otro !== null ? propio - otro : null
+                        return (
+                          <tr key={f.codigo}>
+                            <td>{f.rotulo}</td>
+                            <td className="num">{f.peso} %</td>
+                            <td className="num">{propio !== null ? fmt(propio) : '—'}</td>
+                            <td className="num">{otro !== null ? fmt(otro) : '—'}</td>
+                            <td
+                              className="num"
+                              style={{
+                                fontWeight: 600,
+                                color: d === null ? 'var(--tenue)' : d >= 0 ? 'var(--navy)' : 'var(--rojo)',
+                              }}
+                            >
+                              {d === null ? '—' : `${d >= 0 ? '+' : ''}${fmt(d)}`}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                  <div className="aviso-neutro" style={{ marginTop: 12 }}>
+                    Los factores en rojo son los que estan por debajo del establecimiento que
+                    marco el corte. Multiplicar la brecha por el peso indica cuanto aporta cerrar
+                    cada una: no siempre conviene atacar la brecha mas grande.
+                  </div>
+                </div>
+              </div>
             )}
 
             {error && <div className="error" style={{ marginTop: 16 }}>{error}</div>}

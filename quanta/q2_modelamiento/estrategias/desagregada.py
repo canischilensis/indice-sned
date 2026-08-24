@@ -27,6 +27,7 @@ from q2_modelamiento.etiquetas import etiqueta_de
 from q2_modelamiento.escenario import ConstructorDeEscenario
 from q2_modelamiento.registro_modelos import (
     cargar_artefacto,
+    imputacion_por_grupo,
     medianas_imputacion,
     metadatos_factores,
 )
@@ -43,6 +44,7 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
     def __init__(self) -> None:
         self._meta = metadatos_factores()
         self._medianas = medianas_imputacion()
+        self._por_grupo = imputacion_por_grupo()
         self._codigos = [c for c in self._meta if not c.startswith("_")]
         self._modelos: dict[str, object] = {}
         self._explicadores: dict[str, object] = {}
@@ -88,18 +90,55 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
         de la lista de metadatos, que solo enumera las variables base.
         """
         variables = self._variables(codigo)
+        relleno = self._relleno(observacion)
         fila: dict[str, float] = {}
         ausente: dict[str, float] = {}
         for v in variables:
             valor = observacion.get(v)
             falta = valor is None or (isinstance(valor, float) and np.isnan(valor))
             ausente[f"{v}_ausente"] = 1.0 if falta else 0.0
-            fila[v] = float(self._medianas.get(v, 0.0) if falta else valor)
+            fila[v] = float(relleno(v) if falta else valor)
 
         completa = {**fila, **ausente}
         nombres = getattr(self._modelo(codigo), "feature_names_in_", None)
         esperadas = list(nombres) if nombres is not None else variables
         return pd.DataFrame([{c: completa.get(c, 0.0) for c in esperadas}], columns=esperadas)
+
+    def _relleno(self, observacion: dict):
+        """Valor con que se rellena una variable ausente, para ESTA observacion.
+
+        Primero el promedio del Grupo Homogeneo al que pertenece el
+        establecimiento, que es lo que manda el metodo oficial; si ese grupo no
+        esta en la tabla —o la tabla no existe— cae a la mediana nacional, que
+        es el comportamiento anterior.
+
+        La jerarquia importa: rellenar a un establecimiento con el promedio de
+        su grupo lo compara contra el universo con el que efectivamente compite.
+        Rellenarlo con la mediana del pais introduce un sesgo sistematico en la
+        direccion del grupo mayoritario.
+        """
+        grupo = observacion.get("CLUSTER", observacion.get("cluster_codigo"))
+        tabla = self._por_grupo.get(str(grupo)) if grupo is not None else None
+
+        def valor(variable: str) -> float:
+            if tabla is not None and variable in tabla:
+                return float(tabla[variable])
+            return float(self._medianas.get(variable, 0.0))
+
+        return valor
+
+    def describir_imputacion(self) -> dict:
+        """Con que se rellenan las ausencias y de donde sale ese criterio.
+
+        Existe para que la auditoria pueda distinguir una estimacion apoyada en
+        dato real de una apoyada en relleno, sin leer el codigo.
+        """
+        return {
+            "criterio": "promedio del grupo homogeneo" if self._por_grupo else "mediana nacional",
+            "grupos_con_tabla": len(self._por_grupo),
+            "respaldo": "MINEDUC, Documento Tecnico SNED 2026-2027, p. 12",
+            "respaldo_ausente": not self._por_grupo,
+        }
 
     # -- inferencia --------------------------------------------------------
 
@@ -177,7 +216,7 @@ class EstrategiaDesagregada(EstrategiaPredictiva):
         base = dict(observacion)
         actual = base.get(variable)
         if actual is None:
-            actual = self._medianas.get(variable, 0.0)
+            actual = self._relleno(base)(variable)
             # Se fija el punto de partida en la propia observacion. Sin esto, el
             # constructor no puede calcular el delta y la variacion asociada no
             # se arrastra: la curva quedaria con la palanca movida y su derivada

@@ -32,6 +32,7 @@ __all__ = [
     "metadatos_factores",
     "metadatos_global",
     "medianas_imputacion",
+    "imputacion_por_grupo",
     "inventario",
 ]
 
@@ -64,6 +65,26 @@ class RegistroDeModelos:
 
     def medianas_imputacion(self) -> dict[str, float]:
         return self._leer_json("medianas_imputacion.json")
+
+    def imputacion_por_grupo(self) -> dict[str, dict[str, float]]:
+        """Valor de relleno por Grupo Homogeneo, no por pais.
+
+        El metodo oficial no imputa con una mediana nacional:
+
+            "Para los establecimientos que no cuentan con informacion para los
+            Factores Efectividad y Superacion se imputa el promedio del grupo
+            homogeneo."
+            -- MINEDUC, Documento Tecnico SNED 2026-2027, p. 12
+
+        La diferencia no es cosmetica. Rellenar a un establecimiento vulnerable
+        con la mediana del pais lo compara contra un universo que no es el suyo,
+        cuando el propio SNED lo evalua contra su grupo. El archivo es OPCIONAL:
+        si no existe, el motor vuelve a la mediana nacional y lo declara.
+        """
+        try:
+            return self._leer_json("imputacion_por_grupo.json")
+        except ArtefactoNoDisponible:
+            return {}
 
     # -- artefactos --------------------------------------------------------
 
@@ -123,6 +144,10 @@ def metadatos_global() -> dict[str, Any]:
 
 def medianas_imputacion() -> dict[str, float]:
     return registro().medianas_imputacion()
+
+
+def imputacion_por_grupo() -> dict[str, dict[str, float]]:
+    return registro().imputacion_por_grupo()
 
 
 def inventario() -> list[dict[str, Any]]:

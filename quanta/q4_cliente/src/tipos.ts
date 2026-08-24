@@ -84,6 +84,14 @@ export interface LiderDeGrupo {
   es_consultado: boolean
 }
 
+export interface ReferenciaDeCorte {
+  rbd: string
+  nombre: string
+  indicer: number | null
+  posicion: number
+  factores: Record<string, number | null>
+}
+
 export interface Ranking {
   rbd: string
   ciclo: string
@@ -98,6 +106,8 @@ export interface Ranking {
    *  umbral: es el resultado observado, y cambia de grupo en grupo. */
   corte_premiado: number | null
   lideres: LiderDeGrupo[]
+  factores: Record<string, number | null>
+  referencia_de_corte: ReferenciaDeCorte | null
 }
 
 /** Diagnostico de cobertura tal como lo devuelve el servicio. */

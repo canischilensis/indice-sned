@@ -47,6 +47,18 @@ DIRECTORIO: dict[str, Usuario] = {
     "sostenedor.demo": Usuario("sostenedor.demo", "Sostenedor Demo", Rol.SOSTENEDOR, ["25520", "9012", "10156"]),
     "directora.demo": Usuario("directora.demo", "Directora Demo", Rol.DIRECTIVO, ["25520"]),
     "sagrado.demo": Usuario("sagrado.demo", "Sagrados Corazones de La Reina", Rol.DIRECTIVO, ["25520"]),
+    # Piloto de contraste. Dos establecimientos particulares subvencionados,
+    # urbanos, de la Region Metropolitana, en el mismo ciclo 2026-2027:
+    #
+    #   25185  Colegio Particular Ozanam, Santiago      68,34  PREMIADO
+    #   25520  Sagrado Corazon de Jesus, La Reina       65,59  no premiado
+    #
+    # Lo que hace util a este par es que el que perdio tiene MEJOR Efectividad
+    # —71,30 contra 60,87— y aun asi quedo fuera. La diferencia no esta en los
+    # resultados academicos sino en los factores de proceso y en el grupo
+    # homogeneo donde a cada uno le toco competir. Es el caso que desarma la
+    # creencia de que el SNED se gana con puntaje.
+    "piloto.demo": Usuario("piloto.demo", "Sostenedor piloto", Rol.SOSTENEDOR, ["25185", "25520"]),
     "auditor.demo": Usuario("auditor.demo", "Auditoria", Rol.AUDITOR, []),
 }
 

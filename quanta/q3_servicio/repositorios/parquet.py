@@ -189,6 +189,9 @@ class RepositorioParquet(RepositorioEstablecimientos):
     #: listado que nadie lee.
     LIDERES = 5
 
+    #: Los seis factores del indice, en el orden de su ponderacion.
+    FACTORES = ("EFECTIVR", "SUPERAR", "IGUALDR", "INICIAR", "INTEGRAR", "MEJORAR")
+
     def ranking(self, rbd: str, periodo: str | None = None) -> dict:
         """Posicion dentro del grupo homogeneo, con el corte y los lideres.
 
@@ -240,9 +243,28 @@ class RepositorioParquet(RepositorioEstablecimientos):
             if premiados:
                 corte = _decimal(gana["INDICER"].min())
 
+        # Referencia de corte: el ultimo establecimiento que SI obtuvo el
+        # beneficio. Es la comparacion que le sirve a un directivo que quedo
+        # fuera, porque responde "que me separa del que entro" en vez de "que me
+        # separa del mejor", que casi siempre es inalcanzable y no orienta nada.
+        referencia = None
+        if corte is not None:
+            fila_corte = gana.sort_values("INDICER").iloc[0]
+            referencia = {
+                "rbd": str(fila_corte["rbd"]),
+                "nombre": _texto(fila_corte.get("NOM_RBD")) or f"RBD {fila_corte['rbd']}",
+                "indicer": _decimal(fila_corte.get("INDICER")),
+                "posicion": orden.index(str(fila_corte["rbd"])) + 1,
+                "factores": {
+                    f: _decimal(fila_corte.get(f)) for f in self.FACTORES if f in grupo.columns
+                },
+            }
+
         return {
             "rbd": clave,
             "ciclo": str(ciclo),
+            "factores": {f: _decimal(fila.get(f)) for f in self.FACTORES if f in grupo.columns},
+            "referencia_de_corte": referencia,
             "cluster_codigo": int(cluster),
             "indicer": float(fila["INDICER"]),
             "posicion_en_grupo": pos,

@@ -130,6 +130,21 @@ class LiderDeGrupo(BaseModel):
     es_consultado: bool = False
 
 
+class ReferenciaDeCorte(BaseModel):
+    """El ultimo establecimiento que SI obtuvo el beneficio en el grupo.
+
+    Es la comparacion util para quien quedo fuera: responde "que me separa del
+    que entro" y no "que me separa del mejor", que rara vez orienta una decision
+    de gestion.
+    """
+
+    rbd: str
+    nombre: str
+    indicer: float | None = None
+    posicion: int
+    factores: dict[str, float | None] = Field(default_factory=dict)
+
+
 class RespuestaRanking(BaseModel):
     """Posicion dentro del grupo homogeneo: la mecanica real de la seleccion.
 
@@ -154,6 +169,10 @@ class RespuestaRanking(BaseModel):
         ),
     )
     lideres: list[LiderDeGrupo] = Field(default_factory=list)
+    factores: dict[str, float | None] = Field(
+        default_factory=dict, description="Los seis factores del establecimiento consultado."
+    )
+    referencia_de_corte: ReferenciaDeCorte | None = None
     sel: int | None = Field(
         default=None,
         description="1 = tramo 100 %; 2 = tramo 60 %; 3 = no seleccionado",
