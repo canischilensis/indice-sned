@@ -1,0 +1,61 @@
+%% Diagrama de casos de uso - Ecosistema predictivo SNED
+%% Fuente de verdad: docs/requisitos/CASOS_DE_USO.md (CU-SNED-01)
+flowchart LR
+  %% --- Actores humanos ---
+  DIR["Directivo<br/>1 establecimiento"]
+  SOS["Sostenedor<br/>N establecimientos"]
+  AUD["Auditor<br/>todos los RBD"]
+  ING["Ingeniero de datos<br/>línea de comandos"]
+
+  %% --- Límite del sistema ---
+  subgraph SIS["Ecosistema predictivo SNED"]
+    direction TB
+    CU01(["CU-01 · Iniciar sesión"])
+    CU02(["CU-02 · Consultar tablero del establecimiento"])
+    CU03(["CU-03 · Revisar alertas"])
+    CU04(["CU-04 · Simular escenario"])
+    CU05(["CU-05 · Consultar reporte de explicabilidad"])
+    CU07(["CU-07 · Consultar posición en el grupo homogéneo"])
+    CU06(["CU-06 · Listar establecimientos a cargo"])
+    CU08(["CU-08 · Auditar composición y cobertura"])
+    CU09(["CU-09 · Consultar catálogo de ponderaciones"])
+    CU10(["CU-10 · Ingerir una fuente"])
+    CU11(["CU-11 · Publicar un artefacto en el registro"])
+    CU12(["CU-12 · Conmutar la fuente de datos"])
+  end
+
+  %% --- Actores de sistema ---
+  MP["«sistema»<br/>Motor predictivo"]
+  RD["«sistema»<br/>Repositorio de datos"]
+
+  %% --- Asociaciones actor -> caso de uso ---
+  DIR --- CU01
+  DIR --- CU02
+  DIR --- CU03
+  DIR --- CU04
+  DIR --- CU05
+  DIR --- CU07
+  SOS --- CU01
+  SOS --- CU06
+  SOS --- CU07
+  AUD --- CU01
+  AUD --- CU08
+  AUD --- CU09
+  ING --- CU10
+  ING --- CU11
+  ING --- CU12
+
+  %% --- Actores de sistema (secundarios) ---
+  CU02 --- MP
+  CU04 --- MP
+  CU05 --- MP
+  CU06 --- RD
+  CU07 --- RD
+
+  %% --- Estilos ---
+  classDef actor fill:#ffffff,stroke:#011E3C,stroke-width:2px,color:#1A2333;
+  classDef uc fill:#EEF2F7,stroke:#011E3C,stroke-width:1.5px,color:#1A2333;
+  classDef sys fill:#EBEDF0,stroke:#011E3C,stroke-width:1.5px,color:#1A2333;
+  class DIR,SOS,AUD,ING actor;
+  class CU01,CU02,CU03,CU04,CU05,CU06,CU07,CU08,CU09,CU10,CU11,CU12 uc;
+  class MP,RD sys;

@@ -72,6 +72,33 @@ Ambos se conservan porque responden preguntas distintas.
 
 ---
 
+## Ramas del repositorio: el agente asesor (cuanto 5, valor agregado)
+
+`main` contiene los **cuatro cuantos** evaluados en el Hito 2 (ingesta, modelamiento, servicio y
+cliente). El **agente asesor de IA (cuanto 5)** no vive en `main`: se desarrolla como
+**extension de valor agregado** en dos ramas no integradas.
+
+Las ramas **`q5-agente-asesor`** y **`orquestacion-langgraph`** agregan `quanta/q5_agente/`, un
+asesor conversacional que hace *function calling* real sobre los endpoints del cuanto 3 —**no
+calcula el indice ni pondera factores**; solo consulta lo que el servicio ya expone— con:
+
+- **Dos orquestadores intercambiables** tras el puerto `AsesorDeGestion`: un bucle propio
+  (`httpx` como unica dependencia) y un agente ReAct de LangGraph (opcional).
+- **Proveedores de modelo** tras el puerto `ProveedorDeModelo`: determinista (sin red), local
+  (Ollama) y de frontera (Anthropic / OpenAI / Gemini).
+- **Guardarrailes de salida** (G-01, G-02, G-03) aplicados en cada respuesta.
+- **Dos comparaciones medidas** sobre los mismos 20 casos: orquestadores (bucle vs LangGraph,
+  empate en calidad, +14 dependencias transitivas y ~10 ms) y proveedores (el modelo local
+  rutea 17/20 frente a 20/20 del determinista, con guardarrailes 20/20 en ambos).
+
+Documentacion del agente: `docs/agente/` en esas ramas.
+
+> **Nota sobre `main`.** Puede aparecer una carpeta `quanta/q5_agente/__pycache__/` con archivos
+> `.pyc` sin fuente: son residuos de cambiar de rama, no codigo de `main`. El agente **no forma
+> parte del alcance evaluado del Hito 2**.
+
+---
+
 ## Estructura del repositorio
 
 ```
