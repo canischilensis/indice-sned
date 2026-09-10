@@ -66,6 +66,93 @@ Ambos se conservan porque responden preguntas distintas.
 
 ---
 
+## Cuanto 5 — Agente asesor de gestion (IA)
+
+> **Alcance.** El agente es una **extension de valor agregado** desarrollada en las ramas
+> `q5-agente-asesor` y `orquestacion-langgraph`. No forma parte del alcance evaluado del Hito 2;
+> se documenta como prototipado que amplia el ecosistema, no como objetivo comprometido.
+
+Un asesor conversacional que traduce la estimacion y su explicacion a lenguaje de gestion.
+**No calcula el indice ni pondera factores:** hace *function calling* real sobre los endpoints
+que el propio servicio (cuanto 3) ya expone, y responde solo con lo que el servicio le entrega.
+
+```
+   Consulta del directivo
+            |
+   +--------v---------+     elige herramienta      +---------------------------+
+   |  Orquestador     |--------------------------->|  Catalogo de herramientas |
+   |  bucle propio    |    (el modelo decide)      |  (envuelven endpoints Q3) |
+   |  o LangGraph     |<---------------------------|                           |
+   +--------|---------+        resultado           +------------|--------------+
+            |                                              HTTP  |  gateway
+   +--------v---------+                              +-----------v--------------+
+   |  Guardarrailes   |  G-01, G-02, G-03            |  Servicio del indice Q3  |
+   |  (Politica de    |  en cada respuesta           |  :8000                   |
+   |   salida)        |                              +--------------------------+
+   +--------|---------+
+            |
+     Respuesta al usuario
+```
+
+**Piezas** (`quanta/q5_agente/`):
+
+| Componente | Archivo | Que hace |
+|-----------|---------|----------|
+| Puerto del agente | `contrato.py` (`AsesorDeGestion`) | Contrato que ambos orquestadores cumplen |
+| Orquestador propio | `bucle.py` | Bucle de ejecucion escrito a mano; unica dependencia `httpx` |
+| Orquestador alternativo | `orquestadores/langgraph_react.py` | Agente ReAct de LangGraph (dependencia **opcional**) |
+| Puerto de proveedor | `proveedores/contrato.py` (`ProveedorDeModelo`) | Abstrae el modelo de lenguaje |
+| Proveedores | `proveedores/determinista.py`, `ollama.py`, `externos.py` | Determinista (sin red), local (Ollama) y de frontera (Anthropic / OpenAI / Gemini) |
+| Herramientas | `herramientas/catalogo.py` | Las funciones que el modelo puede invocar, sobre endpoints reales |
+| Guardarrailes | `guardarrailes.py` | `PoliticaDeSalida` (G-01, G-02, G-03) y `SanitizadorDeParametros` |
+| Puerta al servicio | `gateway.py` | Cliente HTTP hacia el cuanto 3 |
+| Consola / servicio | `cli.py`, `app.py` | Punto de entrada por linea de comandos y servicio HTTP propio |
+
+**Comparaciones medidas** (mismos 20 casos criticos, sin modificar):
+
+- **Orquestadores** (`docs/agente/COMPARACION_ORQUESTADORES.md`): bucle propio vs LangGraph ReAct,
+  con proveedor determinista para aislar la orquestacion. Empate total en calidad (20/20 en ruteo,
+  guardarrailes, cifras y llamadas; tokens identicos). LangGraph cuesta **+14 dependencias
+  transitivas y ~10 ms** por consulta. Conclusion: el framework se elige por la complejidad del
+  grafo, no por la del problema.
+- **Proveedores** (`docs/agente/COMPARACION_PROVEEDORES.md` y evidencia JSON fechada):
+  el modelo local (8B, Ollama) **rutea 17/20** frente a 20/20 del determinista, pero los
+  **guardarrailes se mantienen en 20/20** en ambos — la fundamentacion de cifras es una propiedad
+  de la arquitectura, no del proveedor.
+
+**Despliegue.** El agente es una **unidad de despliegue separada** (`:8010`). Si se apaga, el
+tablero, el simulador y el reporte de explicabilidad siguen funcionando: ninguno depende de el.
+`langgraph` y los SDK de proveedores externos son **dependencias opcionales**, importadas de forma
+perezosa; la consola arranca con `httpx` como unica dependencia.
+
+### Levantar el agente
+
+```powershell
+# Requiere el servicio del indice (cuanto 3) levantado en :8000.
+
+# Consola:
+cd quanta
+python -m q5_agente.cli --rbd 25520 --proveedor determinista --trazas "por que se me cae la superacion"
+
+# Servicio HTTP propio (para la ventana Asesor del cliente):
+python -m uvicorn q5_agente.app:app --reload --app-dir quanta --port 8010
+```
+
+Seleccion de proveedor y credenciales, por variable de entorno o `.env` de la raiz
+(`quanta/q5_agente/config.py`):
+
+```
+AGENTE_PROVEEDOR=determinista        # determinista | anthropic | openai | gemini | ollama
+GEMINI_API_KEY=...                   # solo para el proveedor gemini (requiere: pip install google-genai)
+AGENTE_MAX_PASOS=3                   # presupuesto de pasos del bucle (ADR-006)
+AGENTE_SEGUNDOS_ESPERA=10            # timeout hacia el servicio del indice
+```
+
+> El determinista corre sin red ni credenciales y es el que usan las pruebas de comparacion.
+> Los proveedores de frontera necesitan su SDK y su clave; ninguna clave se versiona.
+
+---
+
 ## Estructura del repositorio
 
 ```
@@ -112,19 +199,27 @@ make init
 ### Levantar el sistema
 
 ```powershell
-# Terminal 1 — cuanto 3
+# Terminal 1 — cuanto 3 (servicio del indice)
 .\env\Scripts\Activate.ps1
 python -m uvicorn q3_servicio.main:app --reload --app-dir quanta --port 8000
 
-# Terminal 2 — cuanto 4
+# Terminal 2 — cuanto 4 (interfaz B2B)
 cd quanta\q4_cliente
 npm install          # solo la primera vez
 npm run dev
+
+# Terminal 3 — cuanto 5 (agente asesor, opcional; habilita la ventana Asesor)
+python -m uvicorn q5_agente.app:app --reload --app-dir quanta --port 8010
 ```
 
 - API y documentacion interactiva: <http://127.0.0.1:8000/docs>
 - Interfaz B2B: <http://localhost:5173>
+- Servicio del agente: <http://127.0.0.1:8010>
 - Usuarios de demostracion: `directora.demo`, `sostenedor.demo`, `auditor.demo` — clave `demo`
+
+> El cliente expone **cuatro ventanas**: Dashboard, Simulador, Reporte XAI y **Asesor de gestion**.
+> Las tres primeras funcionan solo con el cuanto 3; la ventana Asesor requiere ademas el cuanto 5
+> (Terminal 3). Sin el, las otras tres siguen operativas.
 
 ### Base de datos
 
