@@ -66,6 +66,8 @@ data/external/**
 *.gz
 
 # Excepcion: metadatos de modelos y benchmarks SI se versionan (CTRL-05)
+experiments/
+mlruns/
 !models/metadata/**
 !models/metadata/*.csv
 !models/metadata/*.json
