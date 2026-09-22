@@ -1,9 +1,9 @@
 {
   "name": "sned-cliente-b2b",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "module",
-  "description": "Cuanto 4 - Interfaz B2B con IA Explicable. Tres ventanas: Dashboard, Simulador, Reporte XAI.",
+  "description": "Cuanto 4 - Interfaz B2B con IA Explicable. Cuatro ventanas: Dashboard, Simulador, Reporte XAI, Asesor de gestion.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

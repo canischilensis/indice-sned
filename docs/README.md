@@ -11,15 +11,12 @@ al índice del Capítulo IV de la tesis.
 |-----------|--------|
 | Levantar el sistema desde cero | `manuales/MANUAL_INSTALACION.md` |
 | Entender la arquitectura | `arquitectura/ARQUITECTURA_AD_HOC.md` y `ARCHITECTURE.md` |
-| Ver el sistema por capas y sus patrones | `capas/VISTA_EN_CAPAS.md` y `capas/PATRONES_POR_CAPA.md` |
 | Saber qué hace cada clase | `diseno/DISENO_DEL_SOFTWARE.md` |
 | Entender la base de datos | `diseno/DISENO_BASE_DATOS.md` y `db/README.md` |
 | Saber qué no se puede tocar | `gestion/PLAN_GESTION_CAMBIOS.md`, sección 3 |
 | Usar el sistema | `manuales/MANUAL_USUARIO.md` |
 | Saber qué se probó y cómo | `planes/PLAN_PRUEBAS.md` |
-| Conducir la prueba con un usuario | `aceptacion/PLAN_SESION_ACEPTACION.md` |
 | Ver de dónde sale cada requisito | `requisitos/MATRIZ_TRAZABILIDAD.md` |
-| Leer el informe del Hito 2 | `Informe_Hito2.docx`, con `INFORME_HITO_2.md` como versión en texto |
 
 ---
 
@@ -36,14 +33,12 @@ al índice del Capítulo IV de la tesis.
 
 | Documento | ID | Contenido |
 |-----------|-----|-----------|
-| `arquitectura/ARQUITECTURA_AD_HOC.md` | AR-SNED-01 | La arquitectura hexagonal por cuantos y dónde se observa en cada artefacto UML. Incluye el contraste contra los tres criterios de cuanto, taxonomía de características, estilos internos, conascencia, contratos, no aplicabilidad y sesgo metodológico |
-| `arquitectura/VISTAS_4MAS1.md` | V41-SNED-01 | Las cinco vistas de Kruchten. La vista física declara el despliegue como monolito modular |
+| `arquitectura/ARQUITECTURA_AD_HOC.md` | AR-SNED-01 | La arquitectura hexagonal por cuantos, y **dónde se observa en cada artefacto UML** |
+| `arquitectura/VISTAS_4MAS1.md` | V41-SNED-01 | Las cinco vistas de Kruchten: lógica, procesos, desarrollo, física y escenarios |
 | `arquitectura/PLATAFORMA_DE_OPERACION.md` | PO-SNED-01 | Despliegue con servidores separados de datos y aplicación, dimensionamiento y contingencia |
 | `ARCHITECTURE.md` | — | Documento vivo: motores de la arquitectura, decisiones y deuda conocida |
 | `PATRONES_DE_DISENO.md` | — | 12 patrones aplicados y 12 descartados, con fuentes citadas |
-| `capas/VISTA_EN_CAPAS.md` | VC-SNED-01 | Las cuatro capas, la regla de dependencia y **los tres puntos donde la clausura no se cumple** |
-| `capas/PATRONES_POR_CAPA.md` | PC-SNED-01 | Los mismos 12 patrones, ordenados por capa en vez de por cuanto |
-| `adr/` | ADR-001 a 005 | Decisiones de arquitectura registradas |
+| `adr/` | ADR-001 a 007 | Decisiones de arquitectura registradas |
 
 ## 3. Diseño
 
@@ -52,7 +47,7 @@ al índice del Capítulo IV de la tesis.
 | `diseno/DISENO_DEL_SOFTWARE.md` | DS-SNED-01 | Modelo de clases por cuanto, responsabilidades y deuda de diseño |
 | `diseno/DISENO_BASE_DATOS.md` | DB-SNED-01 | 38 tablas, seis decisiones de normalización, precisión numérica y verificación del cálculo |
 | `diseno/MOCKUPS_Y_PANTALLAS.md` | UI-SNED-01 | Maquetas de las cuatro pantallas y procedimiento de captura |
-| `diagramas/` | — | 11 imágenes y 9 fuentes Mermaid, derivadas del código. Incluye la vista de despliegue y el diagrama de contexto con los flujos controlados |
+| `diagramas/` | — | 7 imágenes y 5 fuentes Mermaid, derivadas del código |
 | `Anexo_mapeo_conceptual_fisico.docx` | — | Reglas de transformación de modelo conceptual a físico |
 
 ## 4. Gestión del proyecto
@@ -65,7 +60,6 @@ al índice del Capítulo IV de la tesis.
 | `gestion/PLAN_COMUNICACIONES.md` | PCO-SNED-01 | Interesados, canales y **la interfaz como canal formal** |
 | `gestion/PLAN_GESTION_ALCANCE.md` | PGA-SNED-01 | Descomposición del trabajo, exclusiones justificadas y trabajo futuro |
 | `gestion/PLAN_GESTION_CRONOGRAMA.md` | PGCR-SNED-01 | Red de dependencias, hitos con criterio verificable y los tres retrocesos |
-| `Informe_Hito2.docx` | — | Informe del Hito 2: tópicos del plan, alcance, propuesta de solución y plan de proyecto, con las diez figuras |
 
 ## 5. Pruebas
 
@@ -74,11 +68,6 @@ al índice del Capítulo IV de la tesis.
 | `planes/PLAN_PRUEBAS.md` | PPM-SNED-01 | Plan maestro |
 | `planes/PLAN_INTEGRACION.md` | PPI-SNED-01 | 5 de 5 integraciones cubiertas |
 | `planes/PLAN_ACEPTACION.md` | PPA-SNED-01 | Escenarios redactados, sin implementar |
-| `aceptacion/PLAN_SESION_ACEPTACION.md` | PSA-SNED-01 | Protocolo de la sesión con usuario: roles, tareas, umbrales y qué se declara |
-| `aceptacion/PAUTA_OBSERVACION.md` | PO-SNED-01 | Formulario de observación, seis tareas |
-| `aceptacion/CUESTIONARIO_ACEPTACION.md` | CA-SNED-01 | Comprensión (6 preguntas) + escala de usabilidad (10 ítems) |
-| `aceptacion/MATRIZ_RESULTADOS.md` | MR-SNED-01 | Matriz de los 11 escenarios, hallazgos y correcciones |
-| `aceptacion/ACTA_VALIDACION.md` | AV-SNED-01 | Acta firmable, con consentimiento y veredicto |
 | `planes/PLAN_COMPATIBILIDAD.md` | PPC-SNED-01 | Sin implementar |
 
 ## 6. Manuales y operación
@@ -86,7 +75,7 @@ al índice del Capítulo IV de la tesis.
 | Documento | ID | Contenido |
 |-----------|-----|-----------|
 | `manuales/MANUAL_INSTALACION.md` | MI-SNED-01 | Instalación completa desde cero, con verificación por paso |
-| `manuales/MANUAL_USUARIO.md` | MU-SNED-01 | Uso de las tres ventanas y **cómo interpretar lo que muestran** |
+| `manuales/MANUAL_USUARIO.md` | MU-SNED-01 | Uso de las cuatro ventanas y **cómo interpretar lo que muestran** |
 | `manuales/MANUAL_MONITORIZACION.md` | MM-SNED-01 | Tres capas: disponibilidad, integridad del dato y validez del modelo |
 | `manuales/PROCEDIMIENTOS_OPERATIVOS.md` | PR-SNED-01 | Nueve procedimientos, de PR-01 a PR-09 |
 | `FUENTES.md` | — | Origen y redescarga de los datos públicos |
@@ -100,8 +89,7 @@ al índice del Capítulo IV de la tesis.
 | Gestión de proyecto: metodología, objetivos y cronograma | `gestion/METODOLOGIA_Y_GESTION.md` + `gestion/PLAN_GESTION_CRONOGRAMA.md` |
 | Diseño de los componentes funcionales, con artefactos UML | `requisitos/CASOS_DE_USO.md` + `diagramas/` (secuencia) + `diseno/DISENO_DEL_SOFTWARE.md` |
 | Matriz de trazabilidad de requerimientos | `requisitos/MATRIZ_TRAZABILIDAD.md` |
-| Arquitectura de software a implementar | `arquitectura/ARQUITECTURA_AD_HOC.md` (sección 2: dónde se ve en cada artefacto UML) + `capas/VISTA_EN_CAPAS.md` |
-| Arquitectura en capas y patrones de diseño | `capas/VISTA_EN_CAPAS.md` + `capas/PATRONES_POR_CAPA.md` |
+| Arquitectura de software a implementar | `arquitectura/ARQUITECTURA_AD_HOC.md` (sección 2: dónde se ve en cada artefacto UML) |
 | Plan de Calidad | `gestion/PLAN_CALIDAD.md` |
 | Plan de Gestión de Cambios | `gestion/PLAN_GESTION_CAMBIOS.md` |
 | Plan de Comunicaciones | `gestion/PLAN_COMUNICACIONES.md` |
@@ -135,8 +123,6 @@ al índice del Capítulo IV de la tesis.
 | Requisitos funcionales con verificación | 13 de 13 |
 | Niveles de prueba implementados | 4 de 6 |
 | Ponderación acotada por información no publicada | 63 % |
-| Unidades de despliegue | 3 (cuatro cuantos lógicos) |
-| Artefactos: registro completo / carga efectiva | 210 MB / 145 MB |
 
 ## 9. Lo que está declarado como pendiente
 
@@ -153,5 +139,3 @@ correspondiente.
 | Escenarios de aceptación sin implementar | `planes/PLAN_ACEPTACION.md` |
 | Compatibilidad de navegadores sin implementar | `planes/PLAN_COMPATIBILIDAD.md` |
 | Motor desagregado bajo el umbral de R² declarado | `gestion/PLAN_CALIDAD.md`, sección 4 |
-| La ruta de salud salta la capa de aplicación (H-2) | `capas/VISTA_EN_CAPAS.md`, sección 5 |
-| La clausura de capas dentro de Q3 no está automatizada | `capas/VISTA_EN_CAPAS.md`, sección 2 |

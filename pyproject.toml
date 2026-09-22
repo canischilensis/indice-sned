@@ -34,9 +34,15 @@ markers = [
   "paridad: paridad entre los adaptadores del puerto RepositorioEstablecimientos (QA-D)",
   "requiere_datos: necesita data/ o models/registry, que no se versionan",
   "requiere_bd: necesita PostgreSQL levantado",
+  "agente: pruebas del cuanto 5, el agente asesor (QA-E)",
 ]
 
 [tool.mypy]
 python_version = "3.11"
 ignore_missing_imports = true
-files = ["quanta/q1_ingesta", "quanta/q2_modelamiento", "quanta/q3_servicio"]
+files = [
+  "quanta/q1_ingesta",
+  "quanta/q2_modelamiento",
+  "quanta/q3_servicio",
+  "quanta/q5_agente",
+]
